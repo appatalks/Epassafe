@@ -1,0 +1,133 @@
+UMP - Epassafe
+--------------------------
+http://www.epassafe.com
+
+UMP - Epassafe (C) 2013 is a fork of Universal Password Manager (UMP) with the
+development geared to making this a stand-alone application on an Android Device.
+
+UMP - Epassafe differs from Universal Password Manager in several ways. It has been
+stripped down to the most basic usage, that of encrypting your passwords and allowing
+backups to be made to external device i.e sdcard. Also, this program fork has been designed
+to be the sole application to run aside from the most basic android specific applications.
+
+For example, Epassafe replaces the default Launcher. 
+I believe their is a niche market for requiring this kind of device.
+
+Apart from how Epassafe differs from Universal Password Manager, the aim is to use it on a
+modified Android OS or special Rom to make the device sole purpose for keeping passwords
+safe, like a notebook but in electronic form.  
+
+History
+-------
+
+v.0.5b Beta Inital Release 
+
+
+Universal Password Manager
+--------------------------
+http://upm.sourceforge.net
+
+Copyright (C) 2005-2012 Adrian Smith
+
+Universal Password Manager is free software; you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation; either version 2 of the License, or
+(at your option) any later version.
+
+Universal Password Manager is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with Universal Password Manager; if not, write to the Free Software
+Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
+
+
+Overview
+--------
+   Universal Password Manager (UPM) allows you to store usernames, passwords, URLs,
+   and generic notes in an encrypted database protected by one master password.
+
+   There are several open source password managers available so what makes UPM 
+   different? It's three strongest features are...
+
+    * it's simplicity - it provides a small number of very strong features with no
+      clutter.
+
+    * cross platform - UPM runs on Android, Windows, Mac OS X and Linux.
+
+    * database syncing - This feature allows your to keep you database in sync
+      across several PCs/devices using either Dropbox or a HTTP location.
+
+Features
+--------
+   .Small, fast and lean
+   .Uses AES for database encryption
+   .Database sync across multiple PCs/devices
+   .Written in Java/SWING
+   .Android, Windows and Mac OS X native feeling versions available
+   .Fast account searching
+   .Streamlined for those who are more comfortable using the keyboard only
+
+History
+-------
+   v1.14 28-Oct-2012
+     * Added support for syncing to Dropbox
+     * Hide account details in screenshots and task manager
+
+   v1.13 12-Aug-2012
+     * Added support for all API levels up to and including 16
+     * Fixed a few bugs
+
+   v1.12 23-Jan-2012
+     * Added support for version 3 of the password database. This version stores all strings as UTF-8.
+
+   v1.11 08-Jan-2012
+     * Bug fix release
+
+   v1.10 12-Dec-2011
+     * Bug fix release
+
+   v1.9 06-Dec-2011
+     * Bug fix release
+
+   v1.8 12-Oct-2011
+     * Added Russian translation
+     * Trim the remote url before using it
+
+   v1.7 17-Jul-2011
+     * Added permission WRITE_EXTERNAL_STORAGE. Backup wasn't working without this.
+
+   v1.6 17-Jul-2011
+     * When returning to the main account list activity return to the same scroll position as we left
+     * Added support for large screens
+     * Made links on the Account Details page clickable
+
+   v1.5 29-Nov-2010
+     * Moved all buttons onto a ButtonBar on their respective Activity
+     * Put a "Restore Database" option on the New Database dialog
+
+   v1.4 21-Oct-2010
+     * Bugfix for blank screen when the application starts
+
+   v1.3 14-Oct-2010
+     * Fixed a number of problems that were causing crashes.
+     * Delete the temp db file created during a sync operation.
+
+   v1.2 8-Aug-2010
+     * New Feature: Long-clicking on an account now brings up a context menu
+       allowing you to copy username, copy password, launch URL, edit account
+     * New Feature: Added the ability to trust self signed certificates and 
+       certificates that have a different Common Name to the website hostname
+     * New Feature: Increased the font size on the Account Details activity
+     * Bug Fix: recover gracefully when the database is closed unexpectedly
+
+   v1.1 30-Mar-2010
+     * Implemented the Shared Database feature as it exists in the desktop
+       version of UPM
+     * Added Delete Database feature
+     * Lots of little bugs fixes throughout the codebase
+
+   v1.0 1-Feb-2010
+     * Initial Release
