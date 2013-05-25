@@ -1,11 +1,11 @@
-UMP - Epassafe
+UPM - Epassafe
 --------------------------
 http://www.epassafe.com
 
-UMP - Epassafe (C) 2013 is a fork of Universal Password Manager (UMP) with the
+UPM - Epassafe (C) 2013 is a fork of Universal Password Manager (UPM) with the
 development geared to making this a stand-alone application on an Android Device.
 
-UMP - Epassafe differs from Universal Password Manager in several ways. It has been
+UPM - Epassafe differs from Universal Password Manager in several ways. It has been
 stripped down to the most basic usage, that of encrypting your passwords and allowing
 backups to be made to external device i.e sdcard. Also, this program fork has been designed
 to be the sole application to run aside from the most basic android specific applications.

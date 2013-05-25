@@ -21,7 +21,7 @@
         <EditText android:id="@+id/account_name" 
                   android:layout_width="fill_parent" 
                   android:layout_height="wrap_content"
-                  android:singleLine="true"
+                  android:singleLine="false"
                   android:layout_marginBottom="10dip"/>
 
         <TextView android:layout_width="wrap_content"
@@ -31,7 +31,7 @@
         <EditText android:id="@+id/account_userid" 
                   android:layout_width="fill_parent" 
                   android:layout_height="wrap_content"
-                  android:singleLine="true"
+                  android:singleLine="false"
                   android:layout_marginBottom="10dip"/>
 
         <TextView android:layout_width="wrap_content"
@@ -41,7 +41,7 @@
         <EditText android:id="@+id/account_password" 
                   android:layout_width="fill_parent" 
                   android:layout_height="wrap_content"
-                  android:inputType="textVisiblePassword"
+                  android:inputType="textMultiLine"
                   android:layout_marginBottom="10dip"/>
 
         <TextView android:layout_width="wrap_content"
@@ -51,7 +51,7 @@
         <EditText android:id="@+id/account_url"
                   android:layout_width="fill_parent" 
                   android:layout_height="wrap_content"
-                  android:singleLine="true"
+                  android:singleLine="false"
                   android:layout_marginBottom="10dip"/>
 
         <TextView android:layout_width="wrap_content"

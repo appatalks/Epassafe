@@ -3,7 +3,7 @@
     <string name="launch_url">Launch URL</string>
     <string name="copy_password">Copy Password</string>
     <string name="copy_username">Copy Username</string>
-    <string name="app_name_short">UPM - Epassafe</string>
+    <string name="app_name_short">Epassafe</string>
     <string name="enter_master_password">Enter Master Password</string>
     <string name="request_new_master_password">Please provide a master password that will be used to encrypt your password database.</string>
     <string name="ok_label">OK</string>
@@ -16,8 +16,8 @@
     <string name="invalid_password">Invalid password</string>
     <string name="add_account_prompt">Click <b>Add</b> to add an account to your new database</string>
     <string name="decrypting_db">Decrypting…</string>
-    <string name="account_name">Account Name</string>
-    <string name="userid">User Id</string>
+    <string name="account_name">Account</string>
+    <string name="userid">User ID</string>
     <string name="password">Password</string>
     <string name="url">URL</string>
     <string name="notes">Notes</string>
