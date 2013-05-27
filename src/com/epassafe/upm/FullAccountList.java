@@ -22,6 +22,8 @@
 package com.epassafe.upm;
 
 import java.io.File;
+
+
 // import java.io.FileInputStream;
 // import java.io.FileOutputStream;
 // import java.io.IOException;
@@ -57,6 +59,10 @@ public class FullAccountList extends AccountsList {
 
     public static final int RESULT_EXIT = 0;
     public static final int RESULT_ENTER_PW = 1;
+    
+    /* button */ /*
+    public static final int add = Menu.FIRST; */
+    /* button */
 
 //    public static final String CERT_FILE_NAME = "upm.cer";
 
@@ -95,8 +101,9 @@ public class FullAccountList extends AccountsList {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        super.onCreateOptionsMenu(menu);
-        MenuInflater inflater = getMenuInflater();
+        super.onCreateOptionsMenu(menu);   
+
+       MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.main, menu);
         return true;
     }

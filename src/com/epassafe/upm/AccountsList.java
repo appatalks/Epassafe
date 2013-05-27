@@ -20,12 +20,17 @@
  */
 package com.epassafe.upm;
 
+/* For Button
+import com.epassafe.upm.wrappers.CheckWrappers;
+import com.epassafe.upm.wrappers.honeycomb.WrapActionBar;
+*/
 import android.app.ListActivity;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.text.ClipboardManager;
 import android.view.ContextMenu;
+import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -37,9 +42,20 @@ import android.widget.AdapterView.AdapterContextMenuInfo;
 import com.epassafe.upm.database.AccountInformation;
 import com.epassafe.upm.database.PasswordDatabase;
 
+/* Button */
+/*
+import com.epassafe.upm.wrappers.CheckWrappers;
+import com.epassafe.upm.wrappers.honeycomb.WrapActionBar;
+*/
+
+/* END */ 
 @SuppressWarnings("deprecation")
 public class AccountsList extends ListActivity {
 
+	/* BUTTON TRY */ 
+/* public static final int add = Menu.FIRST; */ 
+ /*	END */ 
+	
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -51,7 +67,7 @@ public class AccountsList extends ListActivity {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.account_context_menu, menu);
     }
-
+    
     @Override
     public boolean onContextItemSelected(MenuItem item) {
         AdapterContextMenuInfo info = (AdapterContextMenuInfo) item.getMenuInfo();
@@ -71,6 +87,26 @@ public class AccountsList extends ListActivity {
         }
         return super.onContextItemSelected(item);
     }
+    
+    /* TRYING TO ADD BUTTON */ 
+/* 
+    @Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		super.onCreateOptionsMenu(menu);
+
+		MenuItem item = menu.add(0, add, 0, 0);
+		item.setShortcut('2', 'a');
+		if (CheckWrappers.mActionBarAvailable) {
+			item.setIcon(R.drawable.ic_menu_add_password);
+			WrapActionBar.showIfRoom(item);
+		} else {
+			item.setIcon(android.R.drawable.ic_menu_add);
+		}
+		return super.onCreateOptionsMenu(menu);
+
+		}
+ */
+    /* END */
 
     @SuppressWarnings("deprecation")
 	private void setClipboardText(String text) {

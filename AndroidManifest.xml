@@ -36,6 +36,9 @@
         <activity android:name=".ViewAccountDetails">
         </activity>
 
+        <activity android:name=".MainActivity">
+        </activity>
+        
         <activity android:name=".CreateNewDatabase">
         </activity>
 

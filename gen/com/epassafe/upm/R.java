@@ -14,9 +14,10 @@ public final class R {
     public static final class attr {
     }
     public static final class drawable {
-        public static final int ic_menu_refresh=0x7f020000;
-        public static final int upm=0x7f020001;
-        public static final int upm_hd=0x7f020002;
+        public static final int ic_menu_add_password=0x7f020000;
+        public static final int ic_menu_refresh=0x7f020001;
+        public static final int upm=0x7f020002;
+        public static final int upm_hd=0x7f020003;
     }
     public static final class id {
         public static final int about=0x7f090028;
