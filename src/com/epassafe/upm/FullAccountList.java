@@ -29,6 +29,7 @@ import java.io.File;
 // import java.io.IOException;
 // import java.nio.channels.FileChannel;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
@@ -46,9 +47,16 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
+
+/* Button */
+import com.epassafe.upm.wrappers.CheckWrappers;
+import com.epassafe.upm.wrappers.honeycomb.WrapActionBar;
+/* END */ 
 
 public class FullAccountList extends AccountsList {
 
@@ -60,10 +68,6 @@ public class FullAccountList extends AccountsList {
     public static final int RESULT_EXIT = 0;
     public static final int RESULT_ENTER_PW = 1;
     
-    /* button */ /*
-    public static final int add = Menu.FIRST; */
-    /* button */
-
 //    public static final String CERT_FILE_NAME = "upm.cer";
 
     @Override
@@ -105,8 +109,21 @@ public class FullAccountList extends AccountsList {
 
        MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.main, menu);
-        return true;
-    }
+
+        /* ADD BUTTON */        
+    		MenuItem item = menu.add(0, R.id.add, 0, R.string.add);
+    		item.setShortcut('4', 'a');
+    		if (CheckWrappers.mActionBarAvailable) {
+    			item.setIcon(R.drawable.ic_menu_add_password);
+    			WrapActionBar.showIfRoom(item);
+    		
+    		} else {
+    			item.setIcon(android.R.drawable.ic_menu_add);}
+    		return super.onCreateOptionsMenu(menu);
+        }
+     	
+        /* END ADD BUTTON */
+    
 
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
@@ -129,7 +146,7 @@ public class FullAccountList extends AccountsList {
             return super.onKeyDown(keyCode, event);
         }
     }
-
+    
     @SuppressWarnings("deprecation")
 	@Override
     public boolean onOptionsItemSelected(MenuItem item) {
