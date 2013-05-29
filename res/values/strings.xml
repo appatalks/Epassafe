@@ -28,6 +28,7 @@
     <string name="save">Save</string>
     <string name="edit">Edit</string>
     <string name="delete">Delete</string>
+    <string name="delete_account">Delete Account</string>
     <string name="add_account">Add Account</string>
     <string name="edit_account">Edit Account</string>
     <string name="account_already_exists_error">An account with this name already exists</string>

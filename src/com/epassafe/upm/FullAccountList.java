@@ -64,7 +64,8 @@ public class FullAccountList extends AccountsList {
     private static final int CONFIRM_OVERWRITE_BACKUP_FILE = 1;
     private static final int DIALOG_ABOUT = 2;
     private static final int CONFIRM_DELETE_DB_DIALOG = 3;
-
+    
+    
     public static final int RESULT_EXIT = 0;
     public static final int RESULT_ENTER_PW = 1;
     
@@ -121,7 +122,6 @@ public class FullAccountList extends AccountsList {
     			item.setIcon(android.R.drawable.ic_menu_add);}
     		return super.onCreateOptionsMenu(menu);
         }
-     	
         /* END ADD BUTTON */
     
 
@@ -199,6 +199,7 @@ public class FullAccountList extends AccountsList {
             case R.id.delete_db:
                 showDialog(CONFIRM_DELETE_DB_DIALOG);
                 break;
+                         
         }
 
         return optionConsumed;
@@ -286,6 +287,7 @@ public class FullAccountList extends AccountsList {
                 }
             });
             break;
+            
         }
 
         return dialogBuilder.create();

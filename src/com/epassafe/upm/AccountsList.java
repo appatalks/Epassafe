@@ -21,7 +21,10 @@
 package com.epassafe.upm;
 
 
+import android.app.AlertDialog;
+import android.app.Dialog;
 import android.app.ListActivity;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -34,6 +37,7 @@ import android.view.View;
 import android.view.ContextMenu.ContextMenuInfo;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 import android.widget.AdapterView.AdapterContextMenuInfo;
 
 import com.epassafe.upm.database.AccountInformation;
@@ -41,6 +45,12 @@ import com.epassafe.upm.database.PasswordDatabase;
 
 @SuppressWarnings("deprecation")
 public class AccountsList extends ListActivity {
+
+	/* DELETE ACCOUNT BUTTON CODE */
+/*
+	public static AccountInformation account;
+	*/
+	/* DELETE ACCT BUTTON CODE END */
 	
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -60,8 +70,14 @@ public class AccountsList extends ListActivity {
         switch (item.getItemId()) {
         case R.id.edit_account:
             editAccount(getAccount(info.targetView));
-            return true;
-        case R.id.copy_username:
+            return true;        
+     /* DELETE ACCT BUTTON ****NOT WORKING ATM**** */    
+  /*    case R.id.delete:
+    	  getPasswordDatabase().deleteAccount(account.getAccountName());
+            return true; */
+    /* DELETE ACCT BUTTON END */    
+            
+  /*      case R.id.copy_username:
             setClipboardText(getUsername(getAccount(info.targetView)));
             return true;
         case R.id.copy_password:
@@ -69,10 +85,12 @@ public class AccountsList extends ListActivity {
             return true;
         case R.id.launch_url:
             launchURL(getURL(getAccount(info.targetView)));
-            return true;
+            return true; */
+
         }
         return super.onContextItemSelected(item);
     }
+    
     
     private void setClipboardText(String text) {
         ClipboardManager clipboardManager = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
