@@ -1,0 +1,20 @@
+Some of the Changes I've made:
+
+- Made the program into a Home Launcher
+- Icon
+- Name Modification to differintiate between the Forks
+- Visual Changes
+	-- View Account: Smaller Text, and Visual Fields
+	-- View List: One Click Add Account Button on Menu Bar
+- Disabled Internet Access
+- Disabled Sync to outside sources
+- Changed Context Menu Options
+- Changed Home Button Options
+
+Some things I would like to add:
+
+- Long Press Delete Account from context menu
+- Lock Database on screen off/timeout
+- Theme Options / Like change colors, maybe add background picture
+- Auto Backup after every edit
+- Some Kind of Easter Egg
