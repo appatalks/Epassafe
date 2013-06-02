@@ -69,6 +69,7 @@ public class FullAccountList extends AccountsList {
     public static final int RESULT_EXIT = 0;
     public static final int RESULT_ENTER_PW = 1;
     
+    
 //    public static final String CERT_FILE_NAME = "upm.cer";
 
     @Override
@@ -78,6 +79,9 @@ public class FullAccountList extends AccountsList {
         registerForContextMenu(getListView());
         populateAccountList();
     }
+    
+    /* TRYING TO ADD LOCK ON SCREEN OFF */
+    /* LOCK END */
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
@@ -124,7 +128,7 @@ public class FullAccountList extends AccountsList {
         }
         /* END ADD BUTTON */
     
-
+    /* POWER LOCK AND EXIT LOCK */
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (keyCode == KeyEvent.KEYCODE_BACK) {
@@ -142,10 +146,44 @@ public class FullAccountList extends AccountsList {
             .setNegativeButton(R.string.no, null)
             .show();
             return true;
-        } else {
+        } 
+        else if (keyCode == KeyEvent.KEYCODE_VOLUME_DOWN){
+        	Intent i = new Intent(FullAccountList.this, AppEntryActivity.class);
+            i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            startActivity(i);
+            finish();
+            return true;
+        }
+        else {
             return super.onKeyDown(keyCode, event);
         }
-    }
+    } 
+    /* works with volume press down not exactly what i want, want at screen off */
+    
+/* ORIGINAL EXIT */
+  /*  @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_BACK) {
+            new AlertDialog.Builder(this)
+            .setIcon(android.R.drawable.ic_dialog_alert)
+            .setTitle(R.string.confirm_exit_title)
+            .setMessage(R.string.confirm_exit_message)
+            .setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    FullAccountList.this.setResult(RESULT_ENTER_PW);
+                    FullAccountList.this.finish();
+                }
+            })
+            .setNegativeButton(R.string.no, null)
+            .show();
+            return true;
+        } 
+        else {
+            return super.onKeyDown(keyCode, event);
+        }
+    }    */
+   /* END ORIGINAL EXIT */
     
     @SuppressWarnings("deprecation")
 	@Override
@@ -268,6 +306,7 @@ public class FullAccountList extends AccountsList {
                 .setNegativeButton(R.string.close, null)
                 .setView(v);
             break;
+            /* Clear Activity may be able to also allow Lock */
         case CONFIRM_DELETE_DB_DIALOG:
             dialogBuilder.setMessage(getString(R.string.confirm_delete_db))
             .setPositiveButton("Yes", new DialogInterface.OnClickListener() {

@@ -87,6 +87,7 @@ public class AddEditAccount extends Activity implements OnClickListener {
         accountToEdit = extras.getString(ACCOUNT_TO_EDIT);
     }
 
+    /* MAYBE WE CAN USE THIS CODE TO LOCK DATABASE AFTER SCREEN OFF OR TIMEOUT */
     @Override
     public void onResume() {
         super.onResume();

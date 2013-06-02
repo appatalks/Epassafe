@@ -47,9 +47,6 @@ import com.epassafe.upm.database.PasswordDatabase;
 public class AccountsList extends ListActivity {
 
 	/* DELETE ACCOUNT BUTTON CODE */
-/*
-	public static AccountInformation account;
-	*/
 	/* DELETE ACCT BUTTON CODE END */
 	
     @Override
@@ -71,7 +68,8 @@ public class AccountsList extends ListActivity {
         case R.id.edit_account:
             editAccount(getAccount(info.targetView));
             return true;        
-     /* DELETE ACCT BUTTON ****NOT WORKING ATM**** */    
+     /* DELETE ACCT BUTTON ****NOT WORKING ATM**** */
+
   /*    case R.id.delete:
     	  getPasswordDatabase().deleteAccount(account.getAccountName());
             return true; */
@@ -150,6 +148,7 @@ public class AccountsList extends ListActivity {
         }
     }
 
+    /* MAYBE THIS CODE CAN BE USED TO ALSO DELETE ACCT NAME FROM CONTEXT MENUS */
     @Override
     protected void onListItemClick(ListView l, View v, int position, long id) {
         // Get the name of the account the user selected

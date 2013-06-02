@@ -10,6 +10,7 @@ Some of the Changes I've made:
 - Disabled Sync to outside sources
 - Changed Context Menu Options
 - Changed Home Button Options
+- Added Quick Lock with Volume Down (Temp until figure out with Screen Off)
 
 Some things I would like to add:
 

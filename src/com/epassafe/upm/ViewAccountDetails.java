@@ -155,6 +155,31 @@ public class ViewAccountDetails extends Activity {
         }
     }
 
+    /* KEY KODE BACK AND LOCK APP */
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        // If the back button is pressed pass back the edit account flag
+        // This is used to indicate if the list of account names on 
+        // FullAccountList needs to be refreshed
+        if (keyCode == KeyEvent.KEYCODE_BACK) {
+            setResult(editAccountResultCode);
+        }
+        if (keyCode == KeyEvent.KEYCODE_VOLUME_DOWN){
+        	Intent i = new Intent(ViewAccountDetails.this, AppEntryActivity.class);
+            i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            startActivity(i);
+            finish();
+            return true;
+        }
+        else {
+            return super.onKeyDown(keyCode, event);
+        }
+    } 
+    /* works with volume press down not exactly what i want, want at screen off */
+    /* END BACK AND LOCK */
+    
+    /* ORIGINAL KEYDOWN */
+    /*
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         // If the back button is pressed pass back the edit account flag
@@ -165,6 +190,8 @@ public class ViewAccountDetails extends Activity {
         }
         return super.onKeyDown(keyCode, event);
     } 
+    */
+    /* ORIGINAL END */
 
     private void populateView() {
         TextView accountNameTextView = (TextView) findViewById(R.id.account_name);

@@ -6,7 +6,9 @@
 <!-- TRYING TO ADD DELETE ACCOUNT BUTTON TO ACCOUNT CONTEXT MENU ON LIST VIEW-->
 <!-- <item android:id="@+id/delete" android:title="@string/delete_account"> </item> -->
 <!-- END -->
-<!-- <item android:title="@string/delete_account" android:id="@+id/delete"></item>
+<!-- 
+DISABLED
+<item android:title="@string/delete_account" android:id="@+id/delete"></item>
 <item android:title="@string/copy_username" android:id="@+id/copy_username"></item>
 <item android:title="@string/copy_password" android:id="@+id/copy_password"></item>
 <item android:id="@+id/launch_url" android:title="@string/launch_url"></item> -->
