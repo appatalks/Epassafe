@@ -25,6 +25,7 @@ import java.io.IOException;
 import java.security.GeneralSecurityException;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -56,6 +57,7 @@ public class EnterMasterPassword extends Activity implements OnClickListener {
     private ProgressDialog progressDialog;
 
     @SuppressWarnings("deprecation")
+    
 	@Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

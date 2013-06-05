@@ -11,6 +11,7 @@ Some of the Changes I've made:
 - Changed Context Menu Options
 - Changed Home Button Options
 - Added Quick Lock with Volume Down (Temp until figure out with Screen Off)
+- Easter Egg
 
 Some things I would like to add:
 
@@ -18,4 +19,3 @@ Some things I would like to add:
 - Lock Database on screen off/timeout
 - Theme Options / Like change colors, maybe add background picture
 - Auto Backup after every edit
-- Some Kind of Easter Egg

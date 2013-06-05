@@ -80,9 +80,6 @@ public class FullAccountList extends AccountsList {
         populateAccountList();
     }
     
-    /* TRYING TO ADD LOCK ON SCREEN OFF */
-    /* LOCK END */
-
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
         switch(requestCode) {

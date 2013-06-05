@@ -171,6 +171,14 @@ public class ViewAccountDetails extends Activity {
             finish();
             return true;
         }
+        /* EASTER EGG */
+        if (keyCode == KeyEvent.KEYCODE_VOLUME_UP){
+        	Intent i = new Intent(ViewAccountDetails.this, EasterEgg.class);
+            startActivity(i);
+            finish();
+            return true;
+        }
+            /* EASTER EGG END */
         else {
             return super.onKeyDown(keyCode, event);
         }
