@@ -12,6 +12,7 @@ Some of the Changes I've made:
 - Changed Home Button Options
 - Added Quick Lock with Volume Down (Temp until figure out with Screen Off)
 - Easter Egg
+- Added Password Generator (https://github.com/rod86/PassGenerator)
 
 Some things I would like to add:
 

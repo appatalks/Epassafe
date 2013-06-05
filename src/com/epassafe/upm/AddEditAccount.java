@@ -20,22 +20,37 @@
  */
 package com.epassafe.upm;
 
+import java.io.File;
+
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Environment;
 import android.util.Log;
+import android.view.ContextMenu;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
+import android.view.ContextMenu.ContextMenuInfo;
 import android.view.View.OnClickListener;
 import android.view.WindowManager.LayoutParams;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
+import android.widget.AdapterView.AdapterContextMenuInfo;
 
 import com.epassafe.upm.database.AccountInformation;
 import com.epassafe.upm.database.PasswordDatabase;
+
+
+/* Button */
+import com.epassafe.upm.wrappers.CheckWrappers;
+import com.epassafe.upm.wrappers.honeycomb.WrapActionBar;
+/* END */ 
 
 public class AddEditAccount extends Activity implements OnClickListener {
 
@@ -221,6 +236,44 @@ public class AddEditAccount extends Activity implements OnClickListener {
         }).execute(getPasswordDatabase());
     }
 
+    /* FOR PASSWORD GENERATOR */
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        super.onCreateOptionsMenu(menu);   
+
+       MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.menu, menu);
+
+        /* PASS GEN BUTTON */        
+    		MenuItem item = menu.add(0, R.id.app_name, 0, R.string.app_name);
+    		item.setShortcut('4', 'b');
+    		if (CheckWrappers.mActionBarAvailable) {
+    			item.setIcon(R.drawable.options);
+    			WrapActionBar.showIfRoom(item);
+    		
+    		} else {
+    			item.setIcon(android.R.drawable.ic_menu_add);}
+    		return super.onCreateOptionsMenu(menu);
+        }
+    
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        boolean optionConsumed = false;
+
+        switch (item.getItemId()) {
+            case R.id.app_name:
+            	startActivity(new Intent(AddEditAccount.this, PassGenerator.class));
+                    break;
+           		case R.id.settings:
+           			startActivity(new Intent(AddEditAccount.this, GenPrefs.class));
+           			break;    
+    }
+		return optionConsumed;        
+        }
+
+
+    /* PASSWORD GENERATOR END */
+    
     @Override
     protected Dialog onCreateDialog(int id) {
         Dialog dialog = null;
