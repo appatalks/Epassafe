@@ -69,10 +69,11 @@ public class AccountsList extends ListActivity {
             editAccount(getAccount(info.targetView));
             return true;        
      /* DELETE ACCT BUTTON ****NOT WORKING ATM**** */
-
-  /*    case R.id.delete:
-    	  getPasswordDatabase().deleteAccount(account.getAccountName());
-            return true; */
+            /*
+      case R.id.delete:
+    	  editAccount(getAccount(info.targetView));
+            return true;
+            */ 
     /* DELETE ACCT BUTTON END */    
             
   /*      case R.id.copy_username:

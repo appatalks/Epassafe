@@ -13,10 +13,15 @@ Some of the Changes I've made:
 - Added Quick Lock with Volume Down (Temp until figure out with Screen Off)
 - Easter Egg
 - Added Password Generator (https://github.com/rod86/PassGenerator)
+- Created an Automatic Backup aupm.db from Manual Backup upm.db on application exit
+	--Restore still from Manual Backup file upm.db
+	--If want to restore automatic backup, must rename aupm.db --> upm.db from root of sdCard
+		(This makes good practice to do manual backups in the first place, but leaves a safety net
+		for just in case i.e. database corruption)
 
 Some things I would like to add:
 
 - Long Press Delete Account from context menu
 - Lock Database on screen off/timeout
 - Theme Options / Like change colors, maybe add background picture
-- Auto Backup after every edit
+

@@ -38,6 +38,11 @@ safe, like a notebook but in electronic form.
 
 History
 -------
+v.1.7b Beta - Created an Automatic Backup aupm.db from Manual Backup upm.db on application exit
+				--Restore still from Manual Backup file upm.db
+				--If want to restore automatic backup, must rename aupm.db --> upm.db from root of sdCard
+					(This makes good practice to do manual backups in the first place, but leaves a safety net
+					for just in case i.e. database corruption)
 v.1.6b Beta - Added Password Generator (https://github.com/rod86/PassGenerator)
 v.1.5b Beta - Code Clean Up
 v.1.4b Beta - Added Quick Lock with Volume Down (Temp until figure out with Screen Off)

@@ -34,6 +34,7 @@ import com.epassafe.upm.database.PasswordDatabase;
 public class Utilities {
 
     public static final String DEFAULT_DATABASE_FILE = "upm.db";
+    public static final String AUTOMATIC_DATABASE_FILE = "aupm.db";
     public static final String PREFS_DB_FILE_NAME = "DB_FILE_NAME";
 
     public static final String DROPBOX_PREFS = "DROPBOX_PREFS";
@@ -59,7 +60,12 @@ public class Utilities {
         String dbFileName = getDatabaseFileName(activity);
         if (dbFileName == null || dbFileName.equals("")) {
             return new File(activity.getFilesDir(), DEFAULT_DATABASE_FILE);
-        } else {
+            }
+        /* ADDED FOR AUTOBACKUP */
+        if (dbFileName == null || dbFileName.equals("")) {
+            return new File(activity.getFilesDir(), AUTOMATIC_DATABASE_FILE);
+        } /* END */
+        else {
             return new File(activity.getFilesDir(), dbFileName);
         }
     }

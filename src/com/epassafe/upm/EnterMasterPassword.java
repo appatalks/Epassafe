@@ -29,6 +29,7 @@ import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Environment;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
@@ -57,6 +58,21 @@ public class EnterMasterPassword extends Activity implements OnClickListener {
     private ProgressDialog progressDialog;
 
     @SuppressWarnings("deprecation")
+    
+    /* SAVE DATABASE BACKUP FILE ON EXIT */
+    /* AUTOMATIC BACKUP TO FILE aupm.db THAN MANUAL BACKUP upm.db*/
+    @Override
+    public void onBackPressed()
+    {
+    	File fileOnSDCard = new File(Environment.getExternalStorageDirectory(), Utilities.AUTOMATIC_DATABASE_FILE);
+        File databaseFile = Utilities.getDatabaseFile(this);
+        if (((UPMApplication) getApplication()).copyFile(databaseFile, fileOnSDCard, this)) {
+            String message = String.format(getString(R.string.backup_complete), fileOnSDCard.getAbsolutePath());
+            UIUtilities.showToast(this, message, false);
+        }
+        System.exit(0);
+    }
+    /* SAVE DATABASE ON EXIT END */
     
 	@Override
     public void onCreate(Bundle savedInstanceState) {

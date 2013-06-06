@@ -270,8 +270,6 @@ public class AddEditAccount extends Activity implements OnClickListener {
     }
 		return optionConsumed;        
         }
-
-
     /* PASSWORD GENERATOR END */
     
     @Override

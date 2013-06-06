@@ -41,7 +41,7 @@
     <string name="new_password">New Password</string>
     <string name="new_password_confirm">New Password Confirmation</string>
     <string name="no_accounts_found">No Accounts Found</string>
-    <string name="restore">Restore</string>
+    <string name="restore">Restore Backup</string>
     <string name="backup">Backup</string>
     <string name="error_saving_after_delete">Error saving database following a delete</string>
     <string name="account_deleted">Account \'%s\' deleted</string>
