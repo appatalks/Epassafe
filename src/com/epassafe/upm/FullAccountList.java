@@ -50,9 +50,11 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.epassafe.upm.database.PasswordDatabase;
 /* Button */
 import com.epassafe.upm.wrappers.CheckWrappers;
 import com.epassafe.upm.wrappers.honeycomb.WrapActionBar;
@@ -65,6 +67,10 @@ public class FullAccountList extends AccountsList {
     private static final int DIALOG_ABOUT = 2;
     private static final int CONFIRM_DELETE_DB_DIALOG = 3;
     
+    /* DELETE FROM CONTEXT NOT WORKING ATM*/
+    private static final int DELETE_DIALOG = 5;
+    
+    /* DELETE END */
     
     public static final int RESULT_EXIT = 0;
     public static final int RESULT_ENTER_PW = 1;
@@ -324,10 +330,45 @@ public class FullAccountList extends AccountsList {
             });
             break;
             
+            /* DELETE CONTEXT BUTTON  NOT WORKING ATM*/
+    /*    	case DELETE_DIALOG:
+            
+            dialogBuilder.setMessage(getString(R.string.confirm_delete_dialog))//setting the dialog of confirm_delete_dialog from string.xml
+            .setCancelable(false)
+            .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        getPasswordDatabase().deleteAccount(account.getAccountName(
+                    
+                        		));//insert into database and erase the account selected
+                        final String accountName = account.getAccountName();
+
+                        new SaveDatabaseAsyncTask(FullAccountList.this, new Callback() {
+                            @Override
+                    public void execute() {
+                            String message = String.format(getString(R.string.account_deleted), accountName);
+                            Toast.makeText(FullAccountList.this, message, Toast.LENGTH_SHORT).show();
+                            //B Set this flag so that when we're returned to the FullAccountList
+                            // activity the list is refreshed
+                            FullAccountList.this.setResult(AddEditAccount.EDIT_ACCOUNT_RESULT_CODE_TRUE);
+                            finish();
+                            }
+                        }).execute(getPasswordDatabase());
+                    }
+                })
+                .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        
+                        dialog.cancel();//if the selection is "No" cancel the dialog
+                    }
+                });
+            break;  */
+            /* DELETE END */
+            
         }
 
         return dialogBuilder.create();
     }
+    
 
     private void deleteDatabase() {
         Utilities.getDatabaseFile(this).delete();

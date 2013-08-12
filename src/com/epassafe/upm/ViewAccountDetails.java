@@ -20,12 +20,17 @@
  */
 package com.epassafe.upm;
 
+import java.util.Timer;
+import java.util.TimerTask;
+
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.content.BroadcastReceiver;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -46,6 +51,7 @@ public class ViewAccountDetails extends Activity {
 
     private int editAccountResultCode = 0;
 
+    
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -53,6 +59,24 @@ public class ViewAccountDetails extends Activity {
             getWindow().setFlags(LayoutParams.FLAG_SECURE, LayoutParams.FLAG_SECURE);
         }
         setContentView(R.layout.view_account_details);
+        
+        /* Time Lockout after 10 mins POSSIBLY I DONT NEED HERE SINCE BEING CALLED ON EARLIER ACTIVITY? */
+        Timer timer = new Timer();
+        timer.schedule(new TimerTask() {
+
+           public void run() {
+
+           	Intent i = new Intent(ViewAccountDetails.this, AppEntryActivity.class);
+            i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            startActivity(i);
+            finish();
+            return;
+
+           }
+
+        }, 600000);
+        /* Time Lockout END */
+        
     }
 
     /**
@@ -183,6 +207,7 @@ public class ViewAccountDetails extends Activity {
             return super.onKeyDown(keyCode, event);
         }
     } 
+    
     /* works with volume press down not exactly what i want, want at screen off */
     /* END BACK AND LOCK */
     
@@ -200,6 +225,7 @@ public class ViewAccountDetails extends Activity {
     } 
     */
     /* ORIGINAL END */
+    
 
     private void populateView() {
         TextView accountNameTextView = (TextView) findViewById(R.id.account_name);

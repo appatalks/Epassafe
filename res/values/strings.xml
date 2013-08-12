@@ -48,9 +48,9 @@
     <string name="about">About</string>
     <string name="close">Close</string>
     <string name="homepage">Homepage</string>
-    <string name="homepageUrl">http://upm.sourceforge.net</string>
+    <string name="homepageUrl">http://www.epassafe.com</string>
     <string name="donate">Donate</string>
-    <string name="donateURL">http://sourceforge.net/donate/index.php?group_id=154394</string>
+    <string name="donateURL"></string>
     <string name="aboutText">
         UPM Epassafe allows you to store usernames, passwords and 
         generic notes in an encrypted database protected by one master 
@@ -125,6 +125,8 @@
     <string name="sync_settings">Sync Settings</string>
     <string name="problem_uploading">Problem Uploading Database</string>
     <string name="no_database_files">No Database files on Dropbox</string>
+    
+    <string name="confirm_delete_dialog">Are you sure you want to delete your Account? Once deleted the account is gone forever.</string> 
     
     <string name="lock_timeout">Time to autolock: %s </string>
     

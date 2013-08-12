@@ -37,6 +37,7 @@ import android.view.View.OnClickListener;
 import android.view.View.OnKeyListener;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.epassafe.upm.crypto.InvalidPasswordException;
@@ -79,7 +80,7 @@ public class EnterMasterPassword extends Activity implements OnClickListener {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.enter_master_password);
-
+        
         passwordField = (EditText) findViewById(R.id.password);
         passwordField.setText(null);
 

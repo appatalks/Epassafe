@@ -21,6 +21,9 @@
 package com.epassafe.upm;
 
 
+import java.util.Timer;
+import java.util.TimerTask;
+
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.ListActivity;
@@ -46,12 +49,32 @@ import com.epassafe.upm.database.PasswordDatabase;
 @SuppressWarnings("deprecation")
 public class AccountsList extends ListActivity {
 
-	/* DELETE ACCOUNT BUTTON CODE */
+	/* DELETE ACCOUNT BUTTON CODE NOT WORKING ATM */
+	private static final int DELETE_DIALOG1 = 5;
+	public static AccountInformation account;
+	private int editAccountResultCode = 0; 
 	/* DELETE ACCT BUTTON CODE END */
 	
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        
+        /* Time Lockout after 10 mins */
+        Timer timer = new Timer();
+        timer.schedule(new TimerTask() {
+
+           public void run() {
+
+           	Intent i = new Intent(AccountsList.this, AppEntryActivity.class);
+            i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            startActivity(i);
+            finish();
+            return;
+
+           }
+
+        }, 600000);
+        /* Time Lockout END */
     }
 
     @Override
@@ -69,27 +92,15 @@ public class AccountsList extends ListActivity {
             editAccount(getAccount(info.targetView));
             return true;        
      /* DELETE ACCT BUTTON ****NOT WORKING ATM**** */
-            /*
-      case R.id.delete:
-    	  editAccount(getAccount(info.targetView));
-            return true;
-            */ 
+        /* case R.id.delete:
+         getPasswordDatabase().deleteAccount(account.getAccountName());
+            break; */
     /* DELETE ACCT BUTTON END */    
             
-  /*      case R.id.copy_username:
-            setClipboardText(getUsername(getAccount(info.targetView)));
-            return true;
-        case R.id.copy_password:
-            setClipboardText(getPassword(getAccount(info.targetView)));
-            return true;
-        case R.id.launch_url:
-            launchURL(getURL(getAccount(info.targetView)));
-            return true; */
-
         }
         return super.onContextItemSelected(item);
     }
-    
+        
     
     private void setClipboardText(String text) {
         ClipboardManager clipboardManager = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);

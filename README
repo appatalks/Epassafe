@@ -38,6 +38,8 @@ safe, like a notebook but in electronic form.
 
 History
 -------
+v.1.8b Beta - Replaced Master Password Warning Text with Logo. (Just don't forget your password!)
+			  Added 10 minute timer to lockout. So no more worries if you forget to lock the app.
 v.1.7b Beta - Created an Automatic Backup aupm.db from Manual Backup upm.db on application exit
 				--Restore still from Manual Backup file upm.db
 				--If want to restore automatic backup, must rename aupm.db --> upm.db from root of sdCard

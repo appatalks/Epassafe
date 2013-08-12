@@ -18,10 +18,11 @@ Some of the Changes I've made:
 	--If want to restore automatic backup, must rename aupm.db --> upm.db from root of sdCard
 		(This makes good practice to do manual backups in the first place, but leaves a safety net
 		for just in case i.e. database corruption)
+- Placed logo on Master Password page in place of text.
+- Automatically Lock after 10 minutes (Just in case forget to lock while away.)
 
 Some things I would like to add:
 
 - Long Press Delete Account from context menu
-- Lock Database on screen off/timeout
 - Theme Options / Like change colors, maybe add background picture
 

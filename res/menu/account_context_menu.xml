@@ -4,6 +4,10 @@
   
 <item android:title="@string/edit_account" android:id="@+id/edit_account"></item>
 <!-- TRYING TO ADD DELETE ACCOUNT BUTTON TO ACCOUNT CONTEXT MENU ON LIST VIEW-->
+
+<item android:id="@+id/delete" android:title="@string/delete" 
+    android:icon="@android:drawable/ic_menu_delete" android:alphabeticShortcut="d"></item>
+
 <!-- <item android:id="@+id/delete" android:title="@string/delete_account"> </item> -->
 <!-- END -->
 <!-- 
