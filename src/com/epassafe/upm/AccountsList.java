@@ -24,23 +24,19 @@ package com.epassafe.upm;
 import java.util.Timer;
 import java.util.TimerTask;
 
-import android.app.AlertDialog;
-import android.app.Dialog;
 import android.app.ListActivity;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.text.ClipboardManager;
 import android.view.ContextMenu;
-import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ContextMenu.ContextMenuInfo;
+import android.view.WindowManager.LayoutParams;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 import android.widget.AdapterView.AdapterContextMenuInfo;
 
 import com.epassafe.upm.database.AccountInformation;
@@ -50,16 +46,17 @@ import com.epassafe.upm.database.PasswordDatabase;
 public class AccountsList extends ListActivity {
 
 	/* DELETE ACCOUNT BUTTON CODE NOT WORKING ATM */
-	private static final int DELETE_DIALOG1 = 5;
-	public static AccountInformation account;
-	private int editAccountResultCode = 0; 
+// NEED TO WORK ON THIS ONE
 	/* DELETE ACCT BUTTON CODE END */
-	
+                 	
+        	
     @Override
     public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+        super.onCreate(savedInstanceState);       
         
         /* Time Lockout after 10 mins */
+        getWindow().addFlags(LayoutParams.FLAG_KEEP_SCREEN_ON);
+        
         Timer timer = new Timer();
         timer.schedule(new TimerTask() {
 
@@ -73,7 +70,7 @@ public class AccountsList extends ListActivity {
 
            }
 
-        }, 600000);
+        }, 300000); 
         /* Time Lockout END */
     }
 
@@ -134,7 +131,7 @@ public class AccountsList extends ListActivity {
             Intent intent = new Intent(Intent.ACTION_VIEW, uri); 
             startActivity(intent); 
         }
-    }
+    } 
 
     private void viewAccount(AccountInformation ai) {
         // Pass the AccountInformation object o the AccountDetails Activity by

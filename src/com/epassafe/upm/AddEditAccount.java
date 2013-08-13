@@ -20,7 +20,6 @@
  */
 package com.epassafe.upm;
 
-import java.io.File;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -28,21 +27,16 @@ import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Environment;
 import android.util.Log;
-import android.view.ContextMenu;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ContextMenu.ContextMenuInfo;
 import android.view.View.OnClickListener;
 import android.view.WindowManager.LayoutParams;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
-import android.widget.AdapterView.AdapterContextMenuInfo;
-
 import com.epassafe.upm.database.AccountInformation;
 import com.epassafe.upm.database.PasswordDatabase;
 
@@ -80,6 +74,11 @@ public class AddEditAccount extends Activity implements OnClickListener {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        
+        /* Time Lockout after 10 mins from AccountsList*/
+        getWindow().addFlags(LayoutParams.FLAG_KEEP_SCREEN_ON);
+        /* End */
+        
         if (Utilities.VERSION.SDK_INT >= Utilities.VERSION_CODES.HONEYCOMB) {
             getWindow().setFlags(LayoutParams.FLAG_SECURE, LayoutParams.FLAG_SECURE);
         }
@@ -102,7 +101,6 @@ public class AddEditAccount extends Activity implements OnClickListener {
         accountToEdit = extras.getString(ACCOUNT_TO_EDIT);
     }
 
-    /* MAYBE WE CAN USE THIS CODE TO LOCK DATABASE AFTER SCREEN OFF OR TIMEOUT */
     @Override
     public void onResume() {
         super.onResume();

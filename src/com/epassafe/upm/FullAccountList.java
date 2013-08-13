@@ -23,21 +23,12 @@ package com.epassafe.upm;
 
 import java.io.File;
 
-
-// import java.io.FileInputStream;
-// import java.io.FileOutputStream;
-// import java.io.IOException;
-// import java.nio.channels.FileChannel;
-
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
-// import android.content.DialogInterface.OnClickListener;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager.NameNotFoundException;
-// import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.util.Log;
@@ -47,14 +38,10 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
-import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.epassafe.upm.database.PasswordDatabase;
 /* Button */
 import com.epassafe.upm.wrappers.CheckWrappers;
 import com.epassafe.upm.wrappers.honeycomb.WrapActionBar;
@@ -68,8 +55,7 @@ public class FullAccountList extends AccountsList {
     private static final int CONFIRM_DELETE_DB_DIALOG = 3;
     
     /* DELETE FROM CONTEXT NOT WORKING ATM*/
-    private static final int DELETE_DIALOG = 5;
-    
+ // NEED TO FIGURE THIS ONE OUT
     /* DELETE END */
     
     public static final int RESULT_EXIT = 0;
@@ -161,32 +147,7 @@ public class FullAccountList extends AccountsList {
             return super.onKeyDown(keyCode, event);
         }
     } 
-    /* works with volume press down not exactly what i want, want at screen off */
-    
-/* ORIGINAL EXIT */
-  /*  @Override
-    public boolean onKeyDown(int keyCode, KeyEvent event) {
-        if (keyCode == KeyEvent.KEYCODE_BACK) {
-            new AlertDialog.Builder(this)
-            .setIcon(android.R.drawable.ic_dialog_alert)
-            .setTitle(R.string.confirm_exit_title)
-            .setMessage(R.string.confirm_exit_message)
-            .setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    FullAccountList.this.setResult(RESULT_ENTER_PW);
-                    FullAccountList.this.finish();
-                }
-            })
-            .setNegativeButton(R.string.no, null)
-            .show();
-            return true;
-        } 
-        else {
-            return super.onKeyDown(keyCode, event);
-        }
-    }    */
-   /* END ORIGINAL EXIT */
+    /* End */
     
     @SuppressWarnings("deprecation")
 	@Override
@@ -331,37 +292,7 @@ public class FullAccountList extends AccountsList {
             break;
             
             /* DELETE CONTEXT BUTTON  NOT WORKING ATM*/
-    /*    	case DELETE_DIALOG:
-            
-            dialogBuilder.setMessage(getString(R.string.confirm_delete_dialog))//setting the dialog of confirm_delete_dialog from string.xml
-            .setCancelable(false)
-            .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                        getPasswordDatabase().deleteAccount(account.getAccountName(
-                    
-                        		));//insert into database and erase the account selected
-                        final String accountName = account.getAccountName();
-
-                        new SaveDatabaseAsyncTask(FullAccountList.this, new Callback() {
-                            @Override
-                    public void execute() {
-                            String message = String.format(getString(R.string.account_deleted), accountName);
-                            Toast.makeText(FullAccountList.this, message, Toast.LENGTH_SHORT).show();
-                            //B Set this flag so that when we're returned to the FullAccountList
-                            // activity the list is refreshed
-                            FullAccountList.this.setResult(AddEditAccount.EDIT_ACCOUNT_RESULT_CODE_TRUE);
-                            finish();
-                            }
-                        }).execute(getPasswordDatabase());
-                    }
-                })
-                .setNegativeButton("No", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                        
-                        dialog.cancel();//if the selection is "No" cancel the dialog
-                    }
-                });
-            break;  */
+  // NEED TO FIGUE THIS ONE OUT
             /* DELETE END */
             
         }

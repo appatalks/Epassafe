@@ -8,6 +8,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.WindowManager.LayoutParams;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -16,6 +17,7 @@ import android.text.ClipboardManager;
 import android.util.Log;
 
 
+@SuppressWarnings("deprecation")
 public class PassGenerator extends Activity implements OnClickListener{
 	
 	private static final String TAG = "PassGenerator";
@@ -33,6 +35,11 @@ public class PassGenerator extends Activity implements OnClickListener{
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        
+        /* Time Lockout after 10 mins from AccountsList*/
+        getWindow().addFlags(LayoutParams.FLAG_KEEP_SCREEN_ON);
+        /* End */
+        
         setContentView(R.layout.genmain);
         
         View generate = findViewById(R.id.generate);

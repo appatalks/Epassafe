@@ -25,7 +25,6 @@ import java.io.IOException;
 import java.security.GeneralSecurityException;
 
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -37,7 +36,6 @@ import android.view.View.OnClickListener;
 import android.view.View.OnKeyListener;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.epassafe.upm.crypto.InvalidPasswordException;
@@ -58,8 +56,6 @@ public class EnterMasterPassword extends Activity implements OnClickListener {
     private DecryptDatabase decryptDatabaseTask;
     private ProgressDialog progressDialog;
 
-    @SuppressWarnings("deprecation")
-    
     /* SAVE DATABASE BACKUP FILE ON EXIT */
     /* AUTOMATIC BACKUP TO FILE aupm.db THAN MANUAL BACKUP upm.db*/
     @Override
@@ -75,6 +71,7 @@ public class EnterMasterPassword extends Activity implements OnClickListener {
     }
     /* SAVE DATABASE ON EXIT END */
     
+	@SuppressWarnings("deprecation")
 	@Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

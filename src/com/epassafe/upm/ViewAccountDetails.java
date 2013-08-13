@@ -20,17 +20,15 @@
  */
 package com.epassafe.upm;
 
-import java.util.Timer;
-import java.util.TimerTask;
 
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
-import android.content.BroadcastReceiver;
+
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Handler;
+
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -55,28 +53,16 @@ public class ViewAccountDetails extends Activity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+           
+        /* Time Lockout after 10 mins from AccountsList*/
+        getWindow().addFlags(LayoutParams.FLAG_KEEP_SCREEN_ON);
+        /* End */
+        
         if (Utilities.VERSION.SDK_INT >= Utilities.VERSION_CODES.HONEYCOMB) {
             getWindow().setFlags(LayoutParams.FLAG_SECURE, LayoutParams.FLAG_SECURE);
         }
         setContentView(R.layout.view_account_details);
-        
-        /* Time Lockout after 10 mins POSSIBLY I DONT NEED HERE SINCE BEING CALLED ON EARLIER ACTIVITY? */
-        Timer timer = new Timer();
-        timer.schedule(new TimerTask() {
-
-           public void run() {
-
-           	Intent i = new Intent(ViewAccountDetails.this, AppEntryActivity.class);
-            i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-            startActivity(i);
-            finish();
-            return;
-
-           }
-
-        }, 600000);
-        /* Time Lockout END */
-        
+           
     }
 
     /**
@@ -208,25 +194,7 @@ public class ViewAccountDetails extends Activity {
         }
     } 
     
-    /* works with volume press down not exactly what i want, want at screen off */
-    /* END BACK AND LOCK */
     
-    /* ORIGINAL KEYDOWN */
-    /*
-    @Override
-    public boolean onKeyDown(int keyCode, KeyEvent event) {
-        // If the back button is pressed pass back the edit account flag
-        // This is used to indicate if the list of account names on 
-        // FullAccountList needs to be refreshed
-        if (keyCode == KeyEvent.KEYCODE_BACK) {
-            setResult(editAccountResultCode);
-        }
-        return super.onKeyDown(keyCode, event);
-    } 
-    */
-    /* ORIGINAL END */
-    
-
     private void populateView() {
         TextView accountNameTextView = (TextView) findViewById(R.id.account_name);
         accountNameTextView.setText(account.getAccountName());

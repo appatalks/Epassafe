@@ -36,6 +36,7 @@ public class GenPrefs extends PreferenceActivity implements OnPreferenceChangeLi
 	private static final boolean OPTION_CLIPBOARD_DEFAULT = false;
 	
 
+	@SuppressWarnings("deprecation")
 	@Override
 	protected void onCreate (Bundle savedInstanceState){
 		super.onCreate(savedInstanceState);
@@ -92,6 +93,7 @@ public class GenPrefs extends PreferenceActivity implements OnPreferenceChangeLi
 	}
 	
 	public void updateOptionLength(String slength){
+		@SuppressWarnings("deprecation")
 		EditTextPreference length = (EditTextPreference) findPreference(OPTION_LENGTH);	
 		length.setSummary(String.valueOf(slength));
 	}
