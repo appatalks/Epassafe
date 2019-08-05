@@ -1,0 +1,15 @@
+#Internal package file, do not edit.
+#Mon Aug 05 17:00:07 CDT 2019
+1.base=/home/stev7049/StudioProjects/Epassafe/app/build/intermediates/merged_assets/debug/out
+2.path=classes.dex
+0.baseType=DIRECTORY
+2.base=/home/stev7049/StudioProjects/Epassafe/app/build/intermediates/dex/debug/mergeDexDebug/out
+2.set=DEX
+1.baseType=DIRECTORY
+count=3
+1.set=ASSET
+0.path=hyuna.gif
+0.set=ASSET
+0.base=/home/stev7049/StudioProjects/Epassafe/app/build/intermediates/merged_assets/debug/out
+2.baseType=DIRECTORY
+1.path=index.html

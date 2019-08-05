@@ -1,0 +1,135 @@
+-- Merging decision tree log ---
+manifest
+ADDED from /home/stev7049/StudioProjects/Epassafe/app/src/main/AndroidManifest.xml:2:1-67:12
+INJECTED from /home/stev7049/StudioProjects/Epassafe/app/src/main/AndroidManifest.xml:2:1-67:12
+INJECTED from /home/stev7049/StudioProjects/Epassafe/app/src/main/AndroidManifest.xml:2:1-67:12
+INJECTED from /home/stev7049/StudioProjects/Epassafe/app/src/main/AndroidManifest.xml:2:1-67:12
+INJECTED from /home/stev7049/StudioProjects/Epassafe/app/src/main/AndroidManifest.xml:2:1-67:12
+INJECTED from /home/stev7049/StudioProjects/Epassafe/app/src/main/AndroidManifest.xml:2:1-67:12
+INJECTED from /home/stev7049/StudioProjects/Epassafe/app/src/main/AndroidManifest.xml:2:1-67:12
+	package
+		ADDED from /home/stev7049/StudioProjects/Epassafe/app/src/main/AndroidManifest.xml:3:11-37
+		INJECTED from /home/stev7049/StudioProjects/Epassafe/app/src/main/AndroidManifest.xml
+		INJECTED from /home/stev7049/StudioProjects/Epassafe/app/src/main/AndroidManifest.xml
+	android:versionName
+		ADDED from /home/stev7049/StudioProjects/Epassafe/app/src/main/AndroidManifest.xml:5:11-36
+		INJECTED from /home/stev7049/StudioProjects/Epassafe/app/src/main/AndroidManifest.xml
+		INJECTED from /home/stev7049/StudioProjects/Epassafe/app/src/main/AndroidManifest.xml
+	xmlns:android
+		ADDED from /home/stev7049/StudioProjects/Epassafe/app/src/main/AndroidManifest.xml:2:11-69
+	android:versionCode
+		ADDED from /home/stev7049/StudioProjects/Epassafe/app/src/main/AndroidManifest.xml:4:11-35
+		INJECTED from /home/stev7049/StudioProjects/Epassafe/app/src/main/AndroidManifest.xml
+		INJECTED from /home/stev7049/StudioProjects/Epassafe/app/src/main/AndroidManifest.xml
+uses-permission#android.permission.WRITE_EXTERNAL_STORAGE
+ADDED from /home/stev7049/StudioProjects/Epassafe/app/src/main/AndroidManifest.xml:7:5-97
+	android:name
+		ADDED from /home/stev7049/StudioProjects/Epassafe/app/src/main/AndroidManifest.xml:7:22-78
+application
+ADDED from /home/stev7049/StudioProjects/Epassafe/app/src/main/AndroidManifest.xml:9:5-65:19
+	android:clearTaskOnLaunch
+		ADDED from /home/stev7049/StudioProjects/Epassafe/app/src/main/AndroidManifest.xml:13:13-45
+	android:stateNotNeeded
+		ADDED from /home/stev7049/StudioProjects/Epassafe/app/src/main/AndroidManifest.xml:14:13-42
+	android:label
+		ADDED from /home/stev7049/StudioProjects/Epassafe/app/src/main/AndroidManifest.xml:10:18-56
+	android:launchMode
+		ADDED from /home/stev7049/StudioProjects/Epassafe/app/src/main/AndroidManifest.xml:12:13-48
+	android:icon
+		ADDED from /home/stev7049/StudioProjects/Epassafe/app/src/main/AndroidManifest.xml:9:18-46
+	android:name
+		ADDED from /home/stev7049/StudioProjects/Epassafe/app/src/main/AndroidManifest.xml:11:18-47
+activity#com.epassafe.upm.AppEntryActivity
+ADDED from /home/stev7049/StudioProjects/Epassafe/app/src/main/AndroidManifest.xml:15:9-22:20
+	android:name
+		ADDED from /home/stev7049/StudioProjects/Epassafe/app/src/main/AndroidManifest.xml:15:19-51
+intent-filter#action:name:android.intent.action.MAIN+category:name:android.intent.category.DEFAULT+category:name:android.intent.category.HOME+category:name:android.intent.category.LAUNCHER
+ADDED from /home/stev7049/StudioProjects/Epassafe/app/src/main/AndroidManifest.xml:16:13-21:29
+action#android.intent.action.MAIN
+ADDED from /home/stev7049/StudioProjects/Epassafe/app/src/main/AndroidManifest.xml:17:17-69
+	android:name
+		ADDED from /home/stev7049/StudioProjects/Epassafe/app/src/main/AndroidManifest.xml:17:25-66
+category#android.intent.category.HOME
+ADDED from /home/stev7049/StudioProjects/Epassafe/app/src/main/AndroidManifest.xml:18:17-72
+	android:name
+		ADDED from /home/stev7049/StudioProjects/Epassafe/app/src/main/AndroidManifest.xml:18:27-70
+category#android.intent.category.DEFAULT
+ADDED from /home/stev7049/StudioProjects/Epassafe/app/src/main/AndroidManifest.xml:19:17-76
+	android:name
+		ADDED from /home/stev7049/StudioProjects/Epassafe/app/src/main/AndroidManifest.xml:19:27-73
+category#android.intent.category.LAUNCHER
+ADDED from /home/stev7049/StudioProjects/Epassafe/app/src/main/AndroidManifest.xml:20:17-77
+	android:name
+		ADDED from /home/stev7049/StudioProjects/Epassafe/app/src/main/AndroidManifest.xml:20:27-74
+activity#com.epassafe.upm.EnterMasterPassword
+ADDED from /home/stev7049/StudioProjects/Epassafe/app/src/main/AndroidManifest.xml:24:9-25:20
+	android:name
+		ADDED from /home/stev7049/StudioProjects/Epassafe/app/src/main/AndroidManifest.xml:24:19-54
+activity#com.epassafe.upm.FullAccountList
+ADDED from /home/stev7049/StudioProjects/Epassafe/app/src/main/AndroidManifest.xml:27:9-30:20
+	android:name
+		ADDED from /home/stev7049/StudioProjects/Epassafe/app/src/main/AndroidManifest.xml:27:19-50
+meta-data#android.app.default_searchable
+ADDED from /home/stev7049/StudioProjects/Epassafe/app/src/main/AndroidManifest.xml:28:13-29:57
+	android:value
+		ADDED from /home/stev7049/StudioProjects/Epassafe/app/src/main/AndroidManifest.xml:29:24-54
+	android:name
+		ADDED from /home/stev7049/StudioProjects/Epassafe/app/src/main/AndroidManifest.xml:28:24-69
+activity#com.epassafe.upm.ViewAccountDetails
+ADDED from /home/stev7049/StudioProjects/Epassafe/app/src/main/AndroidManifest.xml:32:9-33:20
+	android:name
+		ADDED from /home/stev7049/StudioProjects/Epassafe/app/src/main/AndroidManifest.xml:32:19-53
+activity#com.epassafe.upm.CreateNewDatabase
+ADDED from /home/stev7049/StudioProjects/Epassafe/app/src/main/AndroidManifest.xml:35:9-36:20
+	android:name
+		ADDED from /home/stev7049/StudioProjects/Epassafe/app/src/main/AndroidManifest.xml:35:19-52
+activity#com.epassafe.upm.AddEditAccount
+ADDED from /home/stev7049/StudioProjects/Epassafe/app/src/main/AndroidManifest.xml:38:9-39:20
+	android:name
+		ADDED from /home/stev7049/StudioProjects/Epassafe/app/src/main/AndroidManifest.xml:38:19-49
+activity#com.epassafe.upm.ChangeMasterPassword
+ADDED from /home/stev7049/StudioProjects/Epassafe/app/src/main/AndroidManifest.xml:41:9-42:20
+	android:name
+		ADDED from /home/stev7049/StudioProjects/Epassafe/app/src/main/AndroidManifest.xml:41:19-55
+activity#com.epassafe.upm.EasterEgg
+ADDED from /home/stev7049/StudioProjects/Epassafe/app/src/main/AndroidManifest.xml:44:9-45:20
+	android:name
+		ADDED from /home/stev7049/StudioProjects/Epassafe/app/src/main/AndroidManifest.xml:44:19-44
+activity#com.epassafe.upm.PassGenerator
+ADDED from /home/stev7049/StudioProjects/Epassafe/app/src/main/AndroidManifest.xml:47:9-48:20
+	android:name
+		ADDED from /home/stev7049/StudioProjects/Epassafe/app/src/main/AndroidManifest.xml:47:19-48
+activity#com.epassafe.upm.GenPrefs
+ADDED from /home/stev7049/StudioProjects/Epassafe/app/src/main/AndroidManifest.xml:50:9-51:20
+	android:name
+		ADDED from /home/stev7049/StudioProjects/Epassafe/app/src/main/AndroidManifest.xml:50:19-43
+activity#com.epassafe.upm.SearchResults
+ADDED from /home/stev7049/StudioProjects/Epassafe/app/src/main/AndroidManifest.xml:53:9-63:20
+	android:label
+		ADDED from /home/stev7049/StudioProjects/Epassafe/app/src/main/AndroidManifest.xml:54:19-57
+	android:launchMode
+		ADDED from /home/stev7049/StudioProjects/Epassafe/app/src/main/AndroidManifest.xml:55:19-49
+	android:exported
+		ADDED from /home/stev7049/StudioProjects/Epassafe/app/src/main/AndroidManifest.xml:56:19-43
+	android:name
+		ADDED from /home/stev7049/StudioProjects/Epassafe/app/src/main/AndroidManifest.xml:53:19-48
+intent-filter#action:name:android.intent.action.SEARCH
+ADDED from /home/stev7049/StudioProjects/Epassafe/app/src/main/AndroidManifest.xml:57:13-59:29
+action#android.intent.action.SEARCH
+ADDED from /home/stev7049/StudioProjects/Epassafe/app/src/main/AndroidManifest.xml:58:17-70
+	android:name
+		ADDED from /home/stev7049/StudioProjects/Epassafe/app/src/main/AndroidManifest.xml:58:25-68
+meta-data#android.app.searchable
+ADDED from /home/stev7049/StudioProjects/Epassafe/app/src/main/AndroidManifest.xml:61:13-62:60
+	android:resource
+		ADDED from /home/stev7049/StudioProjects/Epassafe/app/src/main/AndroidManifest.xml:62:24-58
+	android:name
+		ADDED from /home/stev7049/StudioProjects/Epassafe/app/src/main/AndroidManifest.xml:61:24-61
+uses-sdk
+INJECTED from /home/stev7049/StudioProjects/Epassafe/app/src/main/AndroidManifest.xml reason: use-sdk injection requested
+INJECTED from /home/stev7049/StudioProjects/Epassafe/app/src/main/AndroidManifest.xml
+INJECTED from /home/stev7049/StudioProjects/Epassafe/app/src/main/AndroidManifest.xml
+	android:targetSdkVersion
+		INJECTED from /home/stev7049/StudioProjects/Epassafe/app/src/main/AndroidManifest.xml
+		ADDED from /home/stev7049/StudioProjects/Epassafe/app/src/main/AndroidManifest.xml
+		INJECTED from /home/stev7049/StudioProjects/Epassafe/app/src/main/AndroidManifest.xml

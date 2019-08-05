@@ -1,0 +1,4 @@
+#Mon Aug 05 17:00:07 CDT 2019
+base.0=/home/stev7049/StudioProjects/Epassafe/app/build/intermediates/dex/debug/mergeDexDebug/out
+path.0=classes.dex
+renamed.0=classes.dex

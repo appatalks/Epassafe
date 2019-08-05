@@ -1,0 +1,118 @@
+[
+    {
+        "merged": "/home/stev7049/StudioProjects/Epassafe/app/build/intermediates/res/merged/debug/drawable_on.png.flat",
+        "source": "/home/stev7049/StudioProjects/Epassafe/app/src/main/res/drawable/on.png"
+    },
+    {
+        "merged": "/home/stev7049/StudioProjects/Epassafe/app/build/intermediates/res/merged/debug/menu_menu.xml.flat",
+        "source": "/home/stev7049/StudioProjects/Epassafe/app/src/main/res/menu/menu.xml"
+    },
+    {
+        "merged": "/home/stev7049/StudioProjects/Epassafe/app/build/intermediates/res/merged/debug/drawable_upm_hd.png.flat",
+        "source": "/home/stev7049/StudioProjects/Epassafe/app/src/main/res/drawable/upm_hd.png"
+    },
+    {
+        "merged": "/home/stev7049/StudioProjects/Epassafe/app/build/intermediates/res/merged/debug/layout_dialog.xml.flat",
+        "source": "/home/stev7049/StudioProjects/Epassafe/app/src/main/res/layout/dialog.xml"
+    },
+    {
+        "merged": "/home/stev7049/StudioProjects/Epassafe/app/build/intermediates/res/merged/debug/drawable_logo.png.flat",
+        "source": "/home/stev7049/StudioProjects/Epassafe/app/src/main/res/drawable/logo.png"
+    },
+    {
+        "merged": "/home/stev7049/StudioProjects/Epassafe/app/build/intermediates/res/merged/debug/menu_account.xml.flat",
+        "source": "/home/stev7049/StudioProjects/Epassafe/app/src/main/res/menu/account.xml"
+    },
+    {
+        "merged": "/home/stev7049/StudioProjects/Epassafe/app/build/intermediates/res/merged/debug/drawable_info.png.flat",
+        "source": "/home/stev7049/StudioProjects/Epassafe/app/src/main/res/drawable/info.png"
+    },
+    {
+        "merged": "/home/stev7049/StudioProjects/Epassafe/app/build/intermediates/res/merged/debug/layout_view_account_details.xml.flat",
+        "source": "/home/stev7049/StudioProjects/Epassafe/app/src/main/res/layout/view_account_details.xml"
+    },
+    {
+        "merged": "/home/stev7049/StudioProjects/Epassafe/app/build/intermediates/res/merged/debug/layout_master_password_dialog.xml.flat",
+        "source": "/home/stev7049/StudioProjects/Epassafe/app/src/main/res/layout/master_password_dialog.xml"
+    },
+    {
+        "merged": "/home/stev7049/StudioProjects/Epassafe/app/build/intermediates/res/merged/debug/xml_searchable.xml.flat",
+        "source": "/home/stev7049/StudioProjects/Epassafe/app/src/main/res/xml/searchable.xml"
+    },
+    {
+        "merged": "/home/stev7049/StudioProjects/Epassafe/app/build/intermediates/res/merged/debug/layout_add_edit_account_details.xml.flat",
+        "source": "/home/stev7049/StudioProjects/Epassafe/app/src/main/res/layout/add_edit_account_details.xml"
+    },
+    {
+        "merged": "/home/stev7049/StudioProjects/Epassafe/app/build/intermediates/res/merged/debug/layout_change_master_password.xml.flat",
+        "source": "/home/stev7049/StudioProjects/Epassafe/app/src/main/res/layout/change_master_password.xml"
+    },
+    {
+        "merged": "/home/stev7049/StudioProjects/Epassafe/app/build/intermediates/res/merged/debug/layout_new_database_options.xml.flat",
+        "source": "/home/stev7049/StudioProjects/Epassafe/app/src/main/res/layout/new_database_options.xml"
+    },
+    {
+        "merged": "/home/stev7049/StudioProjects/Epassafe/app/build/intermediates/res/merged/debug/layout_enter_master_password.xml.flat",
+        "source": "/home/stev7049/StudioProjects/Epassafe/app/src/main/res/layout/enter_master_password.xml"
+    },
+    {
+        "merged": "/home/stev7049/StudioProjects/Epassafe/app/build/intermediates/res/merged/debug/drawable_ic_menu_add_password.png.flat",
+        "source": "/home/stev7049/StudioProjects/Epassafe/app/src/main/res/drawable/ic_menu_add_password.png"
+    },
+    {
+        "merged": "/home/stev7049/StudioProjects/Epassafe/app/build/intermediates/res/merged/debug/drawable_options.png.flat",
+        "source": "/home/stev7049/StudioProjects/Epassafe/app/src/main/res/drawable/options.png"
+    },
+    {
+        "merged": "/home/stev7049/StudioProjects/Epassafe/app/build/intermediates/res/merged/debug/layout_easteregg.xml.flat",
+        "source": "/home/stev7049/StudioProjects/Epassafe/app/src/main/res/layout/easteregg.xml"
+    },
+    {
+        "merged": "/home/stev7049/StudioProjects/Epassafe/app/build/intermediates/res/merged/debug/drawable_ic_menu_refresh.png.flat",
+        "source": "/home/stev7049/StudioProjects/Epassafe/app/src/main/res/drawable/ic_menu_refresh.png"
+    },
+    {
+        "merged": "/home/stev7049/StudioProjects/Epassafe/app/build/intermediates/res/merged/debug/menu_account_context_menu.xml.flat",
+        "source": "/home/stev7049/StudioProjects/Epassafe/app/src/main/res/menu/account_context_menu.xml"
+    },
+    {
+        "merged": "/home/stev7049/StudioProjects/Epassafe/app/build/intermediates/res/merged/debug/layout_search_results.xml.flat",
+        "source": "/home/stev7049/StudioProjects/Epassafe/app/src/main/res/layout/search_results.xml"
+    },
+    {
+        "merged": "/home/stev7049/StudioProjects/Epassafe/app/build/intermediates/res/merged/debug/xml_settings.xml.flat",
+        "source": "/home/stev7049/StudioProjects/Epassafe/app/src/main/res/xml/settings.xml"
+    },
+    {
+        "merged": "/home/stev7049/StudioProjects/Epassafe/app/build/intermediates/res/merged/debug/layout_download_remote_db.xml.flat",
+        "source": "/home/stev7049/StudioProjects/Epassafe/app/src/main/res/layout/download_remote_db.xml"
+    },
+    {
+        "merged": "/home/stev7049/StudioProjects/Epassafe/app/build/intermediates/res/merged/debug/layout_genmain.xml.flat",
+        "source": "/home/stev7049/StudioProjects/Epassafe/app/src/main/res/layout/genmain.xml"
+    },
+    {
+        "merged": "/home/stev7049/StudioProjects/Epassafe/app/build/intermediates/res/merged/debug/drawable_upm.png.flat",
+        "source": "/home/stev7049/StudioProjects/Epassafe/app/src/main/res/drawable/upm.png"
+    },
+    {
+        "merged": "/home/stev7049/StudioProjects/Epassafe/app/build/intermediates/res/merged/debug/layout_new_master_password_dialog.xml.flat",
+        "source": "/home/stev7049/StudioProjects/Epassafe/app/src/main/res/layout/new_master_password_dialog.xml"
+    },
+    {
+        "merged": "/home/stev7049/StudioProjects/Epassafe/app/build/intermediates/res/merged/debug/layout_main.xml.flat",
+        "source": "/home/stev7049/StudioProjects/Epassafe/app/src/main/res/layout/main.xml"
+    },
+    {
+        "merged": "/home/stev7049/StudioProjects/Epassafe/app/build/intermediates/res/merged/debug/layout_dropbox_file_list.xml.flat",
+        "source": "/home/stev7049/StudioProjects/Epassafe/app/src/main/res/layout/dropbox_file_list.xml"
+    },
+    {
+        "merged": "/home/stev7049/StudioProjects/Epassafe/app/build/intermediates/res/merged/debug/menu_main.xml.flat",
+        "source": "/home/stev7049/StudioProjects/Epassafe/app/src/main/res/menu/main.xml"
+    },
+    {
+        "merged": "/home/stev7049/StudioProjects/Epassafe/app/build/intermediates/res/merged/debug/drawable_off.png.flat",
+        "source": "/home/stev7049/StudioProjects/Epassafe/app/src/main/res/drawable/off.png"
+    }
+]
