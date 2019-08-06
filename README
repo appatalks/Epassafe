@@ -38,6 +38,12 @@ safe, like a notebook but in electronic form.
 
 History
 -------
+v.2.0 - Out of Beta
+            Updated for Android v9.0+ (Q, PIE) 2019.
+            Updated Build API from 16 to 29.0.1.
+            Adjusted lockout to 1 hour. 
+            Code Clean up.
+            
 v.1.9b Beta - Changed lockout to 5 mins, added screen keep alive to fix issue of timer not working when phone sleeps.
 v.1.8b Beta - Replaced Master Password Warning Text with Logo. (Just don't forget your password!)
 			  Added 10 minute timer to lockout. So no more worries if you forget to lock the app.

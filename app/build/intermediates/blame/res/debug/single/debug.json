@@ -28,6 +28,10 @@
         "source": "/home/stev7049/StudioProjects/Epassafe/app/src/main/res/drawable/info.png"
     },
     {
+        "merged": "/home/stev7049/StudioProjects/Epassafe/app/build/intermediates/res/merged/debug/xml_searchable.xml.flat",
+        "source": "/home/stev7049/StudioProjects/Epassafe/app/src/main/res/xml/searchable.xml"
+    },
+    {
         "merged": "/home/stev7049/StudioProjects/Epassafe/app/build/intermediates/res/merged/debug/layout_view_account_details.xml.flat",
         "source": "/home/stev7049/StudioProjects/Epassafe/app/src/main/res/layout/view_account_details.xml"
     },
@@ -36,16 +40,12 @@
         "source": "/home/stev7049/StudioProjects/Epassafe/app/src/main/res/layout/master_password_dialog.xml"
     },
     {
-        "merged": "/home/stev7049/StudioProjects/Epassafe/app/build/intermediates/res/merged/debug/xml_searchable.xml.flat",
-        "source": "/home/stev7049/StudioProjects/Epassafe/app/src/main/res/xml/searchable.xml"
+        "merged": "/home/stev7049/StudioProjects/Epassafe/app/build/intermediates/res/merged/debug/layout_change_master_password.xml.flat",
+        "source": "/home/stev7049/StudioProjects/Epassafe/app/src/main/res/layout/change_master_password.xml"
     },
     {
         "merged": "/home/stev7049/StudioProjects/Epassafe/app/build/intermediates/res/merged/debug/layout_add_edit_account_details.xml.flat",
         "source": "/home/stev7049/StudioProjects/Epassafe/app/src/main/res/layout/add_edit_account_details.xml"
-    },
-    {
-        "merged": "/home/stev7049/StudioProjects/Epassafe/app/build/intermediates/res/merged/debug/layout_change_master_password.xml.flat",
-        "source": "/home/stev7049/StudioProjects/Epassafe/app/src/main/res/layout/change_master_password.xml"
     },
     {
         "merged": "/home/stev7049/StudioProjects/Epassafe/app/build/intermediates/res/merged/debug/layout_new_database_options.xml.flat",

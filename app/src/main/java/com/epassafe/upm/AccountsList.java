@@ -70,7 +70,7 @@ public class AccountsList extends ListActivity {
 
            }
 
-        }, 300000); 
+        }, 3600000);
         /* Time Lockout END */
     }
 

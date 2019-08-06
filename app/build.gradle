@@ -6,6 +6,7 @@ android {
 
     defaultConfig {
         applicationId "com.epassafe.upm"
+        minSdkVersion 24
         targetSdkVersion 29
     }
 

@@ -13,13 +13,13 @@ Some of the Changes I've made:
 - Added Quick Lock with Volume Down (Temp until figure out with Screen Off)
 - Easter Egg
 - Added Password Generator (https://github.com/rod86/PassGenerator)
-- Created an Automatic Backup aupm.db from Manual Backup upm.db on application exit
-	--Restore still from Manual Backup file upm.db
-	--If want to restore automatic backup, must rename aupm.db --> upm.db from root of sdCard
+- Created an Automatic Backup "aupm.db" (generated in Android's root) from Manual Backup upm.db on application exit
+	-- Restore still from Manual Backup file upm.db
+	-- If want to restore automatic backup, must rename aupm.db --> upm.db from root of sdCard
 		(This makes good practice to do manual backups in the first place, but leaves a safety net
 		for just in case i.e. database corruption)
 - Placed logo on Master Password page in place of text.
-- Automatically Lock after 10 minutes (Just in case forget to lock while away.)
+- Automatically Lock after 1 hour (Just in case forget to lock while away.)
 
 Some things I would like to add:
 

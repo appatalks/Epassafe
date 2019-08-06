@@ -3,10 +3,10 @@
     package="com.epassafe.upm"
     android:targetSandboxVersion="2"
     android:versionCode="10"
-    android:versionName="1.9" >
+    android:versionName="2.0" >
 
     <uses-sdk
-        android:minSdkVersion="5"
+        android:minSdkVersion="24"
         android:targetSdkVersion="29" />
 
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
