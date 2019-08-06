@@ -38,10 +38,10 @@ safe, like a notebook but in electronic form.
 
 History
 -------
-v.2.0 - Out of Beta
+v.2.0 - Out of Beta (6 Years Later o.O)
             Updated for Android v9.0+ (Q, PIE) 2019.
             Updated Build API from 16 to 29.0.1.
-            Adjusted lockout to 1 hour. 
+            Adjusted lockout to 1 hour - very annoying having it auto-lock so quickly. 
             Code Clean up.
             
 v.1.9b Beta - Changed lockout to 5 mins, added screen keep alive to fix issue of timer not working when phone sleeps.
