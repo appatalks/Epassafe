@@ -9,7 +9,16 @@
               android:layout_height="wrap_content"
               android:text="@string/emp_new_db_options"
               android:layout_marginBottom="20dip"/>
-    
+
+    <!--
+    <Button android:id="@+id/request_permissions"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:text="Request Permissions"
+        style="@android:style/Widget.Button"
+        android:layout_gravity="center"/>
+    -->
+
     <Button android:id="@+id/new_database"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"

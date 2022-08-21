@@ -9,16 +9,15 @@ backups to be made to external device i.e sdcard.
 
 Grab latest Build from:
 https://github.com/servingbaby/Epassafe/raw/master/app/build/outputs/apk/debug/app-debug.apk
-Latest: v3.0 MD5 74a8bb94e67352b241f951a8e2473ccf
+Latest: v3.0 MD5 45bbeef3da863d0166db8ab3c0e6cc11
 
 History
 -------
-v.3.0 - Play Store Release Candidate
+v.3.0 - Play Store Release Candidate : Backups stored in Android/data/com.epassafe.upm/files/database
 v.2.9 - Android 13 Clipboard Sensitive Data Recommendation added to Main List view.
 v.2.8 - Fixed annoying Exit Bug
 v.2.7 - Code Clean up, Additional Android 13 Support improvements.
 v.2.6 - Updated for Android 13 Support
-	Database Backup/Restore now kept in ~/Documents
           To solve for Android 13 Permissions.
         Adjusted Password Generator Text Scaling
         Logo now in HD

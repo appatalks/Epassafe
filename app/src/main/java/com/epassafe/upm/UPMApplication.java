@@ -102,7 +102,7 @@ public class UPMApplication extends Application {
     protected void restoreDatabase(Activity activity) {
 
         deleteDatabase(activity);
-        File fileOnSDCard = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS), Utilities.DEFAULT_DATABASE_FILE);
+        File fileOnSDCard = new File(getExternalFilesDir("database"), Utilities.DEFAULT_DATABASE_FILE);
         File databaseFile = Utilities.getDatabaseFile(activity);
         ((UPMApplication) activity.getApplication()).copyFile(fileOnSDCard, databaseFile, activity);
     }

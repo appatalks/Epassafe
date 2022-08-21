@@ -10,125 +10,122 @@
 9        android:targetSdkVersion="33" />
 9-->/home/mj420/StudioProjects/Epassafe/app/src/main/AndroidManifest.xml
 10
-11    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-11-->/home/mj420/StudioProjects/Epassafe/app/src/main/AndroidManifest.xml:8:5-80
-11-->/home/mj420/StudioProjects/Epassafe/app/src/main/AndroidManifest.xml:8:22-78
-12    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
-12-->/home/mj420/StudioProjects/Epassafe/app/src/main/AndroidManifest.xml:9:5-79
-12-->/home/mj420/StudioProjects/Epassafe/app/src/main/AndroidManifest.xml:9:22-77
-13    <uses-permission android:name="android.permission.MANAGE_EXTERNAL_STORAGE" />
-13-->/home/mj420/StudioProjects/Epassafe/app/src/main/AndroidManifest.xml:10:5-11:39
-13-->/home/mj420/StudioProjects/Epassafe/app/src/main/AndroidManifest.xml:10:22-79
-14
-15    <application
-15-->/home/mj420/StudioProjects/Epassafe/app/src/main/AndroidManifest.xml:13:5-73:19
-16        android:name="com.epassafe.upm.UPMApplication"
-16-->/home/mj420/StudioProjects/Epassafe/app/src/main/AndroidManifest.xml:15:18-47
-17        android:allowBackup="false"
-17-->/home/mj420/StudioProjects/Epassafe/app/src/main/AndroidManifest.xml:20:18-45
-18        android:clearTaskOnLaunch="true"
-18-->/home/mj420/StudioProjects/Epassafe/app/src/main/AndroidManifest.xml:17:18-50
-19        android:debuggable="true"
-20        android:extractNativeLibs="false"
-21        android:icon="@drawable/upm_hd"
-21-->/home/mj420/StudioProjects/Epassafe/app/src/main/AndroidManifest.xml:13:18-49
-22        android:label="@string/app_name_short"
-22-->/home/mj420/StudioProjects/Epassafe/app/src/main/AndroidManifest.xml:14:18-56
-23        android:launchMode="singleInstance"
-23-->/home/mj420/StudioProjects/Epassafe/app/src/main/AndroidManifest.xml:16:18-53
-24        android:requestLegacyExternalStorage="true"
-24-->/home/mj420/StudioProjects/Epassafe/app/src/main/AndroidManifest.xml:21:18-61
-25        android:stateNotNeeded="true" >
-25-->/home/mj420/StudioProjects/Epassafe/app/src/main/AndroidManifest.xml:18:18-47
-26        <activity
-26-->/home/mj420/StudioProjects/Epassafe/app/src/main/AndroidManifest.xml:22:9-30:20
-27            android:name="com.epassafe.upm.AppEntryActivity"
-27-->/home/mj420/StudioProjects/Epassafe/app/src/main/AndroidManifest.xml:22:19-51
-28            android:exported="true" >
-28-->/home/mj420/StudioProjects/Epassafe/app/src/main/AndroidManifest.xml:23:13-36
-29            <intent-filter>
-29-->/home/mj420/StudioProjects/Epassafe/app/src/main/AndroidManifest.xml:24:13-29:29
-30                <action android:name="android.intent.action.MAIN" />
-30-->/home/mj420/StudioProjects/Epassafe/app/src/main/AndroidManifest.xml:25:17-69
-30-->/home/mj420/StudioProjects/Epassafe/app/src/main/AndroidManifest.xml:25:25-66
-31
-32                <category android:name="android.intent.category.HOME" />
-32-->/home/mj420/StudioProjects/Epassafe/app/src/main/AndroidManifest.xml:26:17-72
-32-->/home/mj420/StudioProjects/Epassafe/app/src/main/AndroidManifest.xml:26:27-70
-33                <category android:name="android.intent.category.DEFAULT" />
-33-->/home/mj420/StudioProjects/Epassafe/app/src/main/AndroidManifest.xml:27:17-76
-33-->/home/mj420/StudioProjects/Epassafe/app/src/main/AndroidManifest.xml:27:27-73
-34                <category android:name="android.intent.category.LAUNCHER" />
-34-->/home/mj420/StudioProjects/Epassafe/app/src/main/AndroidManifest.xml:28:17-77
-34-->/home/mj420/StudioProjects/Epassafe/app/src/main/AndroidManifest.xml:28:27-74
-35            </intent-filter>
-36        </activity>
-37        <activity android:name="com.epassafe.upm.EnterMasterPassword" >
-37-->/home/mj420/StudioProjects/Epassafe/app/src/main/AndroidManifest.xml:32:9-33:20
-37-->/home/mj420/StudioProjects/Epassafe/app/src/main/AndroidManifest.xml:32:19-54
-38        </activity>
-39        <activity android:name="com.epassafe.upm.FullAccountList" >
-39-->/home/mj420/StudioProjects/Epassafe/app/src/main/AndroidManifest.xml:35:9-38:20
-39-->/home/mj420/StudioProjects/Epassafe/app/src/main/AndroidManifest.xml:35:19-50
-40            <meta-data
-40-->/home/mj420/StudioProjects/Epassafe/app/src/main/AndroidManifest.xml:36:13-37:57
-41                android:name="android.app.default_searchable"
-41-->/home/mj420/StudioProjects/Epassafe/app/src/main/AndroidManifest.xml:36:24-69
-42                android:value=".SearchResults" />
-42-->/home/mj420/StudioProjects/Epassafe/app/src/main/AndroidManifest.xml:37:24-54
-43        </activity>
-44        <activity android:name="com.epassafe.upm.ViewAccountDetails" >
-44-->/home/mj420/StudioProjects/Epassafe/app/src/main/AndroidManifest.xml:40:9-41:20
-44-->/home/mj420/StudioProjects/Epassafe/app/src/main/AndroidManifest.xml:40:19-53
-45        </activity>
-46        <activity android:name="com.epassafe.upm.CreateNewDatabase" >
-46-->/home/mj420/StudioProjects/Epassafe/app/src/main/AndroidManifest.xml:43:9-44:20
-46-->/home/mj420/StudioProjects/Epassafe/app/src/main/AndroidManifest.xml:43:19-52
-47        </activity>
-48        <activity android:name="com.epassafe.upm.AddEditAccount" >
-48-->/home/mj420/StudioProjects/Epassafe/app/src/main/AndroidManifest.xml:46:9-47:20
-48-->/home/mj420/StudioProjects/Epassafe/app/src/main/AndroidManifest.xml:46:19-49
-49        </activity>
-50        <activity android:name="com.epassafe.upm.ChangeMasterPassword" >
-50-->/home/mj420/StudioProjects/Epassafe/app/src/main/AndroidManifest.xml:49:9-50:20
-50-->/home/mj420/StudioProjects/Epassafe/app/src/main/AndroidManifest.xml:49:19-55
-51        </activity>
-52        <activity android:name="com.epassafe.upm.EasterEgg" >
-52-->/home/mj420/StudioProjects/Epassafe/app/src/main/AndroidManifest.xml:52:9-53:20
-52-->/home/mj420/StudioProjects/Epassafe/app/src/main/AndroidManifest.xml:52:19-44
-53        </activity>
-54        <activity android:name="com.epassafe.upm.PassGenerator" >
-54-->/home/mj420/StudioProjects/Epassafe/app/src/main/AndroidManifest.xml:55:9-56:20
-54-->/home/mj420/StudioProjects/Epassafe/app/src/main/AndroidManifest.xml:55:19-48
-55        </activity>
-56        <activity android:name="com.epassafe.upm.GenPrefs" >
-56-->/home/mj420/StudioProjects/Epassafe/app/src/main/AndroidManifest.xml:58:9-59:20
-56-->/home/mj420/StudioProjects/Epassafe/app/src/main/AndroidManifest.xml:58:19-43
-57        </activity>
-58        <activity
-58-->/home/mj420/StudioProjects/Epassafe/app/src/main/AndroidManifest.xml:61:9-71:20
-59            android:name="com.epassafe.upm.SearchResults"
-59-->/home/mj420/StudioProjects/Epassafe/app/src/main/AndroidManifest.xml:61:19-48
-60            android:exported="false"
-60-->/home/mj420/StudioProjects/Epassafe/app/src/main/AndroidManifest.xml:64:19-43
-61            android:label="@string/search_results"
-61-->/home/mj420/StudioProjects/Epassafe/app/src/main/AndroidManifest.xml:62:19-57
-62            android:launchMode="singleTop" >
-62-->/home/mj420/StudioProjects/Epassafe/app/src/main/AndroidManifest.xml:63:19-49
-63            <intent-filter>
-63-->/home/mj420/StudioProjects/Epassafe/app/src/main/AndroidManifest.xml:65:13-67:29
-64                <action android:name="android.intent.action.SEARCH" />
-64-->/home/mj420/StudioProjects/Epassafe/app/src/main/AndroidManifest.xml:66:17-70
-64-->/home/mj420/StudioProjects/Epassafe/app/src/main/AndroidManifest.xml:66:25-68
-65            </intent-filter>
-66
-67            <meta-data
-67-->/home/mj420/StudioProjects/Epassafe/app/src/main/AndroidManifest.xml:69:13-70:60
-68                android:name="android.app.searchable"
-68-->/home/mj420/StudioProjects/Epassafe/app/src/main/AndroidManifest.xml:69:24-61
-69                android:resource="@xml/searchable" />
-69-->/home/mj420/StudioProjects/Epassafe/app/src/main/AndroidManifest.xml:70:24-58
-70        </activity>
-71    </application>
-72
-73</manifest>
+11    <!--
+12     PERMISSIONS
+13    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+14    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
+15    <uses-permission android:name="android.permission.MANAGE_EXTERNAL_STORAGE"
+16        tools:ignore="ScopedStorage"/>
+17    -->
+18    <application
+18-->/home/mj420/StudioProjects/Epassafe/app/src/main/AndroidManifest.xml:15:5-75:19
+19        android:name="com.epassafe.upm.UPMApplication"
+19-->/home/mj420/StudioProjects/Epassafe/app/src/main/AndroidManifest.xml:17:18-47
+20        android:allowBackup="false"
+20-->/home/mj420/StudioProjects/Epassafe/app/src/main/AndroidManifest.xml:22:18-45
+21        android:clearTaskOnLaunch="true"
+21-->/home/mj420/StudioProjects/Epassafe/app/src/main/AndroidManifest.xml:19:18-50
+22        android:debuggable="true"
+23        android:extractNativeLibs="false"
+24        android:icon="@drawable/upm_hd"
+24-->/home/mj420/StudioProjects/Epassafe/app/src/main/AndroidManifest.xml:15:18-49
+25        android:label="@string/app_name_short"
+25-->/home/mj420/StudioProjects/Epassafe/app/src/main/AndroidManifest.xml:16:18-56
+26        android:launchMode="singleInstance"
+26-->/home/mj420/StudioProjects/Epassafe/app/src/main/AndroidManifest.xml:18:18-53
+27        android:requestLegacyExternalStorage="true"
+27-->/home/mj420/StudioProjects/Epassafe/app/src/main/AndroidManifest.xml:23:18-61
+28        android:stateNotNeeded="true" >
+28-->/home/mj420/StudioProjects/Epassafe/app/src/main/AndroidManifest.xml:20:18-47
+29        <activity
+29-->/home/mj420/StudioProjects/Epassafe/app/src/main/AndroidManifest.xml:24:9-32:20
+30            android:name="com.epassafe.upm.AppEntryActivity"
+30-->/home/mj420/StudioProjects/Epassafe/app/src/main/AndroidManifest.xml:24:19-51
+31            android:exported="true" >
+31-->/home/mj420/StudioProjects/Epassafe/app/src/main/AndroidManifest.xml:25:13-36
+32            <intent-filter>
+32-->/home/mj420/StudioProjects/Epassafe/app/src/main/AndroidManifest.xml:26:13-31:29
+33                <action android:name="android.intent.action.MAIN" />
+33-->/home/mj420/StudioProjects/Epassafe/app/src/main/AndroidManifest.xml:27:17-69
+33-->/home/mj420/StudioProjects/Epassafe/app/src/main/AndroidManifest.xml:27:25-66
+34
+35                <category android:name="android.intent.category.HOME" />
+35-->/home/mj420/StudioProjects/Epassafe/app/src/main/AndroidManifest.xml:28:17-72
+35-->/home/mj420/StudioProjects/Epassafe/app/src/main/AndroidManifest.xml:28:27-70
+36                <category android:name="android.intent.category.DEFAULT" />
+36-->/home/mj420/StudioProjects/Epassafe/app/src/main/AndroidManifest.xml:29:17-76
+36-->/home/mj420/StudioProjects/Epassafe/app/src/main/AndroidManifest.xml:29:27-73
+37                <category android:name="android.intent.category.LAUNCHER" />
+37-->/home/mj420/StudioProjects/Epassafe/app/src/main/AndroidManifest.xml:30:17-77
+37-->/home/mj420/StudioProjects/Epassafe/app/src/main/AndroidManifest.xml:30:27-74
+38            </intent-filter>
+39        </activity>
+40        <activity android:name="com.epassafe.upm.EnterMasterPassword" >
+40-->/home/mj420/StudioProjects/Epassafe/app/src/main/AndroidManifest.xml:34:9-35:20
+40-->/home/mj420/StudioProjects/Epassafe/app/src/main/AndroidManifest.xml:34:19-54
+41        </activity>
+42        <activity android:name="com.epassafe.upm.FullAccountList" >
+42-->/home/mj420/StudioProjects/Epassafe/app/src/main/AndroidManifest.xml:37:9-40:20
+42-->/home/mj420/StudioProjects/Epassafe/app/src/main/AndroidManifest.xml:37:19-50
+43            <meta-data
+43-->/home/mj420/StudioProjects/Epassafe/app/src/main/AndroidManifest.xml:38:13-39:57
+44                android:name="android.app.default_searchable"
+44-->/home/mj420/StudioProjects/Epassafe/app/src/main/AndroidManifest.xml:38:24-69
+45                android:value=".SearchResults" />
+45-->/home/mj420/StudioProjects/Epassafe/app/src/main/AndroidManifest.xml:39:24-54
+46        </activity>
+47        <activity android:name="com.epassafe.upm.ViewAccountDetails" >
+47-->/home/mj420/StudioProjects/Epassafe/app/src/main/AndroidManifest.xml:42:9-43:20
+47-->/home/mj420/StudioProjects/Epassafe/app/src/main/AndroidManifest.xml:42:19-53
+48        </activity>
+49        <activity android:name="com.epassafe.upm.CreateNewDatabase" >
+49-->/home/mj420/StudioProjects/Epassafe/app/src/main/AndroidManifest.xml:45:9-46:20
+49-->/home/mj420/StudioProjects/Epassafe/app/src/main/AndroidManifest.xml:45:19-52
+50        </activity>
+51        <activity android:name="com.epassafe.upm.AddEditAccount" >
+51-->/home/mj420/StudioProjects/Epassafe/app/src/main/AndroidManifest.xml:48:9-49:20
+51-->/home/mj420/StudioProjects/Epassafe/app/src/main/AndroidManifest.xml:48:19-49
+52        </activity>
+53        <activity android:name="com.epassafe.upm.ChangeMasterPassword" >
+53-->/home/mj420/StudioProjects/Epassafe/app/src/main/AndroidManifest.xml:51:9-52:20
+53-->/home/mj420/StudioProjects/Epassafe/app/src/main/AndroidManifest.xml:51:19-55
+54        </activity>
+55        <activity android:name="com.epassafe.upm.EasterEgg" >
+55-->/home/mj420/StudioProjects/Epassafe/app/src/main/AndroidManifest.xml:54:9-55:20
+55-->/home/mj420/StudioProjects/Epassafe/app/src/main/AndroidManifest.xml:54:19-44
+56        </activity>
+57        <activity android:name="com.epassafe.upm.PassGenerator" >
+57-->/home/mj420/StudioProjects/Epassafe/app/src/main/AndroidManifest.xml:57:9-58:20
+57-->/home/mj420/StudioProjects/Epassafe/app/src/main/AndroidManifest.xml:57:19-48
+58        </activity>
+59        <activity android:name="com.epassafe.upm.GenPrefs" >
+59-->/home/mj420/StudioProjects/Epassafe/app/src/main/AndroidManifest.xml:60:9-61:20
+59-->/home/mj420/StudioProjects/Epassafe/app/src/main/AndroidManifest.xml:60:19-43
+60        </activity>
+61        <activity
+61-->/home/mj420/StudioProjects/Epassafe/app/src/main/AndroidManifest.xml:63:9-73:20
+62            android:name="com.epassafe.upm.SearchResults"
+62-->/home/mj420/StudioProjects/Epassafe/app/src/main/AndroidManifest.xml:63:19-48
+63            android:exported="false"
+63-->/home/mj420/StudioProjects/Epassafe/app/src/main/AndroidManifest.xml:66:19-43
+64            android:label="@string/search_results"
+64-->/home/mj420/StudioProjects/Epassafe/app/src/main/AndroidManifest.xml:64:19-57
+65            android:launchMode="singleTop" >
+65-->/home/mj420/StudioProjects/Epassafe/app/src/main/AndroidManifest.xml:65:19-49
+66            <intent-filter>
+66-->/home/mj420/StudioProjects/Epassafe/app/src/main/AndroidManifest.xml:67:13-69:29
+67                <action android:name="android.intent.action.SEARCH" />
+67-->/home/mj420/StudioProjects/Epassafe/app/src/main/AndroidManifest.xml:68:17-70
+67-->/home/mj420/StudioProjects/Epassafe/app/src/main/AndroidManifest.xml:68:25-68
+68            </intent-filter>
+69
+70            <meta-data
+70-->/home/mj420/StudioProjects/Epassafe/app/src/main/AndroidManifest.xml:71:13-72:60
+71                android:name="android.app.searchable"
+71-->/home/mj420/StudioProjects/Epassafe/app/src/main/AndroidManifest.xml:71:24-61
+72                android:resource="@xml/searchable" />
+72-->/home/mj420/StudioProjects/Epassafe/app/src/main/AndroidManifest.xml:72:24-58
+73        </activity>
+74    </application>
+75
+76</manifest>

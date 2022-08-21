@@ -62,8 +62,8 @@ public class EnterMasterPassword extends Activity implements OnClickListener {
     @Override
     public void onBackPressed()
     {
-    /*	File fileOnSDCard = new File(getExternalFilesDir("database"), Utilities.AUTOMATIC_DATABASE_FILE); */
-        File fileOnSDCard = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS), Utilities.AUTOMATIC_DATABASE_FILE);
+    	File fileOnSDCard = new File(getExternalFilesDir("database"), Utilities.AUTOMATIC_DATABASE_FILE);
+    /*    File fileOnSDCard = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS), Utilities.AUTOMATIC_DATABASE_FILE); */
         File databaseFile = Utilities.getDatabaseFile(this);
         if (((UPMApplication) getApplication()).copyFile(databaseFile, fileOnSDCard, this)) {
             String message = String.format(getString(R.string.backup_complete), fileOnSDCard.getAbsolutePath());

@@ -20,17 +20,22 @@
  */
 package com.epassafe.upm;
 
+import android.Manifest;
 import android.app.Activity;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnCancelListener;
 import android.content.Intent;
+// import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.os.Environment;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.Toast;
+
+// import androidx.core.app.ActivityCompat;
+// import androidx.core.content.ContextCompat;
 
 import java.io.File;
 
@@ -44,6 +49,17 @@ public class AppEntryActivity extends Activity {
     private static final int REQ_CODE_DOWNLOAD_DB = 2;
     private static final int REQ_CODE_OPEN_DB = 3;
     private static final int REQ_CODE_GET_DB_FILE = 4;
+
+    /*
+    // Storage Permissions
+    private static final int REQUEST_EXTERNAL_STORAGE = 90;
+    private static String[] PERMISSIONS_STORAGE = {
+            Manifest.permission.READ_EXTERNAL_STORAGE,
+            Manifest.permission.WRITE_EXTERNAL_STORAGE
+    };
+     */
+    // END Storage Permissions
+
 
 
     @SuppressWarnings("deprecation")
@@ -86,7 +102,6 @@ public class AppEntryActivity extends Activity {
                 startActivityForResult(i, REQ_CODE_OPEN_DB);
             } else {
                 // User clicked Back from the EnterMasterPassword activity so quit
-            //    finish();
             	System.exit(0);
             }
             break;
@@ -128,6 +143,22 @@ public class AppEntryActivity extends Activity {
                 dialog.setContentView(R.layout.new_database_options);
                 dialog.setTitle(R.string.new_database);
 
+/*
+                // REQUEST PERMISSIONS BUTTON
+                Button requestPermissions = (Button) dialog.findViewById(R.id.request_permissions);
+                requestPermissions.setOnClickListener(new OnClickListener() {
+
+                    // CODE NOT WORKING :/
+                    @Override
+                    public void onClick(View v) {
+                        Intent i = new Intent(AppEntryActivity.this, null);
+                        startActivityForResult(i, REQUEST_EXTERNAL_STORAGE);
+                    }
+                    //
+
+                });
+                // END PERMISSIONS
+*/
                 Button newDatabase = (Button) dialog.findViewById(R.id.new_database);
                 newDatabase.setOnClickListener(new OnClickListener() {
                     @Override
@@ -141,7 +172,7 @@ public class AppEntryActivity extends Activity {
                 restoreDatabase.setOnClickListener(new OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        File restoreFile = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS), Utilities.DEFAULT_DATABASE_FILE);
+                        File restoreFile = new File(getExternalFilesDir("database"), Utilities.DEFAULT_DATABASE_FILE);
                         if (restoreFile.exists()) {
                             ((UPMApplication) getApplication()).restoreDatabase(AppEntryActivity.this);
                             // Clear the activity stack and bring up AppEntryActivity
@@ -162,7 +193,6 @@ public class AppEntryActivity extends Activity {
                 dialog.setOnCancelListener(new OnCancelListener() {
                     @Override
                     public void onCancel(DialogInterface dialog) {
-                       // finish();
                     System.exit(0);  
                     }
                 });
