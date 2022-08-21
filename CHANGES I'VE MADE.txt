@@ -1,0 +1,28 @@
+Some of the Changes I've made:
+
+- Made the program into a Home Launcher
+- Icon
+- Name Modification to differintiate between the Forks
+- Visual Changes
+	-- View Account: Smaller Text, and Visual Fields
+	-- View List: One Click Add Account Button on Menu Bar
+- Disabled Internet Access
+- Disabled Sync to outside sources
+- Changed Context Menu Options
+- Changed Home Button Options
+- Added Quick Lock with Volume Down (Temp until figure out with Screen Off)
+- Easter Egg
+- Added Password Generator (https://github.com/rod86/PassGenerator)
+- Created an Automatic Backup "aupm.db" (generated in Android's root) from Manual Backup upm.db on application exit
+	-- Restore still from Manual Backup file upm.db
+	-- If want to restore automatic backup, must rename aupm.db --> upm.db from root of sdCard
+		(This makes good practice to do manual backups in the first place, but leaves a safety net
+		for just in case i.e. database corruption)
+- Placed logo on Master Password page in place of text.
+- Automatically Lock after 1 hour (Just in case forget to lock while away.)
+
+Some things I would like to add:
+
+- Long Press Delete Account from context menu
+- Theme Options / Like change colors, maybe add background picture
+

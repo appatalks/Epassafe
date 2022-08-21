@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    >
+<TextView  
+    android:layout_width="fill_parent" 
+    android:layout_height="wrap_content"
+    android:gravity="center" 
+    android:paddingTop="10dip"
+    android:paddingBottom="10dip"
+    android:textSize="25sp"
+    android:textStyle="bold"
+    android:text="@string/app_name"
+    />
+	 <TableLayout
+         android:layout_height="wrap_content"
+         android:layout_width="wrap_content"
+         android:layout_marginLeft="10sp"
+         android:layout_marginRight="10sp"         
+         android:layout_gravity="center"
+         android:stretchColumns="*">
+         
+         
+         <TableRow
+           	android:layout_marginBottom="10sp">
+         	<TextView 
+         		android:text="@string/option_length"         		
+         		android:textSize="36px"
+         		/>
+         	<TextView 
+         		android:id="@+id/option_length"
+         		android:gravity="center"
+         		android:textColor="#ffffff"
+         		android:textStyle="bold"
+         		/>         	
+         </TableRow>
+         
+         <TableRow
+           	android:layout_marginBottom="10sp">
+         	<TextView 
+         		android:text="@string/option_letters"         		
+         		android:textSize="36px"
+         		/>
+         	<ImageView
+         		android:id="@+id/option_letters"
+         		android:src="@drawable/on"
+         		android:scaleType="fitCenter"
+         		android:layout_width="15px"
+         		android:layout_height="14px"         		
+         		/>         	
+         </TableRow>
+         
+         <TableRow
+           	android:layout_marginBottom="10sp">
+         	<TextView 
+         		android:text="@string/option_capital_letters"         		
+         		android:textSize="36px"
+         		/>
+         	<ImageView
+         		android:id="@+id/option_capital_letters"
+         		android:src="@drawable/on"
+         		android:scaleType="fitCenter"
+         		android:layout_width="15px"
+         		android:layout_height="14px"         		
+         		/>         	
+         </TableRow>
+         
+      	 <TableRow
+           	android:layout_marginBottom="10sp">
+         	<TextView 
+         		android:text="@string/option_numbers"         		
+         		android:textSize="36px"
+         		/>
+         	<ImageView
+         		android:id="@+id/option_numbers"
+         		android:src="@drawable/on"
+         		android:scaleType="fitCenter"
+         		android:layout_width="15px"
+         		android:layout_height="14px"         		
+         		/>         	
+         </TableRow>
+         
+        <TableRow
+           	android:layout_marginBottom="10sp">
+         	<TextView 
+         		android:text="@string/option_symbols"         		
+         		android:textSize="36px"
+         		/>
+         	<ImageView
+         		android:id="@+id/option_symbols"
+         		android:src="@drawable/on"
+         		android:scaleType="fitCenter"
+         		android:layout_width="15px"
+         		android:layout_height="14px"         		
+         		/>         	
+         </TableRow>
+         
+      </TableLayout>
+      
+	 <LinearLayout 
+	 	android:layout_height="wrap_content" 
+	 	android:layout_width="fill_parent"
+	 	android:layout_marginTop="20sp"
+	 	android:layout_marginBottom="20sp"
+	 	android:orientation="vertical"
+	 	>	     
+	     
+	    <Button 
+	    	android:text="@string/generate" 
+	     	android:id="@+id/generate" 
+	     	android:layout_height="wrap_content" 
+	     	android:layout_width="wrap_content" 	     	
+	     	android:layout_gravity="center|center_horizontal"
+	     	android:paddingLeft="20sp"
+	     	android:paddingRight="20sp"
+	     	/>	   
+	 	
+	 </LinearLayout>
+	 
+	 <LinearLayout 
+	 	android:layout_height="wrap_content" 
+	 	android:layout_width="fill_parent"
+	 	android:background="#333" 
+	 	android:layout_marginLeft="20sp"
+	 	android:layout_marginRight="20sp"
+	 	>	     
+
+	     <TextView 
+	     	android:id="@+id/password"
+			android:layout_width="fill_parent" 
+			android:layout_height="wrap_content"
+			android:gravity="center"
+			android:layout_margin="1sp"
+			android:paddingTop="5sp"
+			android:paddingBottom="5sp"
+			android:background="#010101"
+			android:textSize="15sp"
+			android:textStyle="bold"
+			android:textColor="#fff"
+			/>
+	 	
+	 </LinearLayout>
+	 
+	  <LinearLayout 
+	  	android:id="@+id/clipboardBlock"	  	
+	 	android:layout_height="wrap_content" 
+	 	android:layout_width="fill_parent"
+	 	android:layout_marginTop="20sp"
+	 	android:layout_marginBottom="20sp"
+	 	android:orientation="vertical"
+	 	>	     
+	     
+	    <Button 
+	    	android:text="@string/clipboard_copy" 
+	     	android:id="@+id/clipboard_copy" 
+	     	android:layout_height="wrap_content" 
+	     	android:layout_width="wrap_content" 	     	
+	     	android:layout_gravity="center|center_horizontal"
+	     	android:paddingLeft="20sp"
+	     	android:paddingRight="20sp"
+	     	/>	   
+	 	
+	 </LinearLayout>
+      
+</LinearLayout>

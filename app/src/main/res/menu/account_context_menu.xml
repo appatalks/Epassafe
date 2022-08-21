@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu
+  xmlns:android="http://schemas.android.com/apk/res/android">
+  
+<item android:title="@string/edit_account" android:id="@+id/edit_account"></item>
+<item android:title="@string/copy_password" android:id="@+id/copy_password"></item>
+
+<!-- TRYING TO ADD DELETE ACCOUNT BUTTON TO ACCOUNT CONTEXT MENU ON LIST VIEW -->
+<!-- FullAccountList.java, AccountsList.java, account_context_menu.xml -->
+<!-- <item android:id="@+id/delete" android:title="@string/delete" android:icon="@android:drawable/ic_menu_delete" android:alphabeticShortcut="d"></item> -->
+<!-- -->
+
+</menu>

@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen
+	xmlns:android="http://schemas.android.com/apk/res/android" >
+
+	<PreferenceCategory android:title="@string/password_settings">	
+			
+		<EditTextPreference
+			android:key="option_length"
+			android:title="@string/option_length"			
+			android:defaultValue="8" />
+			
+		<CheckBoxPreference
+			android:key="option_letters"
+			android:title="@string/option_letters"
+			android:summary=""			
+			android:defaultValue="true" />
+			
+		<CheckBoxPreference
+			android:key="option_capital_letters"
+			android:title="@string/option_capital_letters"
+			android:summary=""
+			android:dependency="option_letters"		
+			android:defaultValue="true" />
+			
+		<CheckBoxPreference
+			android:key="option_numbers"
+			android:title="@string/option_numbers"
+			android:summary=""
+			android:defaultValue="true" />
+			
+		<CheckBoxPreference
+			android:key="option_symbols"
+			android:title="@string/option_symbols"
+			android:summary=""
+			android:defaultValue="true" />
+	</PreferenceCategory>
+	
+	<PreferenceCategory android:title="@string/clipboard_settings">
+		<CheckBoxPreference
+			android:key="option_clipboard"
+			android:title="@string/option_clipboard"
+			android:summary="@string/option_clipboard_summary"
+			android:defaultValue="false" />
+	</PreferenceCategory>
+</PreferenceScreen>
+<!-- ABOVE IMPORTED SETTINGS FOR PASSWORD GENERATOR -->

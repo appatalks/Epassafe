@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+            	  android:id="@+id/accountScrollView"
+            	  android:layout_width="fill_parent"
+       			  android:layout_height="wrap_content"
+       			  android:scrollbars="vertical">
+
+        <LinearLayout android:layout_width="fill_parent"
+           			  android:layout_height="wrap_content"
+                      android:orientation="vertical"
+                      android:padding="10dip">
+                      
+<TableLayout android:layout_width="fill_parent" 
+			 android:layout_height="wrap_content">
+
+<TableRow>
+        <TextView android:layout_width="wrap_content"
+                  android:layout_height="wrap_content"
+                  android:text="@string/account_name"
+                  android:textStyle="bold"
+            	  android:layout_marginRight="16sp"
+			      android:layout_marginBottom="1sp"
+                  android:textSize="16sp"/>
+
+    	<TextView android:id="@+id/account_name"
+    	    	  android:textColor="#eee"
+    	    	  android:background="#445"
+    	    	  android:padding="2sp"
+	              android:layout_width="wrap_content" 
+	              android:layout_height="wrap_content"
+	              android:inputType="textMultiLine"
+    			  android:layout_marginBottom="10dip"
+                  android:textSize="18sp"
+            	  android:layout_weight="1"/>
+</TableRow>
+
+<TableRow>
+        <TextView android:layout_width="wrap_content"
+                  android:layout_height="wrap_content"
+                  android:text="@string/userid"
+                  android:textStyle="bold"
+                  android:textSize="16sp"/>
+
+	    <TextView android:id="@+id/account_userid" 
+	        	  android:textColor="#eee"
+    	    	  android:background="#445"
+    	    	  android:padding="2sp"
+	              android:layout_width="wrap_content" 
+	              android:layout_height="wrap_content"
+	              android:inputType="textMultiLine"
+			      android:layout_marginBottom="10dip"
+                  android:textSize="18sp"
+            	  android:layout_weight="1"/>
+</TableRow>
+
+<TableRow>
+        <TextView android:layout_width="wrap_content"
+                  android:layout_height="wrap_content"
+                  android:text="@string/password"
+                  android:textStyle="bold"
+                  android:textSize="16sp"/>
+
+	    <TextView android:id="@+id/account_password"
+	        	  android:textColor="#eee"
+    	    	  android:background="#445"
+    	    	  android:padding="2sp"
+	              android:layout_width="wrap_content" 
+	              android:layout_height="wrap_content"
+	              android:inputType="textMultiLine"
+				  android:textIsSelectable="true"
+			      android:layout_marginBottom="10dip"
+                  android:textSize="18sp"
+            	  android:layout_weight="1"/>
+</TableRow>
+
+<TableRow>
+        <TextView android:layout_width="wrap_content"
+                  android:layout_height="wrap_content"
+                  android:text="@string/url"
+                  android:textStyle="bold"
+                  android:textSize="16sp"/>
+
+	    <TextView android:id="@+id/account_url"
+	        	  android:textColor="#eee"
+    	    	  android:background="#445"
+    	    	  android:padding="2sp"
+	              android:layout_width="wrap_content" 
+	              android:layout_height="wrap_content"
+	              android:inputType="textMultiLine"
+			      android:layout_marginBottom="10dip"
+                  android:textSize="18sp"
+                  android:autoLink="none"
+            	  android:layout_weight="1"/>
+</TableRow>
+
+</TableLayout>
+
+        <TextView android:layout_width="wrap_content"
+                  android:layout_height="wrap_content"
+                  android:text="@string/notes"
+                  android:textStyle="bold"
+                  android:textSize="16sp"/>
+
+	    <TextView android:id="@+id/account_notes"
+	        	  android:textColor="#eee"
+    	    	  android:background="#445"
+    	    	  android:padding="10sp"
+	              android:layout_width="fill_parent" 
+	              android:layout_height="wrap_content"
+	              android:inputType="textMultiLine"
+				  android:textIsSelectable="true"
+	              android:layout_marginBottom="10dip"
+                  android:textSize="18sp"
+            	  android:layout_weight="1"/>
+
+    </LinearLayout>
+
+</ScrollView>

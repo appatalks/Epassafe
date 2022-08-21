@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    package="com.epassafe.upm"
+          android:versionCode="29"
+          android:versionName="2.9">
+
+    <!-- <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.MANAGE_EXTERNAL_STORAGE"
+        tools:ignore="ScopedStorage"/>
+    -->
+    <application android:icon="@drawable/upm_hd"
+                 android:label="@string/app_name_short"
+                 android:name="UPMApplication"
+                 android:launchMode="singleInstance"
+                 android:clearTaskOnLaunch="true"
+                 android:stateNotNeeded="true"
+                 tools:ignore="GoogleAppIndexingWarning"
+                 android:allowBackup="false"
+                 android:requestLegacyExternalStorage="true">
+        <activity android:name=".AppEntryActivity"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.HOME"/>
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+        <activity android:name=".EnterMasterPassword">
+        </activity>
+
+        <activity android:name=".FullAccountList">
+            <meta-data android:name="android.app.default_searchable"
+                       android:value=".SearchResults" />
+        </activity>
+
+        <activity android:name=".ViewAccountDetails">
+        </activity>
+               
+        <activity android:name=".CreateNewDatabase">
+        </activity>
+
+        <activity android:name=".AddEditAccount">
+        </activity>
+
+        <activity android:name=".ChangeMasterPassword">
+        </activity>
+
+        <activity android:name=".EasterEgg">
+        </activity>
+        
+        <activity android:name=".PassGenerator">
+        </activity>
+        
+        <activity android:name=".GenPrefs">
+        </activity>
+        
+        <activity android:name=".SearchResults"
+                  android:label="@string/search_results"
+                  android:launchMode="singleTop"
+                  android:exported="false">
+            <intent-filter>
+                <action android:name="android.intent.action.SEARCH"/>
+            </intent-filter>
+
+            <meta-data android:name="android.app.searchable"
+                       android:resource="@xml/searchable"/>
+        </activity>
+
+    </application>
+
+</manifest>

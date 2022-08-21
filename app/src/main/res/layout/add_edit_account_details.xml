@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="vertical">
+
+     <ScrollView 
+        android:layout_width="fill_parent"
+        android:layout_height="1px"
+        android:layout_weight="1"
+        android:fillViewport="true">
+
+        <LinearLayout android:layout_width="fill_parent"
+                      android:layout_height="fill_parent"
+                      android:orientation="vertical">
+
+        <TextView android:layout_width="wrap_content"
+                  android:layout_height="wrap_content"
+                  android:text="@string/account_name"/>
+
+        <EditText android:id="@+id/account_name" 
+                  android:layout_width="fill_parent" 
+                  android:layout_height="wrap_content"
+                  android:singleLine="false"
+                  android:layout_marginBottom="10dip"/>
+
+        <TextView android:layout_width="wrap_content"
+                  android:layout_height="wrap_content"
+                  android:text="@string/userid"/>
+
+        <EditText android:id="@+id/account_userid" 
+                  android:layout_width="fill_parent" 
+                  android:layout_height="wrap_content"
+                  android:singleLine="false"
+                  android:layout_marginBottom="10dip"/>
+
+        <TextView android:layout_width="wrap_content"
+                  android:layout_height="wrap_content"
+                  android:text="@string/password"/>
+
+        <EditText android:id="@+id/account_password" 
+                  android:layout_width="fill_parent" 
+                  android:layout_height="wrap_content"
+                  android:inputType="textVisiblePassword"
+                  android:importantForAccessibility="no"
+                  android:layout_marginBottom="10dip"/>
+
+        <TextView android:layout_width="wrap_content"
+                  android:layout_height="wrap_content"
+                  android:text="@string/url"/>
+
+        <EditText android:id="@+id/account_url"
+                  android:layout_width="fill_parent" 
+                  android:layout_height="wrap_content"
+                  android:singleLine="false"
+                  android:layout_marginBottom="10dip"/>
+
+        <TextView android:layout_width="wrap_content"
+                  android:layout_height="wrap_content"
+                  android:text="@string/notes"/>
+
+        <EditText android:id="@+id/account_notes"
+                  android:layout_width="fill_parent" 
+                  android:layout_height="wrap_content"
+                  android:inputType="textMultiLine"
+                  android:layout_marginBottom="10dip"
+                  android:lines="8"/>
+
+        </LinearLayout>
+
+    </ScrollView> 
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        style="@android:style/ButtonBar">
+
+        <Button android:id="@+id/save_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/save"
+                style="@android:style/Widget.Button"
+                android:layout_weight="1"/>
+
+        <Button android:id="@+id/cancel_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/cancel"
+            style="@android:style/Widget.Button"
+            android:layout_weight="1"/>
+
+    </LinearLayout>
+
+</LinearLayout>
