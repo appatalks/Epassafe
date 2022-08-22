@@ -22,10 +22,12 @@ package com.epassafe.upm;
 
 import android.app.ListActivity;
 import android.content.ClipData;
+import android.content.ClipDescription;
 import android.content.Context;
 import android.content.Intent;
 import android.content.ClipboardManager;
 import android.os.Bundle;
+import android.os.PersistableBundle;
 import android.view.ContextMenu;
 import android.view.ContextMenu.ContextMenuInfo;
 import android.view.MenuInflater;
@@ -35,6 +37,7 @@ import android.view.WindowManager.LayoutParams;
 import android.widget.AdapterView.AdapterContextMenuInfo;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.epassafe.upm.database.AccountInformation;
 import com.epassafe.upm.database.PasswordDatabase;
@@ -96,7 +99,10 @@ public class AccountsList extends ListActivity {
     // Android 13 New Feature - Clipboard Sensitive Data
     private void setClipboardText(String text) {
         ClipboardManager clipboard = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
-        ClipData clip = ClipData.newPlainText("Password", "Copied");
+        ClipData clip = ClipData.newPlainText("Password", text.toString());
+        PersistableBundle extras = new PersistableBundle();
+        extras.putBoolean(ClipDescription.EXTRA_IS_SENSITIVE, true);
+        clip.getDescription().setExtras(extras);
         clipboard.setPrimaryClip(clip);
     }
 

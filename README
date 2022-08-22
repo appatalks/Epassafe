@@ -9,7 +9,7 @@ backups to be made to external device i.e sdcard.
 
 Grab latest Build from:
 https://github.com/servingbaby/Epassafe/raw/master/app/build/outputs/apk/debug/app-debug.apk
-Latest: v3.0 MD5 45bbeef3da863d0166db8ab3c0e6cc11
+Latest: v3.1 MD5 248ec7b8546f4156c206661d3fe7bf8c
 
 ** NOTE **
 If upgrading from <v.3.0, you will need to import your backup to "../Android/data/com.epassafe.upm/files/database/" from your PC or connected device.
@@ -17,6 +17,7 @@ If first inital install on device, go ahead and backup a blank database to auto 
 
 History
 -------
+v.3.1 - Resolved ClipBoard Sensitive Data copy issue on Main View
 v.3.0 - Play Store Release Candidate : Backups stored in Android/data/com.epassafe.upm/files/database
 	Permissions no longer needed
 v.2.9 - Android 13 Clipboard Sensitive Data Recommendation added to Main List view.
