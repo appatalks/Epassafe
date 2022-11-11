@@ -17,6 +17,7 @@ If first inital install on device, go ahead and backup a blank database to auto 
 
 History
 -------
+v.3.2 - Tweaking Exit code for better performance
 v.3.1 - Resolved ClipBoard Sensitive Data copy issue on Main View
 v.3.0 - Play Store Release Candidate : Backups stored in Android/data/com.epassafe.upm/files/database
 	Permissions no longer needed

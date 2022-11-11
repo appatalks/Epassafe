@@ -70,7 +70,9 @@ public class EnterMasterPassword extends Activity implements OnClickListener {
             UIUtilities.showToast(this, message, false);
         }
         /* System.exit(0);  // Annoying Exit Bug */
-        this.finishAffinity();
+        this.finishAffinity();              // Doesn't seem to fully exit but leaving to close tasks
+        EnterMasterPassword.this.finish();  // TESTING for cleaner exit
+        finishAndRemoveTask();              // TESTING for cleaner exit
     }
     /* SAVE DATABASE ON EXIT END */
     
