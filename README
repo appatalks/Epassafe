@@ -9,7 +9,7 @@ backups to be made to external device i.e sdcard.
 
 Grab latest Build from:
 https://github.com/servingbaby/Epassafe/raw/master/app/build/outputs/apk/debug/app-debug.apk
-Latest: v3.1 MD5 248ec7b8546f4156c206661d3fe7bf8c
+Latest: v3.2 MD5 d5d8c42d257648cee211574115e2dbf5
 
 ** NOTE **
 If upgrading from <v.3.0, you will need to import your backup to "../Android/data/com.epassafe.upm/files/database/" from your PC or connected device.
