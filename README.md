@@ -9,7 +9,8 @@
 UPM - Epassafe differs from Universal Password Manager in several ways. It has been stripped down to the most basic usage, that of encrypting your passwords and allowing backups to be made to an external device (e.g., sdcard).
 
 Grab the latest [Developer Build](https://github.com/appatalks/Epassafe/raw/master/app/build/outputs/apk/debug/app-debug.apk)
-Latest: **v3.5** MD5: **0db05a1b667d06e13f7489df4d423bbd**
+
+Latest: **v3.5** MD5: ```0db05a1b667d06e13f7489df4d423bbd```
 
 Or get it from the [Google Play Store](https://play.google.com/store/apps/details?id=com.epassafe.upm&pcampaignid=web_share)
 
