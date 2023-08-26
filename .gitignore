@@ -7,6 +7,7 @@ build.gradle
 app/build/intermediates/
 app/build.gradle
 app/build/intermediates/incremental/debug
+app/build/intermediates/project_dex_archive/
 !src/**/build/
 
 # Ignore Gradle GUI config
