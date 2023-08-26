@@ -3,10 +3,10 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/Epassafe.iml" filepath="$PROJECT_DIR$/.idea/modules/Epassafe.iml" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/Epassafe.app.iml" filepath="$PROJECT_DIR$/.idea/modules/app/Epassafe.app.iml" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/Epassafe.app.androidTest.iml" filepath="$PROJECT_DIR$/.idea/modules/app/Epassafe.app.androidTest.iml" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/Epassafe.app.main.iml" filepath="$PROJECT_DIR$/.idea/modules/app/Epassafe.app.main.iml" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/Epassafe.app.unitTest.iml" filepath="$PROJECT_DIR$/.idea/modules/app/Epassafe.app.unitTest.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/StudioProjects.Epassafe.app.iml" filepath="$PROJECT_DIR$/.idea/modules/app/StudioProjects.Epassafe.app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/StudioProjects.Epassafe.app.androidTest.iml" filepath="$PROJECT_DIR$/.idea/modules/app/StudioProjects.Epassafe.app.androidTest.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/StudioProjects.Epassafe.app.main.iml" filepath="$PROJECT_DIR$/.idea/modules/app/StudioProjects.Epassafe.app.main.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/StudioProjects.Epassafe.app.unitTest.iml" filepath="$PROJECT_DIR$/.idea/modules/app/StudioProjects.Epassafe.app.unitTest.iml" />
     </modules>
   </component>
 </project>

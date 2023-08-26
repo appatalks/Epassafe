@@ -1,18 +1,18 @@
 -- Merging decision tree log ---
 manifest
-ADDED from /home/mj420/StudioProjects/Epassafe/app/src/main/AndroidManifest.xml:2:1-77:12
-INJECTED from /home/mj420/StudioProjects/Epassafe/app/src/main/AndroidManifest.xml:2:1-77:12
-INJECTED from /home/mj420/StudioProjects/Epassafe/app/src/main/AndroidManifest.xml:2:1-77:12
-INJECTED from /home/mj420/StudioProjects/Epassafe/app/src/main/AndroidManifest.xml:2:1-77:12
-INJECTED from /home/mj420/StudioProjects/Epassafe/app/src/main/AndroidManifest.xml:2:1-77:12
-INJECTED from /home/mj420/StudioProjects/Epassafe/app/src/main/AndroidManifest.xml:2:1-77:12
-INJECTED from /home/mj420/StudioProjects/Epassafe/app/src/main/AndroidManifest.xml:2:1-77:12
+ADDED from /home/mj420/StudioProjects/Epassafe/app/src/main/AndroidManifest.xml:2:1-70:12
+INJECTED from /home/mj420/StudioProjects/Epassafe/app/src/main/AndroidManifest.xml:2:1-70:12
+INJECTED from /home/mj420/StudioProjects/Epassafe/app/src/main/AndroidManifest.xml:2:1-70:12
+INJECTED from /home/mj420/StudioProjects/Epassafe/app/src/main/AndroidManifest.xml:2:1-70:12
+INJECTED from /home/mj420/StudioProjects/Epassafe/app/src/main/AndroidManifest.xml:2:1-70:12
+INJECTED from /home/mj420/StudioProjects/Epassafe/app/src/main/AndroidManifest.xml:2:1-70:12
+INJECTED from /home/mj420/StudioProjects/Epassafe/app/src/main/AndroidManifest.xml:2:1-70:12
 	package
-		ADDED from /home/mj420/StudioProjects/Epassafe/app/src/main/AndroidManifest.xml:4:5-31
 		INJECTED from /home/mj420/StudioProjects/Epassafe/app/src/main/AndroidManifest.xml
+		ADDED from /home/mj420/StudioProjects/Epassafe/app/src/main/AndroidManifest.xml:2:1-70:12
 		INJECTED from /home/mj420/StudioProjects/Epassafe/app/src/main/AndroidManifest.xml
 	android:versionName
-		ADDED from /home/mj420/StudioProjects/Epassafe/app/src/main/AndroidManifest.xml:6:11-36
+		ADDED from /home/mj420/StudioProjects/Epassafe/app/src/main/AndroidManifest.xml:5:11-36
 		INJECTED from /home/mj420/StudioProjects/Epassafe/app/src/main/AndroidManifest.xml
 		INJECTED from /home/mj420/StudioProjects/Epassafe/app/src/main/AndroidManifest.xml
 	xmlns:tools
@@ -20,117 +20,119 @@ INJECTED from /home/mj420/StudioProjects/Epassafe/app/src/main/AndroidManifest.x
 	xmlns:android
 		ADDED from /home/mj420/StudioProjects/Epassafe/app/src/main/AndroidManifest.xml:2:11-69
 	android:versionCode
-		ADDED from /home/mj420/StudioProjects/Epassafe/app/src/main/AndroidManifest.xml:5:11-35
+		ADDED from /home/mj420/StudioProjects/Epassafe/app/src/main/AndroidManifest.xml:4:5-29
 		INJECTED from /home/mj420/StudioProjects/Epassafe/app/src/main/AndroidManifest.xml
 		INJECTED from /home/mj420/StudioProjects/Epassafe/app/src/main/AndroidManifest.xml
 application
-ADDED from /home/mj420/StudioProjects/Epassafe/app/src/main/AndroidManifest.xml:15:5-75:19
+ADDED from /home/mj420/StudioProjects/Epassafe/app/src/main/AndroidManifest.xml:7:5-68:19
 	android:requestLegacyExternalStorage
-		ADDED from /home/mj420/StudioProjects/Epassafe/app/src/main/AndroidManifest.xml:23:18-61
+		ADDED from /home/mj420/StudioProjects/Epassafe/app/src/main/AndroidManifest.xml:15:18-61
 	android:clearTaskOnLaunch
-		ADDED from /home/mj420/StudioProjects/Epassafe/app/src/main/AndroidManifest.xml:19:18-50
+		ADDED from /home/mj420/StudioProjects/Epassafe/app/src/main/AndroidManifest.xml:11:18-50
 	android:stateNotNeeded
-		ADDED from /home/mj420/StudioProjects/Epassafe/app/src/main/AndroidManifest.xml:20:18-47
+		ADDED from /home/mj420/StudioProjects/Epassafe/app/src/main/AndroidManifest.xml:12:18-47
 	android:label
-		ADDED from /home/mj420/StudioProjects/Epassafe/app/src/main/AndroidManifest.xml:16:18-56
+		ADDED from /home/mj420/StudioProjects/Epassafe/app/src/main/AndroidManifest.xml:8:18-56
 	android:launchMode
-		ADDED from /home/mj420/StudioProjects/Epassafe/app/src/main/AndroidManifest.xml:18:18-53
+		ADDED from /home/mj420/StudioProjects/Epassafe/app/src/main/AndroidManifest.xml:10:18-53
 	tools:ignore
-		ADDED from /home/mj420/StudioProjects/Epassafe/app/src/main/AndroidManifest.xml:21:18-57
+		ADDED from /home/mj420/StudioProjects/Epassafe/app/src/main/AndroidManifest.xml:13:18-57
 	android:icon
-		ADDED from /home/mj420/StudioProjects/Epassafe/app/src/main/AndroidManifest.xml:15:18-49
+		ADDED from /home/mj420/StudioProjects/Epassafe/app/src/main/AndroidManifest.xml:7:18-49
 	android:allowBackup
-		ADDED from /home/mj420/StudioProjects/Epassafe/app/src/main/AndroidManifest.xml:22:18-45
+		ADDED from /home/mj420/StudioProjects/Epassafe/app/src/main/AndroidManifest.xml:14:18-45
+	android:enableOnBackInvokedCallback
+		ADDED from /home/mj420/StudioProjects/Epassafe/app/src/main/AndroidManifest.xml:16:18-61
 	android:name
-		ADDED from /home/mj420/StudioProjects/Epassafe/app/src/main/AndroidManifest.xml:17:18-47
+		ADDED from /home/mj420/StudioProjects/Epassafe/app/src/main/AndroidManifest.xml:9:18-47
 activity#com.epassafe.upm.AppEntryActivity
-ADDED from /home/mj420/StudioProjects/Epassafe/app/src/main/AndroidManifest.xml:24:9-32:20
+ADDED from /home/mj420/StudioProjects/Epassafe/app/src/main/AndroidManifest.xml:17:9-25:20
 	android:exported
-		ADDED from /home/mj420/StudioProjects/Epassafe/app/src/main/AndroidManifest.xml:25:13-36
+		ADDED from /home/mj420/StudioProjects/Epassafe/app/src/main/AndroidManifest.xml:18:13-36
 	android:name
-		ADDED from /home/mj420/StudioProjects/Epassafe/app/src/main/AndroidManifest.xml:24:19-51
+		ADDED from /home/mj420/StudioProjects/Epassafe/app/src/main/AndroidManifest.xml:17:19-51
 intent-filter#action:name:android.intent.action.MAIN+category:name:android.intent.category.DEFAULT+category:name:android.intent.category.HOME+category:name:android.intent.category.LAUNCHER
-ADDED from /home/mj420/StudioProjects/Epassafe/app/src/main/AndroidManifest.xml:26:13-31:29
+ADDED from /home/mj420/StudioProjects/Epassafe/app/src/main/AndroidManifest.xml:19:13-24:29
 action#android.intent.action.MAIN
-ADDED from /home/mj420/StudioProjects/Epassafe/app/src/main/AndroidManifest.xml:27:17-69
+ADDED from /home/mj420/StudioProjects/Epassafe/app/src/main/AndroidManifest.xml:20:17-69
 	android:name
-		ADDED from /home/mj420/StudioProjects/Epassafe/app/src/main/AndroidManifest.xml:27:25-66
+		ADDED from /home/mj420/StudioProjects/Epassafe/app/src/main/AndroidManifest.xml:20:25-66
 category#android.intent.category.HOME
-ADDED from /home/mj420/StudioProjects/Epassafe/app/src/main/AndroidManifest.xml:28:17-72
+ADDED from /home/mj420/StudioProjects/Epassafe/app/src/main/AndroidManifest.xml:21:17-72
 	android:name
-		ADDED from /home/mj420/StudioProjects/Epassafe/app/src/main/AndroidManifest.xml:28:27-70
+		ADDED from /home/mj420/StudioProjects/Epassafe/app/src/main/AndroidManifest.xml:21:27-70
 category#android.intent.category.DEFAULT
-ADDED from /home/mj420/StudioProjects/Epassafe/app/src/main/AndroidManifest.xml:29:17-76
+ADDED from /home/mj420/StudioProjects/Epassafe/app/src/main/AndroidManifest.xml:22:17-76
 	android:name
-		ADDED from /home/mj420/StudioProjects/Epassafe/app/src/main/AndroidManifest.xml:29:27-73
+		ADDED from /home/mj420/StudioProjects/Epassafe/app/src/main/AndroidManifest.xml:22:27-73
 category#android.intent.category.LAUNCHER
-ADDED from /home/mj420/StudioProjects/Epassafe/app/src/main/AndroidManifest.xml:30:17-77
+ADDED from /home/mj420/StudioProjects/Epassafe/app/src/main/AndroidManifest.xml:23:17-77
 	android:name
-		ADDED from /home/mj420/StudioProjects/Epassafe/app/src/main/AndroidManifest.xml:30:27-74
+		ADDED from /home/mj420/StudioProjects/Epassafe/app/src/main/AndroidManifest.xml:23:27-74
 activity#com.epassafe.upm.EnterMasterPassword
-ADDED from /home/mj420/StudioProjects/Epassafe/app/src/main/AndroidManifest.xml:34:9-35:20
+ADDED from /home/mj420/StudioProjects/Epassafe/app/src/main/AndroidManifest.xml:27:9-28:20
 	android:name
-		ADDED from /home/mj420/StudioProjects/Epassafe/app/src/main/AndroidManifest.xml:34:19-54
+		ADDED from /home/mj420/StudioProjects/Epassafe/app/src/main/AndroidManifest.xml:27:19-54
 activity#com.epassafe.upm.FullAccountList
-ADDED from /home/mj420/StudioProjects/Epassafe/app/src/main/AndroidManifest.xml:37:9-40:20
+ADDED from /home/mj420/StudioProjects/Epassafe/app/src/main/AndroidManifest.xml:30:9-33:20
 	android:name
-		ADDED from /home/mj420/StudioProjects/Epassafe/app/src/main/AndroidManifest.xml:37:19-50
+		ADDED from /home/mj420/StudioProjects/Epassafe/app/src/main/AndroidManifest.xml:30:19-50
 meta-data#android.app.default_searchable
-ADDED from /home/mj420/StudioProjects/Epassafe/app/src/main/AndroidManifest.xml:38:13-39:57
+ADDED from /home/mj420/StudioProjects/Epassafe/app/src/main/AndroidManifest.xml:31:13-32:57
 	android:value
-		ADDED from /home/mj420/StudioProjects/Epassafe/app/src/main/AndroidManifest.xml:39:24-54
+		ADDED from /home/mj420/StudioProjects/Epassafe/app/src/main/AndroidManifest.xml:32:24-54
 	android:name
-		ADDED from /home/mj420/StudioProjects/Epassafe/app/src/main/AndroidManifest.xml:38:24-69
+		ADDED from /home/mj420/StudioProjects/Epassafe/app/src/main/AndroidManifest.xml:31:24-69
 activity#com.epassafe.upm.ViewAccountDetails
-ADDED from /home/mj420/StudioProjects/Epassafe/app/src/main/AndroidManifest.xml:42:9-43:20
+ADDED from /home/mj420/StudioProjects/Epassafe/app/src/main/AndroidManifest.xml:35:9-36:20
 	android:name
-		ADDED from /home/mj420/StudioProjects/Epassafe/app/src/main/AndroidManifest.xml:42:19-53
+		ADDED from /home/mj420/StudioProjects/Epassafe/app/src/main/AndroidManifest.xml:35:19-53
 activity#com.epassafe.upm.CreateNewDatabase
-ADDED from /home/mj420/StudioProjects/Epassafe/app/src/main/AndroidManifest.xml:45:9-46:20
+ADDED from /home/mj420/StudioProjects/Epassafe/app/src/main/AndroidManifest.xml:38:9-39:20
 	android:name
-		ADDED from /home/mj420/StudioProjects/Epassafe/app/src/main/AndroidManifest.xml:45:19-52
+		ADDED from /home/mj420/StudioProjects/Epassafe/app/src/main/AndroidManifest.xml:38:19-52
 activity#com.epassafe.upm.AddEditAccount
-ADDED from /home/mj420/StudioProjects/Epassafe/app/src/main/AndroidManifest.xml:48:9-49:20
+ADDED from /home/mj420/StudioProjects/Epassafe/app/src/main/AndroidManifest.xml:41:9-42:20
 	android:name
-		ADDED from /home/mj420/StudioProjects/Epassafe/app/src/main/AndroidManifest.xml:48:19-49
+		ADDED from /home/mj420/StudioProjects/Epassafe/app/src/main/AndroidManifest.xml:41:19-49
 activity#com.epassafe.upm.ChangeMasterPassword
-ADDED from /home/mj420/StudioProjects/Epassafe/app/src/main/AndroidManifest.xml:51:9-52:20
+ADDED from /home/mj420/StudioProjects/Epassafe/app/src/main/AndroidManifest.xml:44:9-45:20
 	android:name
-		ADDED from /home/mj420/StudioProjects/Epassafe/app/src/main/AndroidManifest.xml:51:19-55
+		ADDED from /home/mj420/StudioProjects/Epassafe/app/src/main/AndroidManifest.xml:44:19-55
 activity#com.epassafe.upm.EasterEgg
-ADDED from /home/mj420/StudioProjects/Epassafe/app/src/main/AndroidManifest.xml:54:9-55:20
+ADDED from /home/mj420/StudioProjects/Epassafe/app/src/main/AndroidManifest.xml:47:9-48:20
 	android:name
-		ADDED from /home/mj420/StudioProjects/Epassafe/app/src/main/AndroidManifest.xml:54:19-44
+		ADDED from /home/mj420/StudioProjects/Epassafe/app/src/main/AndroidManifest.xml:47:19-44
 activity#com.epassafe.upm.PassGenerator
-ADDED from /home/mj420/StudioProjects/Epassafe/app/src/main/AndroidManifest.xml:57:9-58:20
+ADDED from /home/mj420/StudioProjects/Epassafe/app/src/main/AndroidManifest.xml:50:9-51:20
 	android:name
-		ADDED from /home/mj420/StudioProjects/Epassafe/app/src/main/AndroidManifest.xml:57:19-48
+		ADDED from /home/mj420/StudioProjects/Epassafe/app/src/main/AndroidManifest.xml:50:19-48
 activity#com.epassafe.upm.GenPrefs
-ADDED from /home/mj420/StudioProjects/Epassafe/app/src/main/AndroidManifest.xml:60:9-61:20
+ADDED from /home/mj420/StudioProjects/Epassafe/app/src/main/AndroidManifest.xml:53:9-54:20
 	android:name
-		ADDED from /home/mj420/StudioProjects/Epassafe/app/src/main/AndroidManifest.xml:60:19-43
+		ADDED from /home/mj420/StudioProjects/Epassafe/app/src/main/AndroidManifest.xml:53:19-43
 activity#com.epassafe.upm.SearchResults
-ADDED from /home/mj420/StudioProjects/Epassafe/app/src/main/AndroidManifest.xml:63:9-73:20
+ADDED from /home/mj420/StudioProjects/Epassafe/app/src/main/AndroidManifest.xml:56:9-66:20
 	android:label
-		ADDED from /home/mj420/StudioProjects/Epassafe/app/src/main/AndroidManifest.xml:64:19-57
+		ADDED from /home/mj420/StudioProjects/Epassafe/app/src/main/AndroidManifest.xml:57:19-57
 	android:launchMode
-		ADDED from /home/mj420/StudioProjects/Epassafe/app/src/main/AndroidManifest.xml:65:19-49
+		ADDED from /home/mj420/StudioProjects/Epassafe/app/src/main/AndroidManifest.xml:58:19-49
 	android:exported
-		ADDED from /home/mj420/StudioProjects/Epassafe/app/src/main/AndroidManifest.xml:66:19-43
+		ADDED from /home/mj420/StudioProjects/Epassafe/app/src/main/AndroidManifest.xml:59:19-43
 	android:name
-		ADDED from /home/mj420/StudioProjects/Epassafe/app/src/main/AndroidManifest.xml:63:19-48
+		ADDED from /home/mj420/StudioProjects/Epassafe/app/src/main/AndroidManifest.xml:56:19-48
 intent-filter#action:name:android.intent.action.SEARCH
-ADDED from /home/mj420/StudioProjects/Epassafe/app/src/main/AndroidManifest.xml:67:13-69:29
+ADDED from /home/mj420/StudioProjects/Epassafe/app/src/main/AndroidManifest.xml:60:13-62:29
 action#android.intent.action.SEARCH
-ADDED from /home/mj420/StudioProjects/Epassafe/app/src/main/AndroidManifest.xml:68:17-70
+ADDED from /home/mj420/StudioProjects/Epassafe/app/src/main/AndroidManifest.xml:61:17-70
 	android:name
-		ADDED from /home/mj420/StudioProjects/Epassafe/app/src/main/AndroidManifest.xml:68:25-68
+		ADDED from /home/mj420/StudioProjects/Epassafe/app/src/main/AndroidManifest.xml:61:25-68
 meta-data#android.app.searchable
-ADDED from /home/mj420/StudioProjects/Epassafe/app/src/main/AndroidManifest.xml:71:13-72:60
+ADDED from /home/mj420/StudioProjects/Epassafe/app/src/main/AndroidManifest.xml:64:13-65:60
 	android:resource
-		ADDED from /home/mj420/StudioProjects/Epassafe/app/src/main/AndroidManifest.xml:72:24-58
+		ADDED from /home/mj420/StudioProjects/Epassafe/app/src/main/AndroidManifest.xml:65:24-58
 	android:name
-		ADDED from /home/mj420/StudioProjects/Epassafe/app/src/main/AndroidManifest.xml:71:24-61
+		ADDED from /home/mj420/StudioProjects/Epassafe/app/src/main/AndroidManifest.xml:64:24-61
 uses-sdk
 INJECTED from /home/mj420/StudioProjects/Epassafe/app/src/main/AndroidManifest.xml reason: use-sdk injection requested
 INJECTED from /home/mj420/StudioProjects/Epassafe/app/src/main/AndroidManifest.xml
