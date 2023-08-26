@@ -1,7 +1,7 @@
 {
     "logs": [
         {
-            "outputFile": "com.epassafe.upm.app-merged_res-5:/values_values.arsc.flat",
+            "outputFile": "com.epassafe.upm.app-merged_res-4:/values_values.arsc.flat",
             "map": [
                 {
                     "source": "/home/mj420/StudioProjects/Epassafe/app/src/main/res/values/strings.xml",
@@ -63,7 +63,7 @@
             ]
         },
         {
-            "outputFile": "com.epassafe.upm.app-merged_res-5:/values-de_values-de.arsc.flat",
+            "outputFile": "com.epassafe.upm.app-merged_res-4:/values-de_values-de.arsc.flat",
             "map": [
                 {
                     "source": "/home/mj420/StudioProjects/Epassafe/app/src/main/res/values-de/strings.xml",
@@ -87,7 +87,7 @@
             ]
         },
         {
-            "outputFile": "com.epassafe.upm.app-merged_res-5:/values-ru_values-ru.arsc.flat",
+            "outputFile": "com.epassafe.upm.app-merged_res-4:/values-ru_values-ru.arsc.flat",
             "map": [
                 {
                     "source": "/home/mj420/StudioProjects/Epassafe/app/src/main/res/values-ru/strings.xml",

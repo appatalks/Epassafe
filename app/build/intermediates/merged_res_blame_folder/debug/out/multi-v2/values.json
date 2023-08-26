@@ -1,7 +1,7 @@
 {
     "logs": [
         {
-            "outputFile": "com.epassafe.upm.app-mergeDebugResources-3:/values/values.xml",
+            "outputFile": "com.epassafe.upm.app-mergeDebugResources-2:/values/values.xml",
             "map": [
                 {
                     "source": "/home/mj420/StudioProjects/Epassafe/app/src/main/res/values/strings.xml",
