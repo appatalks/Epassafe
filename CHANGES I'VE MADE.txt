@@ -1,6 +1,6 @@
 Some of the Changes I've made:
 
-- Made the program into a Home Launcher
+- Made the program into an optional Home Launcher
 - Icon
 - Name Modification to differintiate between the Forks
 - Visual Changes

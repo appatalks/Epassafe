@@ -4,16 +4,10 @@ ADDED from /home/mj420/StudioProjects/Epassafe/app/src/main/AndroidManifest.xml:
 INJECTED from /home/mj420/StudioProjects/Epassafe/app/src/main/AndroidManifest.xml:2:1-70:12
 INJECTED from /home/mj420/StudioProjects/Epassafe/app/src/main/AndroidManifest.xml:2:1-70:12
 INJECTED from /home/mj420/StudioProjects/Epassafe/app/src/main/AndroidManifest.xml:2:1-70:12
-INJECTED from /home/mj420/StudioProjects/Epassafe/app/src/main/AndroidManifest.xml:2:1-70:12
-INJECTED from /home/mj420/StudioProjects/Epassafe/app/src/main/AndroidManifest.xml:2:1-70:12
-INJECTED from /home/mj420/StudioProjects/Epassafe/app/src/main/AndroidManifest.xml:2:1-70:12
 	package
-		INJECTED from /home/mj420/StudioProjects/Epassafe/app/src/main/AndroidManifest.xml
-		ADDED from /home/mj420/StudioProjects/Epassafe/app/src/main/AndroidManifest.xml:2:1-70:12
 		INJECTED from /home/mj420/StudioProjects/Epassafe/app/src/main/AndroidManifest.xml
 	android:versionName
 		ADDED from /home/mj420/StudioProjects/Epassafe/app/src/main/AndroidManifest.xml:5:11-36
-		INJECTED from /home/mj420/StudioProjects/Epassafe/app/src/main/AndroidManifest.xml
 		INJECTED from /home/mj420/StudioProjects/Epassafe/app/src/main/AndroidManifest.xml
 	xmlns:tools
 		ADDED from /home/mj420/StudioProjects/Epassafe/app/src/main/AndroidManifest.xml:3:5-51
@@ -22,9 +16,11 @@ INJECTED from /home/mj420/StudioProjects/Epassafe/app/src/main/AndroidManifest.x
 	android:versionCode
 		ADDED from /home/mj420/StudioProjects/Epassafe/app/src/main/AndroidManifest.xml:4:5-29
 		INJECTED from /home/mj420/StudioProjects/Epassafe/app/src/main/AndroidManifest.xml
-		INJECTED from /home/mj420/StudioProjects/Epassafe/app/src/main/AndroidManifest.xml
 application
 ADDED from /home/mj420/StudioProjects/Epassafe/app/src/main/AndroidManifest.xml:7:5-68:19
+INJECTED from /home/mj420/StudioProjects/Epassafe/app/src/main/AndroidManifest.xml:7:5-68:19
+	android:extractNativeLibs
+		INJECTED from /home/mj420/StudioProjects/Epassafe/app/src/main/AndroidManifest.xml
 	android:requestLegacyExternalStorage
 		ADDED from /home/mj420/StudioProjects/Epassafe/app/src/main/AndroidManifest.xml:15:18-61
 	android:clearTaskOnLaunch
@@ -137,13 +133,7 @@ uses-sdk
 INJECTED from /home/mj420/StudioProjects/Epassafe/app/src/main/AndroidManifest.xml reason: use-sdk injection requested
 INJECTED from /home/mj420/StudioProjects/Epassafe/app/src/main/AndroidManifest.xml
 INJECTED from /home/mj420/StudioProjects/Epassafe/app/src/main/AndroidManifest.xml
-INJECTED from /home/mj420/StudioProjects/Epassafe/app/src/main/AndroidManifest.xml
-INJECTED from /home/mj420/StudioProjects/Epassafe/app/src/main/AndroidManifest.xml
 	android:targetSdkVersion
 		INJECTED from /home/mj420/StudioProjects/Epassafe/app/src/main/AndroidManifest.xml
-		ADDED from /home/mj420/StudioProjects/Epassafe/app/src/main/AndroidManifest.xml
-		INJECTED from /home/mj420/StudioProjects/Epassafe/app/src/main/AndroidManifest.xml
 	android:minSdkVersion
-		INJECTED from /home/mj420/StudioProjects/Epassafe/app/src/main/AndroidManifest.xml
-		ADDED from /home/mj420/StudioProjects/Epassafe/app/src/main/AndroidManifest.xml
 		INJECTED from /home/mj420/StudioProjects/Epassafe/app/src/main/AndroidManifest.xml

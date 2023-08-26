@@ -4,10 +4,10 @@ gen/
 .gradle
 .gradle/*
 build.gradle
-app/build/intermediates/
+app/build/*
 app/build.gradle
-app/build/intermediates/incremental/debug
-app/build/intermediates/project_dex_archive/
+app/build/intermediates/*
+!app/build/outputs/apk/debug/
 !src/**/build/
 
 # Ignore Gradle GUI config
