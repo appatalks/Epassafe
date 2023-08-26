@@ -1,4 +1,5 @@
 ﻿UPM - Epassafe
+![logo](https://github.com/appatalks/Epassafe/blob/main/app/src/main/res/drawable/logo.png?raw=true)
 --------------------------
 UPM - Epassafe (C) 2013 is a fork of Universal Password Manager (UPM) with the
 development geared to making this a stand-alone application on an Android Device.
@@ -7,9 +8,10 @@ UPM - Epassafe differs from Universal Password Manager in several ways. It has b
 stripped down to the most basic usage, that of encrypting your passwords and allowing
 backups to be made to external device i.e sdcard. 
 
-Grab latest Build from:
-https://github.com/appatalks/Epassafe/raw/master/app/build/outputs/apk/debug/app-debug.apk
+Grab latest [Developer Build](https://github.com/appatalks/Epassafe/raw/master/app/build/outputs/apk/debug/app-debug.apk)
 Latest: v3.5 MD5 0db05a1b667d06e13f7489df4d423bbd
+
+Ir grab it from the [Google Play Store](https://play.google.com/store/apps/details?id=com.epassafe.upm&pcampaignid=web_share)
 
 ** NOTE **
 If upgrading from <v.3.0, you will need to import your backup to "../Android/data/com.epassafe.upm/files/database/" from your PC or connected device.
