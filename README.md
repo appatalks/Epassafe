@@ -60,6 +60,11 @@ Or get it from the [Google Play Store](https://play.google.com/store/apps/detail
 
 ---
 
+---
+
+**Core Based from the original Author**
+
+```md
 ## Universal Password Manager
 
 http://upm.sourceforge.net
@@ -106,3 +111,4 @@ There are several open source password managers available, so what makes UPM dif
 
 - **v1.0** (1-Feb-2010)
   - Initial Release
+```
