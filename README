@@ -8,7 +8,7 @@ stripped down to the most basic usage, that of encrypting your passwords and all
 backups to be made to external device i.e sdcard. 
 
 Grab latest Build from:
-https://github.com/servingbaby/Epassafe/raw/master/app/build/outputs/apk/debug/app-debug.apk
+https://github.com/appatalks/Epassafe/raw/master/app/build/outputs/apk/debug/app-debug.apk
 Latest: v3.2 MD5 d5d8c42d257648cee211574115e2dbf5
 
 ** NOTE **
@@ -17,6 +17,7 @@ If first inital install on device, go ahead and backup a blank database to auto 
 
 History
 -------
+v.3.5 - General update, move to github.com/appatalks/Epassafe
 v.3.2 - Tweaking Exit code for better performance
 v.3.1 - Resolved ClipBoard Sensitive Data copy issue on Main View
 v.3.0 - Play Store Release Candidate : Backups stored in Android/data/com.epassafe.upm/files/database
