@@ -1,7 +1,0 @@
-com.epassafe.upm.app-pngs-0 /home/mj420/StudioProjects/Epassafe/app/build/generated/res/pngs/debug
-com.epassafe.upm.app-resValues-1 /home/mj420/StudioProjects/Epassafe/app/build/generated/res/resValues/debug
-com.epassafe.upm.app-mergeDebugResources-2 /home/mj420/StudioProjects/Epassafe/app/build/intermediates/incremental/debug/mergeDebugResources/merged.dir
-com.epassafe.upm.app-mergeDebugResources-3 /home/mj420/StudioProjects/Epassafe/app/build/intermediates/incremental/debug/mergeDebugResources/stripped.dir
-com.epassafe.upm.app-merged_res-4 /home/mj420/StudioProjects/Epassafe/app/build/intermediates/merged_res/debug
-com.epassafe.upm.app-debug-5 /home/mj420/StudioProjects/Epassafe/app/src/debug/res
-com.epassafe.upm.app-main-6 /home/mj420/StudioProjects/Epassafe/app/src/main/res
