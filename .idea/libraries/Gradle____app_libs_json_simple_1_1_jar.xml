@@ -1,5 +1,5 @@
 <component name="libraryTable">
-  <library name="Gradle: ./app/libs/json_simple-1.1.jar">
+  <library name="Gradle: ./app/libs/json_simple-1.1.jar" external-system-id="GRADLE">
     <CLASSES>
       <root url="jar://$PROJECT_DIR$/app/libs/json_simple-1.1.jar!/" />
     </CLASSES>

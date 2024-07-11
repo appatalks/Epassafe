@@ -6,6 +6,7 @@ gen/
 build.gradle
 app/build/*
 app/build.gradle
+app/release/*
 app/build/intermediates/*
 !app/build/outputs/apk/debug/
 !src/**/build/
