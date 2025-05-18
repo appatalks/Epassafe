@@ -8,9 +8,9 @@
 
 UPM - Epassafe differs from Universal Password Manager in several ways. It has been ***stripped down*** to the most basic usage, that of encrypting your passwords and allowing backups to be made to an external device (e.g., sdcard).
 
-Grab the latest [Developer Build](https://github.com/appatalks/Epassafe/raw/main/app/build/outputs/apk/debug/app-debug.apk)
+Grab the latest [Developer Build](https://github.com/appatalks/Epassafe/raw/main/app/release/app-release.apk)
 
-Latest: **v3.6** MD5: ```968c15acde2fa767175f55df66cea3af``` ```July '24```
+Latest: **v3.7** MD5: ```7632df2bde7ad32001879caa08e12b0c  app/release/app-release.apk``` ```May '25```
 
 Or get it from the [Google Play Store](https://play.google.com/store/apps/details?id=com.epassafe.upm&pcampaignid=web_share)
 
@@ -19,6 +19,7 @@ Or get it from the [Google Play Store](https://play.google.com/store/apps/detail
 
 > ***History***
 
+> - **v3.7**: Android SDK Target 35; Minor updates, bug fixes.
 > - **v3.5**: General update, moved to [github.com/appatalks/Epassafe](https://github.com/appatalks/Epassafe)
 > - **v3.2**: Tweaked Exit code for better performance
 > - **v3.1**: Resolved Clipboard Sensitive Data copy issue on Main View
