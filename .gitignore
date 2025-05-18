@@ -1,13 +1,14 @@
 bin/
 gen/
 *~
-.gradle
-.gradle/*
-build.gradle
+.gradle/
 app/build/*
 app/build.gradle
 app/release/*
 app/build/intermediates/*
+build/reports/*
+.idea/
+.idea/libraries/
 !app/build/outputs/apk/debug/
 !src/**/build/
 
@@ -28,3 +29,19 @@ gradle-app.setting
 .project
 # JDT-specific (Eclipse Java Development Tools)
 .classpath
+
+# Android Studio/IntelliJ
+*.iml
+
+# Local properties
+local.properties
+
+# Log files
+*.log
+
+# Captures (Android Studio screenshots)
+captures/
+
+# macOS/Windows system files
+.DS_Store
+Thumbs.db
