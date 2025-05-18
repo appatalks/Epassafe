@@ -1,0 +1,8 @@
+<data-extraction-rules>
+    <cloud-backup>
+        <include domain="file" path="."/>
+    </cloud-backup>
+    <device-transfer>
+        <include domain="file" path="."/>
+    </device-transfer>
+</data-extraction-rules>
