@@ -22,11 +22,17 @@ package com.epassafe.upm;
 import java.io.File;
 import java.io.IOException;
 import java.security.GeneralSecurityException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Environment;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -37,6 +43,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.epassafe.upm.crypto.DatabaseExporter;
 import com.epassafe.upm.crypto.InvalidPasswordException;
 import com.epassafe.upm.database.PasswordDatabase;
 import com.epassafe.upm.database.ProblemReadingDatabaseFile;
@@ -48,7 +55,7 @@ public class ChangeMasterPassword extends Activity {
     private EditText newPassword2EditText;
     private CheckBox modernEncryptionCheckbox;
     private CheckBox useChaCha20Checkbox;
-    private CheckBox legacyEncryptionCheckbox;
+    private CheckBox exportCsvCheckbox;
     private LinearLayout encryptionOptionsLayout;
 
     @Override
@@ -64,7 +71,7 @@ public class ChangeMasterPassword extends Activity {
         // Add UI elements for encryption options
         modernEncryptionCheckbox = (CheckBox) findViewById(R.id.modern_encryption_checkbox);
         useChaCha20Checkbox = (CheckBox) findViewById(R.id.use_chacha20_checkbox);
-        legacyEncryptionCheckbox = (CheckBox) findViewById(R.id.legacy_encryption_checkbox);
+        exportCsvCheckbox = (CheckBox) findViewById(R.id.export_csv_checkbox);
         encryptionOptionsLayout = (LinearLayout) findViewById(R.id.encryption_options_layout);
 
         // Set initial state based on current encryption
@@ -72,7 +79,6 @@ public class ChangeMasterPassword extends Activity {
         if (db != null) {
             boolean isUsingModern = db.isUsingModernEncryption();
             modernEncryptionCheckbox.setChecked(isUsingModern);
-            legacyEncryptionCheckbox.setChecked(!isUsingModern);
 
             // Check if ChaCha20 is being used and set checkbox accordingly
             if (isUsingModern) {
@@ -94,26 +100,35 @@ public class ChangeMasterPassword extends Activity {
             modernEncryptionCheckbox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 @Override
                 public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                    if (isChecked) {
-                        legacyEncryptionCheckbox.setChecked(false);
-                    } else if (!legacyEncryptionCheckbox.isChecked()) {
-                        // Ensure at least one encryption option is selected
-                        buttonView.setChecked(true);
-                        return;
-                    }
                     useChaCha20Checkbox.setEnabled(isChecked);
                 }
             });
 
-            legacyEncryptionCheckbox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            // Add warning dialog for CSV export checkbox
+            exportCsvCheckbox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 @Override
                 public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                     if (isChecked) {
-                        modernEncryptionCheckbox.setChecked(false);
-                        useChaCha20Checkbox.setEnabled(false);
-                    } else if (!modernEncryptionCheckbox.isChecked()) {
-                        // Ensure at least one encryption option is selected
-                        buttonView.setChecked(true);
+                        new AlertDialog.Builder(ChangeMasterPassword.this)
+                            .setTitle("Security Warning")
+                            .setMessage("This will export ALL your passwords to an unencrypted CSV file. " +
+                                        "Anyone with access to this file will be able to see your passwords. " +
+                                        "Are you sure you want to continue?")
+                            .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    // Keep checkbox checked
+                                }
+                            })
+                            .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    // Uncheck the box
+                                    exportCsvCheckbox.setChecked(false);
+                                }
+                            })
+                            .setIcon(android.R.drawable.ic_dialog_alert)
+                            .show();
                     }
                 }
             });
@@ -140,6 +155,14 @@ public class ChangeMasterPassword extends Activity {
             return false;
         }
 
+        // Check if doing CSV export only (no password change)
+        if (exportCsvCheckbox.isChecked() &&
+            newPassword1EditText.getText().toString().length() == 0 &&
+            newPassword2EditText.getText().toString().length() == 0) {
+            // This is valid - we're just exporting to CSV without changing password
+            return true;
+        }
+
         // Check passwords match
         String newPassword1 = newPassword1EditText.getText().toString();
         String newPassword2 = newPassword2EditText.getText().toString();
@@ -150,7 +173,7 @@ public class ChangeMasterPassword extends Activity {
         }
 
         // Check password length (minimum 8 characters)
-        if (newPassword1.length() < 8) {
+        if (newPassword1.length() > 0 && newPassword1.length() < 8) {
             UIUtilities.showToast(this,
                     String.format(getString(R.string.password_too_short), 8),
                     false);
@@ -166,8 +189,11 @@ public class ChangeMasterPassword extends Activity {
         private static final int RESULT_OK = 0;
         private static final int RESULT_INCORRECT_EXISTING_PASSWORD = 1;
         private static final int RESULT_ENCRYPTION_FAILED = 2;
+        private static final int RESULT_CSV_ONLY = 3;
+        private static final int RESULT_CSV_FAILED = 4;
 
         private String errorMessage;
+        private String csvFilePath;
         private ProgressDialog progressDialog;
 
         @Override
@@ -188,11 +214,38 @@ public class ChangeMasterPassword extends Activity {
                 PasswordDatabase testDB = new PasswordDatabase(dbFile, existingPassword);
 
                 // If we got here then the password was correct
+
+                // Check if we need to export to CSV
+                if (exportCsvCheckbox.isChecked()) {
+                    // Create a file in the Downloads directory with timestamp
+                    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd_HHmmss", Locale.US);
+                    String timestamp = sdf.format(new Date());
+                    String filename = "epassafe_export_" + timestamp + ".csv";
+
+                    File downloadsDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS);
+                    File csvFile = new File(downloadsDir, filename);
+
+                    boolean exportSuccess = DatabaseExporter.exportToCSV(database, csvFile);
+                    if (exportSuccess) {
+                        csvFilePath = csvFile.getAbsolutePath();
+                        Log.i("ChangeMasterPassword", "Successfully exported database to " + csvFilePath);
+                    } else {
+                        Log.e("ChangeMasterPassword", "Failed to export database to CSV");
+                        return RESULT_CSV_FAILED;
+                    }
+
+                    // If we're only doing CSV export (no password change)
+                    String newPassword1 = newPassword1EditText.getText().toString();
+                    if (newPassword1.length() == 0) {
+                        return RESULT_CSV_ONLY;
+                    }
+                }
+
+                // If we need to change the password
                 char[] newPassword = newPassword1EditText.getText().toString().toCharArray();
 
                 // Check which encryption type is selected
                 boolean useModernEncryption = modernEncryptionCheckbox.isChecked();
-                boolean useLegacyEncryption = legacyEncryptionCheckbox.isChecked();
                 boolean useChaCha20 = useChaCha20Checkbox.isChecked();
 
                 boolean isCurrentlyModern = database.isUsingModernEncryption();
@@ -215,10 +268,6 @@ public class ChangeMasterPassword extends Activity {
                             Log.i("ChangeMasterPassword", "Switched to " +
                                   (useChaCha20 ? "ChaCha20-Poly1305" : "AES-GCM"));
                         }
-                    } else if (useLegacyEncryption && isCurrentlyModern) {
-                        // Downgrade from modern to legacy
-                        database.downgradeToLegacyEncryption(newPassword);
-                        Log.i("ChangeMasterPassword", "Downgraded to legacy encryption");
                     }
 
                     // Save the database but don't wait for UI callbacks
@@ -249,9 +298,23 @@ public class ChangeMasterPassword extends Activity {
             progressDialog.dismiss();
             switch (result) {
                 case RESULT_OK:
-                    UIUtilities.showToast(ChangeMasterPassword.this,
+                    if (csvFilePath != null) {
+                        String message = "Master password changed and database exported to: " + csvFilePath;
+                        UIUtilities.showToast(ChangeMasterPassword.this, message, true);
+                    } else {
+                        UIUtilities.showToast(ChangeMasterPassword.this,
                             R.string.master_password_changed, true);
+                    }
                     finish();
+                    break;
+                case RESULT_CSV_ONLY:
+                    UIUtilities.showToast(ChangeMasterPassword.this,
+                            "Database exported to: " + csvFilePath, true);
+                    finish();
+                    break;
+                case RESULT_CSV_FAILED:
+                    UIUtilities.showToast(ChangeMasterPassword.this,
+                            "Failed to export database to CSV file", true);
                     break;
                 case RESULT_INCORRECT_EXISTING_PASSWORD:
                     UIUtilities.showToast(ChangeMasterPassword.this,
