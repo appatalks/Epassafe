@@ -71,6 +71,13 @@ public class ChangeMasterPassword extends Activity {
             boolean isUsingModern = db.isUsingModernEncryption();
             modernEncryptionCheckbox.setChecked(isUsingModern);
 
+            // Check if ChaCha20 is being used and set checkbox accordingly
+            if (isUsingModern) {
+                String algorithm = db.getEncryptionAlgorithm();
+                boolean isUsingChaCha = algorithm.contains("ChaCha20");
+                useChaCha20Checkbox.setChecked(isUsingChaCha);
+            }
+
             // Show/hide ChaCha20 option based on modern encryption being enabled
             useChaCha20Checkbox.setEnabled(isUsingModern);
 
