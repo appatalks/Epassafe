@@ -232,6 +232,11 @@ public class PasswordDatabase {
                         // Initialize the modern encryption service with the password
                         modernEncryptionService = new ModernEncryptionService(passwordChars, salt);
 
+                        // Apply the detected algorithm preference to the encryption service
+                        if (preferChaCha20) {
+                            modernEncryptionService.setAlgorithm(true);
+                        }
+
                         // Clear password from memory after use
                         if (passwordChars != null) {
                             Arrays.fill(passwordChars, '\0');
