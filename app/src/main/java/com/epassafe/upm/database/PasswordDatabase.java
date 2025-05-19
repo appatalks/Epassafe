@@ -32,6 +32,7 @@ import java.security.InvalidAlgorithmParameterException;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.security.NoSuchProviderException;
+import java.security.SecureRandom;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -152,16 +153,8 @@ public class PasswordDatabase {
      * @throws GeneralSecurityException
      */
     public void upgradeToModernEncryption(char[] password, boolean useChaCha) throws GeneralSecurityException {
-        if (isUsingModernEncryption) {
-            // Already using modern encryption, just update algorithm choice if needed
-            if (preferChaCha20 != useChaCha) {
-                preferChaCha20 = useChaCha;
-                modernEncryptionService.setAlgorithm(preferChaCha20);
-            }
-            return;
-        }
-
         try {
+            // Always create a new modern encryption service regardless of current state
             modernEncryptionService = new ModernEncryptionService(password);
             modernEncryptionService.setAlgorithm(useChaCha);
             preferChaCha20 = useChaCha;
@@ -171,6 +164,97 @@ public class PasswordDatabase {
         }
     }
 
+    /**
+     * Switch between AES-GCM and ChaCha20-Poly1305 encryption algorithms
+     * Only applicable when modern encryption is being used
+     * @param useChaCha Whether to use ChaCha20-Poly1305 instead of AES-GCM
+     * @throws IllegalStateException if not using modern encryption
+     */
+    public void switchModernAlgorithm(boolean useChaCha) {
+        if (!isUsingModernEncryption) {
+            throw new IllegalStateException("Cannot switch algorithm - not using modern encryption");
+        }
+
+        preferChaCha20 = useChaCha;
+        modernEncryptionService.setAlgorithm(preferChaCha20);
+    }
+
+    /**
+     * Downgrade to legacy encryption from modern encryption
+     * @param password The current master password
+     * @throws GeneralSecurityException
+     */
+    public void downgradeToLegacyEncryption(char[] password) throws GeneralSecurityException {
+        if (!isUsingModernEncryption) {
+            // Already using legacy encryption, nothing to do
+            return;
+        }
+
+        try {
+            // Create a defensive copy of the password
+            char[] passwordCopy = new char[password.length];
+            System.arraycopy(password, 0, passwordCopy, 0, password.length);
+
+            // First verify the password with the existing modern encryption
+            if (!verifyModernPassword(passwordCopy)) {
+                throw new GeneralSecurityException("Invalid password provided for downgrade");
+            }
+
+            // Create another defensive copy for the new encryption service
+            char[] passwordForEncryption = new char[password.length];
+            System.arraycopy(password, 0, passwordForEncryption, 0, password.length);
+
+            // Create a new encryption service with the password copy
+            encryptionService = new EncryptionService(passwordForEncryption);
+
+            // Get unencrypted database contents to re-encrypt with legacy encryption
+            ByteArrayOutputStream os = new ByteArrayOutputStream();
+
+            // Flatpack the database revision and options
+            revision.increment();
+            revision.flatPack(os);
+            dbOptions.flatPack(os);
+
+            // Flatpack the accounts
+            for (AccountInformation ai : accounts.values()) {
+                ai.flatPack(os);
+            }
+
+            byte[] databaseContents = os.toByteArray();
+            os.close();
+
+            // Reset the modern encryption flags and service
+            isUsingModernEncryption = false;
+            preferChaCha20 = false;
+            modernEncryptionService = null; // Clear the modern encryption service
+
+            // Save immediately to persist changes with the new encryption
+            save();
+
+            // Log success
+            Log.i(TAG, "Successfully downgraded to legacy encryption");
+
+        } catch (Exception e) {
+            Log.e(TAG, "Failed to downgrade to legacy encryption", e);
+            throw new GeneralSecurityException("Failed to downgrade to legacy encryption: " + e.getMessage(), e);
+        }
+    }
+
+    /**
+     * Verify that the given password works with the current modern encryption
+     * @param password Password to verify
+     * @return true if password is valid
+     */
+    private boolean verifyModernPassword(char[] password) {
+        try {
+            // Create a temporary service to validate the password
+            ModernEncryptionService testService = new ModernEncryptionService(password, modernEncryptionService.getSalt());
+            return true;
+        } catch (Exception e) {
+            Log.e(TAG, "Password verification failed", e);
+            return false;
+        }
+    }
 
     private void load(SecretKey secretKey) throws IOException, GeneralSecurityException, ProblemReadingDatabaseFile, InvalidPasswordException {
         //Read in the encrypted bytes
