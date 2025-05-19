@@ -101,6 +101,28 @@ public class ChangeMasterPassword extends Activity {
                 @Override
                 public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                     useChaCha20Checkbox.setEnabled(isChecked);
+
+                    // Show warning when trying to disable modern encryption
+                    if (!isChecked && db.isUsingModernEncryption()) {
+                        new AlertDialog.Builder(ChangeMasterPassword.this)
+                            .setTitle(R.string.encryption_downgrade_warning_title)
+                            .setMessage(R.string.encryption_downgrade_warning)
+                            .setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    // User confirmed disabling modern encryption
+                                }
+                            })
+                            .setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    // User canceled, revert the checkbox
+                                    modernEncryptionCheckbox.setChecked(true);
+                                }
+                            })
+                            .setIcon(android.R.drawable.ic_dialog_alert)
+                            .show();
+                    }
                 }
             });
 
@@ -198,8 +220,18 @@ public class ChangeMasterPassword extends Activity {
 
         @Override
         protected void onPreExecute() {
-            progressDialog = ProgressDialog.show(ChangeMasterPassword.this, "",
-                    getString(R.string.changing_master_password));
+            // Show appropriate message based on whether we're exporting to CSV or changing password
+            if (exportCsvCheckbox.isChecked() &&
+                newPassword1EditText.getText().toString().length() == 0 &&
+                newPassword2EditText.getText().toString().length() == 0) {
+                // Only exporting to CSV
+                progressDialog = ProgressDialog.show(ChangeMasterPassword.this, "",
+                        getString(R.string.exporting_csv));
+            } else {
+                // Changing password (possibly with CSV export)
+                progressDialog = ProgressDialog.show(ChangeMasterPassword.this, "",
+                        getString(R.string.changing_master_password));
+            }
         }
 
         @Override
