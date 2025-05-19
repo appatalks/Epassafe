@@ -11,8 +11,7 @@
  *
  * Universal Password Manager is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
  * along with Universal Password Manager; if not, write to the Free Software
@@ -23,4 +22,18 @@ package com.epassafe.upm.crypto;
 @SuppressWarnings("serial")
 public class InvalidPasswordException extends Exception {
 
+    // Default constructor
+    public InvalidPasswordException() {
+        super();
+    }
+
+    // Constructor with message
+    public InvalidPasswordException(String message) {
+        super(message);
+    }
+
+    // Constructor with message and cause
+    public InvalidPasswordException(String message, Throwable cause) {
+        super(message, cause);
+    }
 }
