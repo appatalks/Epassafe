@@ -10,7 +10,7 @@ UPM - Epassafe differs from Universal Password Manager in several ways. It has b
 
 Grab the latest [Developer Build](https://github.com/appatalks/Epassafe/raw/refs/heads/main/app/release/app-release.apk)
 
-Latest: **v3.7** MD5: ```7632df2bde7ad32001879caa08e12b0c  app/release/app-release.apk``` ```May '25```
+Latest: **v3.8** MD5: ```07e453246727831d854c1f18c0d0753e  app/release/app-release.apk``` ```May '25```
 
 Or get it from the [Google Play Store](https://play.google.com/store/apps/details?id=com.epassafe.upm&pcampaignid=web_share)
 
@@ -19,6 +19,7 @@ Or get it from the [Google Play Store](https://play.google.com/store/apps/detail
 
 > ***History***
 
+> - **v3.8**: Major updates, including modern cryptography options, export-to-cvs, bug fixes
 > - **v3.7**: Android SDK Target 35; Minor updates, bug fixes.
 > - **v3.5**: General update, moved to [github.com/appatalks/Epassafe](https://github.com/appatalks/Epassafe)
 > - **v3.2**: Tweaked Exit code for better performance
