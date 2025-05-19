@@ -152,16 +152,8 @@ public class PasswordDatabase {
      * @throws GeneralSecurityException
      */
     public void upgradeToModernEncryption(char[] password, boolean useChaCha) throws GeneralSecurityException {
-        if (isUsingModernEncryption) {
-            // Already using modern encryption, just update algorithm choice if needed
-            if (preferChaCha20 != useChaCha) {
-                preferChaCha20 = useChaCha;
-                modernEncryptionService.setAlgorithm(preferChaCha20);
-            }
-            return;
-        }
-
         try {
+            // Always create a new modern encryption service regardless of current state
             modernEncryptionService = new ModernEncryptionService(password);
             modernEncryptionService.setAlgorithm(useChaCha);
             preferChaCha20 = useChaCha;
@@ -171,6 +163,41 @@ public class PasswordDatabase {
         }
     }
 
+    /**
+     * Switch between AES-GCM and ChaCha20-Poly1305 encryption algorithms
+     * Only applicable when modern encryption is being used
+     * @param useChaCha Whether to use ChaCha20-Poly1305 instead of AES-GCM
+     * @throws IllegalStateException if not using modern encryption
+     */
+    public void switchModernAlgorithm(boolean useChaCha) {
+        if (!isUsingModernEncryption) {
+            throw new IllegalStateException("Cannot switch algorithm - not using modern encryption");
+        }
+
+        preferChaCha20 = useChaCha;
+        modernEncryptionService.setAlgorithm(preferChaCha20);
+    }
+
+    /**
+     * Downgrade to legacy encryption from modern encryption
+     * @param password The current master password
+     * @throws GeneralSecurityException
+     */
+    public void downgradeToLegacyEncryption(char[] password) throws GeneralSecurityException {
+        if (!isUsingModernEncryption) {
+            // Already using legacy encryption, nothing to do
+            return;
+        }
+
+        try {
+            encryptionService = new EncryptionService(password);
+            isUsingModernEncryption = false;
+            preferChaCha20 = false;
+            modernEncryptionService = null; // Clear the modern encryption service
+        } catch (Exception e) {
+            throw new GeneralSecurityException("Failed to downgrade to legacy encryption", e);
+        }
+    }
 
     private void load(SecretKey secretKey) throws IOException, GeneralSecurityException, ProblemReadingDatabaseFile, InvalidPasswordException {
         //Read in the encrypted bytes

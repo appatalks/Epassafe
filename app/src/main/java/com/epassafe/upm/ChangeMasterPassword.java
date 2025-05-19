@@ -48,6 +48,7 @@ public class ChangeMasterPassword extends Activity {
     private EditText newPassword2EditText;
     private CheckBox modernEncryptionCheckbox;
     private CheckBox useChaCha20Checkbox;
+    private CheckBox legacyEncryptionCheckbox;
     private LinearLayout encryptionOptionsLayout;
 
     @Override
@@ -60,16 +61,18 @@ public class ChangeMasterPassword extends Activity {
         newPassword1EditText = (EditText) findViewById(R.id.new_master_password1);
         newPassword2EditText = (EditText) findViewById(R.id.new_master_password2);
 
-        // Add new UI elements for encryption options
+        // Add UI elements for encryption options
         modernEncryptionCheckbox = (CheckBox) findViewById(R.id.modern_encryption_checkbox);
         useChaCha20Checkbox = (CheckBox) findViewById(R.id.use_chacha20_checkbox);
+        legacyEncryptionCheckbox = (CheckBox) findViewById(R.id.legacy_encryption_checkbox);
         encryptionOptionsLayout = (LinearLayout) findViewById(R.id.encryption_options_layout);
 
         // Set initial state based on current encryption
-        PasswordDatabase db = ((UPMApplication) getApplication()).getPasswordDatabase();
+        final PasswordDatabase db = ((UPMApplication) getApplication()).getPasswordDatabase();
         if (db != null) {
             boolean isUsingModern = db.isUsingModernEncryption();
             modernEncryptionCheckbox.setChecked(isUsingModern);
+            legacyEncryptionCheckbox.setChecked(!isUsingModern);
 
             // Check if ChaCha20 is being used and set checkbox accordingly
             if (isUsingModern) {
@@ -87,15 +90,35 @@ public class ChangeMasterPassword extends Activity {
                 encryptionInfo.setText(getString(R.string.current_encryption) + " " + db.getEncryptionAlgorithm());
             }
 
-            // Set listener for modern encryption checkbox
+            // Set listeners for encryption selection
             modernEncryptionCheckbox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 @Override
                 public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                    if (isChecked) {
+                        legacyEncryptionCheckbox.setChecked(false);
+                    } else if (!legacyEncryptionCheckbox.isChecked()) {
+                        // Ensure at least one encryption option is selected
+                        buttonView.setChecked(true);
+                        return;
+                    }
                     useChaCha20Checkbox.setEnabled(isChecked);
                 }
             });
+
+            legacyEncryptionCheckbox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                @Override
+                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                    if (isChecked) {
+                        modernEncryptionCheckbox.setChecked(false);
+                        useChaCha20Checkbox.setEnabled(false);
+                    } else if (!modernEncryptionCheckbox.isChecked()) {
+                        // Ensure at least one encryption option is selected
+                        buttonView.setChecked(true);
+                    }
+                }
+            });
         }
-        
+
         Button okButton = (Button) findViewById(R.id.change_master_password_button);
         okButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -167,23 +190,35 @@ public class ChangeMasterPassword extends Activity {
                 // If we got here then the password was correct
                 char[] newPassword = newPassword1EditText.getText().toString().toCharArray();
 
-                // Check if we should upgrade to modern encryption
+                // Check which encryption type is selected
                 boolean useModernEncryption = modernEncryptionCheckbox.isChecked();
+                boolean useLegacyEncryption = legacyEncryptionCheckbox.isChecked();
                 boolean useChaCha20 = useChaCha20Checkbox.isChecked();
+
+                boolean isCurrentlyModern = database.isUsingModernEncryption();
+                boolean isCurrentlyChaCha = database.getEncryptionAlgorithm().contains("ChaCha20");
 
                 try {
                     // First change the password
                     database.changePassword(newPassword);
 
-                    // Then upgrade encryption if requested
-                    if (useModernEncryption && !database.isUsingModernEncryption()) {
-                        try {
+                    // Handle encryption changes based on selection
+                    if (useModernEncryption) {
+                        if (!isCurrentlyModern) {
+                            // Upgrade to modern from legacy
                             database.upgradeToModernEncryption(newPassword, useChaCha20);
-                        } catch (Exception e) {
-                            Log.e("ChangeMasterPassword", "Error upgrading encryption", e);
-                            errorMessage = "Error upgrading encryption: " + e.getMessage();
-                            return RESULT_ENCRYPTION_FAILED;
+                            Log.i("ChangeMasterPassword", "Upgraded to modern encryption with " +
+                                  (useChaCha20 ? "ChaCha20-Poly1305" : "AES-GCM"));
+                        } else if (isCurrentlyChaCha != useChaCha20) {
+                            // Switch between AES-GCM and ChaCha20-Poly1305
+                            database.switchModernAlgorithm(useChaCha20);
+                            Log.i("ChangeMasterPassword", "Switched to " +
+                                  (useChaCha20 ? "ChaCha20-Poly1305" : "AES-GCM"));
                         }
+                    } else if (useLegacyEncryption && isCurrentlyModern) {
+                        // Downgrade from modern to legacy
+                        database.downgradeToLegacyEncryption(newPassword);
+                        Log.i("ChangeMasterPassword", "Downgraded to legacy encryption");
                     }
 
                     // Save the database but don't wait for UI callbacks
@@ -233,3 +268,4 @@ public class ChangeMasterPassword extends Activity {
         }
     }
 }
+
