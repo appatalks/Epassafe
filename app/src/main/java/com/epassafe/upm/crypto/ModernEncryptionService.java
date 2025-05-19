@@ -45,6 +45,7 @@ import javax.crypto.spec.SecretKeySpec;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
 
 import android.util.Log;
+import android.os.Build;
 
 /**
  * Modern encryption service using AES-GCM or ChaCha20-Poly1305 with enhanced PBKDF2
@@ -82,8 +83,10 @@ public class ModernEncryptionService {
     private byte algorithmId;
 
     static {
-        // Register Bouncy Castle provider
-        Security.addProvider(new BouncyCastleProvider());
+        // Register Bouncy Castle provider only for older Android versions
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.P) { // P is API 28
+            Security.addProvider(new BouncyCastleProvider());
+        }
     }
 
     /**
@@ -282,7 +285,7 @@ public class ModernEncryptionService {
         secureRandom.nextBytes(nonce);
 
         // Initialize cipher
-        Cipher cipher = Cipher.getInstance(CHACHA20_POLY1305, "BC");
+        Cipher cipher = Cipher.getInstance(CHACHA20_POLY1305);
         GCMParameterSpec parameterSpec = new GCMParameterSpec(128, nonce);
         cipher.init(Cipher.ENCRYPT_MODE, secretKey, parameterSpec);
 
@@ -314,7 +317,7 @@ public class ModernEncryptionService {
         byte[] ciphertext = Arrays.copyOfRange(data, CHACHA_NONCE_LENGTH, data.length);
 
         // Initialize cipher
-        Cipher cipher = Cipher.getInstance(CHACHA20_POLY1305, "BC");
+        Cipher cipher = Cipher.getInstance(CHACHA20_POLY1305);
         GCMParameterSpec parameterSpec = new GCMParameterSpec(128, nonce);
         cipher.init(Cipher.DECRYPT_MODE, secretKey, parameterSpec);
 
