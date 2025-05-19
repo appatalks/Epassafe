@@ -11,8 +11,7 @@
  *
  * Universal Password Manager is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
  * along with Universal Password Manager; if not, write to the Free Software
@@ -21,9 +20,14 @@
 package com.epassafe.upm;
 
 import java.io.IOException;
+import java.security.InvalidAlgorithmParameterException;
+import java.security.InvalidKeyException;
+import java.security.NoSuchAlgorithmException;
+import java.security.NoSuchProviderException;
 
 import javax.crypto.BadPaddingException;
 import javax.crypto.IllegalBlockSizeException;
+import javax.crypto.NoSuchPaddingException;
 
 import com.epassafe.upm.database.PasswordDatabase;
 
@@ -61,6 +65,21 @@ public class SaveDatabaseAsyncTask extends AsyncTask<PasswordDatabase, Void, Str
             Log.e("SaveDatabaseAsyncTask", e.getMessage(), e);
             message = String.format(activity.getString(R.string.problem_saving_db), e.getMessage());
         } catch (IOException e) {
+            Log.e("SaveDatabaseAsyncTask", e.getMessage(), e);
+            message = String.format(activity.getString(R.string.problem_saving_db), e.getMessage());
+        } catch (NoSuchPaddingException e) {
+            Log.e("SaveDatabaseAsyncTask", e.getMessage(), e);
+            message = String.format(activity.getString(R.string.problem_saving_db), e.getMessage());
+        } catch (NoSuchAlgorithmException e) {
+            Log.e("SaveDatabaseAsyncTask", e.getMessage(), e);
+            message = String.format(activity.getString(R.string.problem_saving_db), e.getMessage());
+        } catch (InvalidKeyException e) {
+            Log.e("SaveDatabaseAsyncTask", e.getMessage(), e);
+            message = String.format(activity.getString(R.string.problem_saving_db), e.getMessage());
+        } catch (InvalidAlgorithmParameterException e) {
+            Log.e("SaveDatabaseAsyncTask", e.getMessage(), e);
+            message = String.format(activity.getString(R.string.problem_saving_db), e.getMessage());
+        } catch (NoSuchProviderException e) {
             Log.e("SaveDatabaseAsyncTask", e.getMessage(), e);
             message = String.format(activity.getString(R.string.problem_saving_db), e.getMessage());
         }
