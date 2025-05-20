@@ -114,20 +114,13 @@
     <string name="dont_forget_password_warning">If you forget your master password there\'s no way of opening your password database. There are no backdoors and consequently you are sol eeek.</string>
     <string name="backup_message">NOTE: If you uninstall UPM Epassafe your password database will be deleted along with it. For this reason it\'s important you backup your data regularly (available in the menu).</string>
     <string name="search_hint">Search Accounts</string>
-    <string name="dropbox_problem">Problem communicating with Dropbox</string>
-    <string name="dropbox_get_file_list">Retrieving Filenames From Dropbox…</string>
     <string name="sync_method">Sync Method</string>
     <string name="sync_method_disabled">Disabled</string>
-    <string name="sync_method_dropbox">Dropbox</string>
     <string name="sync_method_http">HTTP Server</string>
     <string name="sync_settings">Sync Settings</string>
     <string name="problem_uploading">Problem Uploading Database</string>
-    <string name="no_database_files">No Database files on Dropbox</string>
-    
     <string name="confirm_delete_dialog" tools:ignore="MissingTranslation">Are you sure you want to delete your Account? Once deleted the account is gone forever.</string>
-    
     <string name="lock_timeout" tools:ignore="MissingTranslation">Time to autolock: %s </string>
-    
     <string name="app_name" tools:ignore="MissingTranslation">PassGenerator</string>
     <string name="gen_settings_title" tools:ignore="MissingTranslation">PassGenerator Settings</string>
     <string name="settings" tools:ignore="MissingTranslation">Settings</string>
