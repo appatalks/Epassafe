@@ -1,0 +1,17 @@
+version: 2
+updates:
+  - package-ecosystem: "gradle"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+    ignore:
+      # Ignore indirect dependencies that you don't use directly
+      # Add the package names that Dependabot is flagging unnecessarily
+      # For example:
+      # - dependency-name: "com.google.guava:guava"
+      #   versions: ["*"]
+    allow:
+      # Only allow direct dependencies to be updated automatically
+      - dependency-type: "direct"
+
+
