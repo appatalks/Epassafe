@@ -4,7 +4,7 @@
 -keep class org.bouncycastle.jce.provider.BouncyCastleProvider { *; }
 
 # Only keep the cryptographic algorithms your app actually uses
-# From your code, I can see you're using AES-GCM and ChaCha20-Poly1305
+# Using AES-GCM and ChaCha20-Poly1305
 -keep class org.bouncycastle.jcajce.provider.symmetric.AES { *; }
 -keep class org.bouncycastle.jcajce.provider.symmetric.ChaCha { *; }
 -keep class org.bouncycastle.jcajce.provider.symmetric.Poly1305 { *; }
