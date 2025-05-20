@@ -1,0 +1,56 @@
+apply plugin: 'com.android.application'
+
+// Load the signing configuration from properties file
+def signingPropsFile = rootProject.file('signing.properties')
+def signingProps = new Properties()
+if (signingPropsFile.exists()) {
+    signingProps.load(new FileInputStream(signingPropsFile))
+}
+
+android {
+    signingConfigs {
+        debug {
+            if (signingPropsFile.exists()) {
+                storeFile file(signingProps['storeFile'])
+                storePassword signingProps['storePassword']
+                keyAlias signingProps['keyAlias']
+                keyPassword signingProps['keyPassword']
+            }
+        }
+    }
+    compileSdkVersion 35
+
+    defaultConfig {
+        applicationId "com.epassafe.upm"
+        minSdkVersion 33
+        targetSdkVersion 35
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled true
+            shrinkResources true
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+    namespace 'com.epassafe.upm'
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
+    }
+}
+
+dependencies {
+    // implementation files('libs/httpmime-4.0.3.jar')
+    // implementation files('libs/json_simple-1.1.jar')
+    implementation 'androidx.core:core-ktx:1.16.0'
+    implementation 'androidx.appcompat:appcompat:1.7.0'
+    implementation 'com.google.android.material:material:1.12.0'
+    implementation 'androidx.preference:preference:1.2.1'
+    implementation 'androidx.window:window:1.0.0'  // Corrected dependency for edge-to-edge support
+
+    // Add Bouncy Castle for cryptographic operations
+    implementation 'org.bouncycastle:bcprov-jdk18on:1.77'
+
+}

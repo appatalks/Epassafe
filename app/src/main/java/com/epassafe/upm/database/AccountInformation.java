@@ -24,6 +24,7 @@ import java.io.InputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 
 
 public class AccountInformation extends FlatPackObject {
@@ -55,7 +56,7 @@ public class AccountInformation extends FlatPackObject {
 
 
     public AccountInformation(InputStream is) throws IOException, ProblemReadingDatabaseFile {
-        assemble(is, Charset.forName("UTF-8"));
+        assemble(is, StandardCharsets.UTF_8);
     }
 
 

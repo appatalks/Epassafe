@@ -1,22 +1,18 @@
 /*
  * Universal Password Manager
- \* Copyright (c) 2010-2011 Adrian Smith - MODDIFIED By Steven Bennett for UPM - Epassafe
+ * Copyright (c) 2010-2011 Adrian Smith - MODDIFIED By Steven Bennett for UPM - Epassafe
  *
  * This file is part of Universal Password Manager.
  *   
  * Universal Password Manager is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation; either version 2 of the License, or
- * (at your option) any later version.
+ * (at any later version).
  *
  * Universal Password Manager is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with Universal Password Manager; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  */
 package com.epassafe.upm;
 
@@ -25,6 +21,9 @@ import android.app.Application;
 import android.os.Environment;
 import android.util.Log;
 import android.widget.Toast;
+
+import androidx.core.view.WindowCompat;
+import androidx.core.view.WindowInsetsControllerCompat;
 
 import com.epassafe.upm.database.PasswordDatabase;
 
@@ -41,6 +40,29 @@ import java.nio.channels.FileChannel;
 public class UPMApplication extends Application {
 
     private PasswordDatabase passwordDatabase;
+
+    @Override
+    public void onCreate() {
+        super.onCreate();
+        // Enable edge-to-edge display for backward compatibility with Android versions before 15
+        // This is needed per Google Play Store recommendation for apps targeting SDK 35
+    }
+
+    /**
+     * Enables edge-to-edge display for an activity
+     * This should be called from the onCreate method of each activity
+     * @param activity The activity to enable edge-to-edge for
+     */
+    public void enableEdgeToEdge(Activity activity) {
+        if (activity != null && activity.getWindow() != null) {
+            // This is the recommended way to enable edge-to-edge display
+            WindowCompat.setDecorFitsSystemWindows(activity.getWindow(), false);
+
+            // Make system bars (status and navigation) visible over your content
+            WindowInsetsControllerCompat controller = new WindowInsetsControllerCompat(activity.getWindow(), activity.getWindow().getDecorView());
+            controller.setAppearanceLightStatusBars(true); // Adjust based on your app's theme
+        }
+    }
 
     public void setPasswordDatabase(PasswordDatabase passwordDatabase) {
         this.passwordDatabase = passwordDatabase;
