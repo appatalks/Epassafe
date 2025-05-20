@@ -10,7 +10,7 @@ Epassafe, a Password Manager of the most basic usage, that of encrypting your pa
 
 Grab the latest [Developer Build](https://github.com/appatalks/Epassafe/raw/refs/heads/main/app/release/app-release.apk)
 
-Latest: **v3.9** MD5: ```[in flux]  app/release/app-release.apk``` ```May '25```
+Latest: **v3.9** MD5: ```157de69a13198e2dda42435ca4a16840  app/release/app-release.apk``` ```May '25```
 
 Or get it from the [Google Play Store](https://play.google.com/store/apps/details?id=com.epassafe.upm&pcampaignid=web_share)
 
