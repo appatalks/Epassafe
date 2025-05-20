@@ -1,15 +1,9 @@
 name: Submit dependency graph
 on:
   push:
-    branches:
-      - main
-    paths:
-      - '**/build.gradle'
-      - '**/settings.gradle'
-      - '**/gradle/**'
 
 permissions:
-  contents: read
+  contents: write
 
 jobs:
   build:
