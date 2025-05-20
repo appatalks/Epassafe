@@ -150,7 +150,7 @@
 
     <!-- Encryption options -->
     <string name="current_encryption">Current encryption:</string>
-    <string name="use_modern_encryption">Use modern encryption (Argon2id)</string>
+    <string name="use_modern_encryption">Use modern encryption (AES-GCM)</string>
     <string name="modern_encryption_description">Modern encryption uses memory-hard key derivation for enhanced security against specialized hardware attacks.</string>
     <string name="use_chacha20">Use ChaCha20-Poly1305 (instead of AES-GCM)</string>
     <string name="chacha20_description">ChaCha20 may be faster on devices without hardware AES acceleration.</string>

@@ -1,22 +1,18 @@
 /*
- * Universal Password Manager
- \* Copyright (c) 2010-2025
+ * Epassafe Password Manager
+ * Copyright (c) 2010-2025
  *
- * This file is part of Universal Password Manager.
- *   
- * Universal Password Manager is free software; you can redistribute it and/or modify
+ * This file is part of Epassafe Password Manager.
+ *
+ * Epassafe Password Manager is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation; either version 2 of the License, or
  * (at your option) any later version.
  *
- * Universal Password Manager is distributed in the hope that it will be useful,
+ * Epassafe Password Manager is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
  *
- * You should have received a copy of the GNU General Public License
- * along with Universal Password Manager; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  */
 package com.epassafe.upm.database;
 
@@ -60,7 +56,7 @@ import com.epassafe.upm.util.Util;
  * 
  * Database versions and formats. The items between [] brackets are encrypted.
  *   4      >> UPM_MODERN FORMAT_VERSION SALT [ENCRYPTED DATA WITH ALGORITHM IDENTIFIER]
- *        (all strings are encoded using UTF-8, Argon2id KDF, AES-GCM or ChaCha20-Poly1305)
+ *        (all strings are encoded using UTF-8, AES-GCM or ChaCha20-Poly1305)
  *   3      >> MAGIC_NUMBER DB_VERSION SALT [DB_REVISION DB_OPTIONS ACCOUNTS]
  *        (all strings are encoded using UTF-8)
  *   2      >> MAGIC_NUMBER DB_VERSION SALT [DB_REVISION DB_OPTIONS ACCOUNTS]
@@ -147,7 +143,7 @@ public class PasswordDatabase {
 
     /**
      * Upgrade to modern encryption. This will use the modern encryption
-     * format with Argon2id and authenticated encryption.
+     * formats and authenticated encryption.
      * @param password The current master password
      * @param useChaCha Whether to use ChaCha20-Poly1305 instead of AES-GCM
      * @throws GeneralSecurityException
@@ -713,7 +709,7 @@ public class PasswordDatabase {
 
     public String getEncryptionAlgorithm() {
         if (isUsingModernEncryption) {
-            return preferChaCha20 ? "ChaCha20-Poly1305 with Argon2id" : "AES-GCM with Argon2id";
+            return preferChaCha20 ? "ChaCha20-Poly1305" : "AES-GCM";
         } else {
             return "AES-256-CBC with PBKDF2";
         }
