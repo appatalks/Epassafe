@@ -1,18 +1,34 @@
 name: Submit dependency graph
 on:
   push:
-  
+    branches:
+      - main
+    paths:
+      - '**/build.gradle'
+      - '**/settings.gradle'
+      - '**/gradle/**'
+
 permissions:
-  contents: write
+  contents: read
 
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v3
-    - name: Setup Gradle to generate and submit dependency graphs
+
+    - name: Cache Gradle dependencies
+      uses: actions/cache@v3
+      with:
+        path: ~/.gradle/caches
+        key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
+        restore-keys: |
+          ${{ runner.os }}-gradle-
+
+    - name: Setup Gradle to generate dependency graph
       uses: gradle/gradle-build-action@v2
       with:
-        dependency-graph: generate-and-submit
-    - name: Run a build, generating the dependency graph snapshot which will be submitted
+        arguments: dependencyReport
+
+    - name: Run a build and generate dependency graph
       run: ./gradlew build
