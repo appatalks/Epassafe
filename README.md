@@ -1,12 +1,12 @@
-# UPM - Epassafe
+# Epassafe
 
 ![logo](https://github.com/appatalks/Epassafe/blob/main/app/src/main/res/drawable/logo.png?raw=true)
 
 ---
 
-**UPM - Epassafe (C) 2013** is a fork of Universal Password Manager (UPM) for Android devices.
+**Epassafe (C) 2025** is a modern **no nonsense Password Manager** for Android devices.
 
-UPM - Epassafe differs from Universal Password Manager in several ways. It has been ***stripped down*** to the most basic usage, that of encrypting your passwords and allowing backups to be made to an external device (e.g., sdcard).
+Epassafe, a Password Manager of the most basic usage, that of encrypting your passwords using modern cryptography and allowing backups to be made to an external device (e.g., sdcard). 
 
 Grab the latest [Developer Build](https://github.com/appatalks/Epassafe/raw/refs/heads/main/app/release/app-release.apk)
 
@@ -59,59 +59,19 @@ Or get it from the [Google Play Store](https://play.google.com/store/apps/detail
 > - **v1.3b Beta**: Added Add Account Button to Lists for easy One Click Add Option. Additional Code Clean up.
 > - **v1.2b Beta**: Aesthetics and Code Optimization
 > - **v1.1b Beta**: Fixed Launch Icon on Some devices not showing up.
-> - **v1.0b Beta**: Initial Release
+> - **v1.0b Beta**: (2013) Initial Release
 
 ---
 
 ---
 
-**Core Based from the original Author**
+**Epassafe is heavily modifed from the original Author's work which is no longer maintained**
 
 ```md
 ## Universal Password Manager
 
 http://upm.sourceforge.net
+https://github.com/adrian/upm-android
 
 Copyright (C) 2005-2012 Adrian Smith
-
-Universal Password Manager is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation; either version 2 of the License, or (at your option) any later version.
-
-Universal Password Manager is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
-
-You should have received a copy of the GNU General Public License along with Universal Password Manager; if not, write to the Free Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA
-
-## Overview
-
-Universal Password Manager (UPM) allows you to store usernames, passwords, URLs, and generic notes in an encrypted database protected by one master password.
-
-There are several open source password managers available, so what makes UPM different? Its three strongest features are:
-
-- **Simplicity**: It provides a small number of very strong features with no clutter.
-- **Cross-platform**: UPM runs on Android, Windows, Mac OS X, and Linux.
-- **Database syncing**: This feature allows you to keep your database in sync across several PCs/devices using either Dropbox or an HTTP location.
-
-## Features
-
-- Small, fast, and lean
-- Uses AES for database encryption
-- Database sync across multiple PCs/devices
-- Written in Java/SWING
-- Android, Windows, and Mac OS X native-feeling versions available
-- Fast account searching
-- Streamlined for those who are more comfortable using the keyboard only
-
-## History
-
-- **v1.14** (28-Oct-2012)
-  - Added support for syncing to Dropbox
-  - Hide account details in screenshots and task manager
-
-- **v1.13** (12-Aug-2012)
-  - Added support for all API levels up to and including 16
-  - Fixed a few bugs
-
-- ... (other version history entries)
-
-- **v1.0** (1-Feb-2010)
-  - Initial Release
 ```
