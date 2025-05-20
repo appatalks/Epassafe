@@ -3,11 +3,8 @@ package com.epassafe.upm;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.View;
-import android.view.View.OnClickListener;
-import android.widget.Button;
 
- public abstract class MainActivity extends Activity implements OnClickListener{
+public class MainActivity extends Activity {
 
     /** Called when the activity is first created. */
     @Override
@@ -15,15 +12,10 @@ import android.widget.Button;
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
 
-        final Button countButton = findViewById(R.id.add);
-
-        countButton.setOnClickListener(new OnClickListener() {
-            public void onClick(View v) {
-				Intent intent = new Intent(MainActivity.this,AddEditAccount.class);
-				MainActivity.this.startActivity(intent);
-            }
-        });
-         
+        // Initialize the UPM application by sending user to the entry activity
+        Intent intent = new Intent(MainActivity.this, AppEntryActivity.class);
+        startActivity(intent);
+        finish(); // End this activity as we're just forwarding to AppEntryActivity
     }
-
 }
+
