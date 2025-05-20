@@ -24,6 +24,7 @@ import java.io.EOFException;
 import java.io.File;
 import java.io.IOException;
 import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.security.GeneralSecurityException;
 import java.security.NoSuchAlgorithmException;
 import java.util.Arrays;
@@ -65,7 +66,7 @@ public class DatabaseConverter {
 
         // Variables to hold decrypted data and metadata
         ByteArrayInputStream is = null;
-        Charset charset = Charset.forName("UTF-8");
+        Charset charset = StandardCharsets.UTF_8;
         Revision revision = null;
         DatabaseOptions dbOptions = null;
         byte[] decryptedBytes = null;

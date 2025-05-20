@@ -57,7 +57,7 @@ public class Password {
 		if (symbols) chars+=allowedSymbols;
 		
 		Log.d(TAG, "Chars: " +  chars);
-		Log.d(TAG, "Num. chars: "+String.valueOf(chars.length()));
+		Log.d(TAG, "Num. chars: "+ chars.length());
 		
 		if (chars.length() == 0){
 			Log.d(TAG, "No chars, so return null string");
@@ -70,7 +70,7 @@ public class Password {
 			int pos = rnd.nextInt(chars.length());			
 			letter = chars.substring(pos, pos+1);
 			
-			Log.d(TAG, String.valueOf(pos)+"->"+letter);			
+			Log.d(TAG, pos +"->"+letter);
 			
 			if (letter.equals(lastChar)){
 				Log.d(TAG, letter+" is repeated, skip");

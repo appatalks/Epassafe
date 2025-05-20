@@ -187,20 +187,20 @@ public class ViewAccountDetails extends Activity {
     //
 
     private void populateView() {
-        TextView accountNameTextView = (TextView) findViewById(R.id.account_name);
+        TextView accountNameTextView = findViewById(R.id.account_name);
         accountNameTextView.setText(account.getAccountName());
 
-        TextView accountUseridTextView = (TextView) findViewById(R.id.account_userid);
-        accountUseridTextView.setText(new String(account.getUserId()));
+        TextView accountUseridTextView = findViewById(R.id.account_userid);
+        accountUseridTextView.setText(account.getUserId());
 
-        TextView accountPasswordTextView = (TextView) findViewById(R.id.account_password);
-        accountPasswordTextView.setText(new String(account.getPassword()));
+        TextView accountPasswordTextView = findViewById(R.id.account_password);
+        accountPasswordTextView.setText(account.getPassword());
 
-        TextView accountURLTextView = (TextView) findViewById(R.id.account_url);
-        accountURLTextView.setText(new String(account.getUrl()));
+        TextView accountURLTextView = findViewById(R.id.account_url);
+        accountURLTextView.setText(account.getUrl());
 
-        TextView accountNotesTextView = (TextView) findViewById(R.id.account_notes);
-        accountNotesTextView.setText(new String(account.getNotes()));
+        TextView accountNotesTextView = findViewById(R.id.account_notes);
+        accountNotesTextView.setText(account.getNotes());
     }
 
     private PasswordDatabase getPasswordDatabase() {

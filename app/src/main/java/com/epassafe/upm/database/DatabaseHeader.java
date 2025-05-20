@@ -58,13 +58,12 @@ public class DatabaseHeader extends FlatPackObject {
     }    
 
     public String getVersion() {
-        StringBuffer buf = new StringBuffer();
-        buf.append(majorVersion);
-        buf.append('.');
-        buf.append(minorVersion);
-        buf.append('.');
-        buf.append(patchVersion);
-        return buf.toString();
+        String buf = String.valueOf(majorVersion) +
+                '.' +
+                minorVersion +
+                '.' +
+                patchVersion;
+        return buf;
     }
 
 

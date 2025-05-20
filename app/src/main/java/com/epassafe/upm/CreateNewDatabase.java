@@ -1,6 +1,6 @@
 /*
  * Universal Password Manager
- \* Copyright (c) 2010-2011 Adrian Smith - MODDIFIED By Steven Bennett for UPM - Epassafe
+ * Copyright (c) 2010-2011 Adrian Smith - MODDIFIED By Steven Bennett for UPM - Epassafe
  *
  * This file is part of Universal Password Manager.
  *   
@@ -13,10 +13,6 @@
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with Universal Password Manager; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  */
 package com.epassafe.upm;
 
@@ -44,7 +40,7 @@ public class CreateNewDatabase extends Activity implements OnClickListener {
 
     private static final int GENERIC_ERROR_DIALOG = 1;
 
-    public static final int MIN_PASSWORD_LENGTH = 6;
+    public static final int MIN_PASSWORD_LENGTH = 8;
 
     private EditText password1;
     private EditText password2;
@@ -54,12 +50,12 @@ public class CreateNewDatabase extends Activity implements OnClickListener {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.new_master_password_dialog);
         
-        password1 = (EditText) findViewById(R.id.password1);
-        password2 = (EditText) findViewById(R.id.password2);
-        Button createDatabaseButton = (Button) findViewById(R.id.create_database_button);
+        password1 = findViewById(R.id.password1);
+        password2 = findViewById(R.id.password2);
+        Button createDatabaseButton = findViewById(R.id.create_database_button);
         createDatabaseButton.setOnClickListener(this);
 
-        Button cancelButton = (Button) findViewById(R.id.cancel_button);
+        Button cancelButton = findViewById(R.id.cancel_button);
         cancelButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {

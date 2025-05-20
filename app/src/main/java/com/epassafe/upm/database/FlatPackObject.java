@@ -13,10 +13,6 @@
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with Universal Password Manager; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  */
 package com.epassafe.upm.database;
 
@@ -26,6 +22,7 @@ import java.io.EOFException;
 import java.io.OutputStream;
 import java.io.UnsupportedEncodingException;
 import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 
 import com.epassafe.upm.util.Util;
 
@@ -38,7 +35,7 @@ import com.epassafe.upm.util.Util;
  */
 public abstract class FlatPackObject {
 
-    private static int LENGTH_FIELD_NUM_CHARS = 4;
+    private static final int LENGTH_FIELD_NUM_CHARS = 4;
     
     
     /**
@@ -48,14 +45,14 @@ public abstract class FlatPackObject {
      * @throws UnsupportedEncodingException 
      */
     protected byte[] flatPack(String s) throws UnsupportedEncodingException {
-        return flatPack(s.getBytes("UTF-8"));
+        return flatPack(s.getBytes(StandardCharsets.UTF_8));
     }
     
 
     protected byte[] flatPack(byte[] bytesToFlatPack) throws UnsupportedEncodingException {
         //Create a byte array populated with the field length 
         String l = Util.lpad(bytesToFlatPack.length, LENGTH_FIELD_NUM_CHARS, '0');
-        byte[] fieldLengthBytes = l.getBytes("UTF-8");
+        byte[] fieldLengthBytes = l.getBytes(StandardCharsets.UTF_8);
         
         //Declare the buffer we're going to return
         byte[] returnBuffer = new byte[fieldLengthBytes.length + bytesToFlatPack.length];
@@ -120,12 +117,12 @@ public abstract class FlatPackObject {
 
 
     public String getString(InputStream is) throws IOException, ProblemReadingDatabaseFile {
-        return new String(getBytes(is), "UTF-8");
+        return new String(getBytes(is), StandardCharsets.UTF_8);
     }
 
 
     public String getString(InputStream is, Charset charset) throws IOException, ProblemReadingDatabaseFile {
-        return new String(getBytes(is), charset.name());
+        return new String(getBytes(is), charset);
     }
 
     public abstract void flatPack(OutputStream os) throws IOException;

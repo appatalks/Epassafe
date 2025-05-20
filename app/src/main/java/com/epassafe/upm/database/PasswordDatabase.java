@@ -23,6 +23,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.security.GeneralSecurityException;
 import java.security.InvalidAlgorithmParameterException;
 import java.security.InvalidKeyException;
@@ -100,7 +101,7 @@ public class PasswordDatabase {
     public PasswordDatabase(File dbFile, char[] password, boolean overwrite) throws IOException, GeneralSecurityException, ProblemReadingDatabaseFile, InvalidPasswordException {
         databaseFile = dbFile;
         //Either create a new file (if it exists and overwrite == true OR it doesn't exist) or open the existing file
-        if ((databaseFile.exists() && overwrite == true) || !databaseFile.exists()) {
+        if ((databaseFile.exists() && overwrite) || !databaseFile.exists()) {
             databaseFile.delete();
             databaseFile.createNewFile();
             revision = new Revision();
@@ -262,7 +263,7 @@ public class PasswordDatabase {
         }
 
         ByteArrayInputStream is = null;
-        Charset charset = Charset.forName("UTF-8");
+        Charset charset = StandardCharsets.UTF_8;
 
         // Check for modern format first (UPM_MODERN header)
         byte[] modernHeader = new byte[MODERN_FILE_HEADER.getBytes().length];
@@ -458,7 +459,7 @@ public class PasswordDatabase {
         }
 
         ByteArrayInputStream is = null;
-        Charset charset = Charset.forName("UTF-8");
+        Charset charset = StandardCharsets.UTF_8;
 
         // Check for modern format first (UPM_MODERN header)
         byte[] modernHeader = new byte[MODERN_FILE_HEADER.getBytes().length];
