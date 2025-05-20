@@ -5,7 +5,7 @@ import android.app.Activity;
 import android.view.MenuItem;
 
 public class WrapActionBar {
-	private ActionBar mInstance;
+	private final ActionBar mInstance;
 
 	static {
 		try {

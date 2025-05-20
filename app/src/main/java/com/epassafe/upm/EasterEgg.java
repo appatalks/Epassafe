@@ -17,7 +17,7 @@ public class EasterEgg extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.easteregg);
         
-        WebView mainWebView = (WebView) findViewById(R.id.eastereggWebView);
+        WebView mainWebView = findViewById(R.id.eastereggWebView);
         
         WebSettings webSettings = mainWebView.getSettings();
         webSettings.setJavaScriptEnabled(true);

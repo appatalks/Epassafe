@@ -76,7 +76,7 @@ public class ModernEncryptionService {
 
     // Instance variables
     private SecretKey secretKey;
-    private byte[] salt;
+    private final byte[] salt;
     private byte algorithmId;
 
     static {

@@ -1,6 +1,6 @@
 /*
  * Universal Password Manager
- \* Copyright (c) 2010-2011 Adrian Smith - MODDIFIED By Steven Bennett for UPM - Epassafe
+ * Copyright (c) 2010-2011 Adrian Smith - MODDIFIED By Steven Bennett for UPM - Epassafe
  *
  * This file is part of Universal Password Manager.
  *   
@@ -26,16 +26,12 @@ import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnCancelListener;
 import android.content.Intent;
-// import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.os.Environment;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.Toast;
-
-// import androidx.core.app.ActivityCompat;
-// import androidx.core.content.ContextCompat;
 
 import java.io.File;
 
@@ -49,18 +45,6 @@ public class AppEntryActivity extends Activity {
     private static final int REQ_CODE_DOWNLOAD_DB = 2;
     private static final int REQ_CODE_OPEN_DB = 3;
     private static final int REQ_CODE_GET_DB_FILE = 4;
-
-    /*
-    // Storage Permissions
-    private static final int REQUEST_EXTERNAL_STORAGE = 90;
-    private static String[] PERMISSIONS_STORAGE = {
-            Manifest.permission.READ_EXTERNAL_STORAGE,
-            Manifest.permission.WRITE_EXTERNAL_STORAGE
-    };
-     */
-    // END Storage Permissions
-
-
 
     @SuppressWarnings("deprecation")
 	@Override
@@ -143,23 +127,7 @@ public class AppEntryActivity extends Activity {
                 dialog.setContentView(R.layout.new_database_options);
                 dialog.setTitle(R.string.new_database);
 
-/*
-                // REQUEST PERMISSIONS BUTTON
-                Button requestPermissions = (Button) dialog.findViewById(R.id.request_permissions);
-                requestPermissions.setOnClickListener(new OnClickListener() {
-
-                    // CODE NOT WORKING :/
-                    @Override
-                    public void onClick(View v) {
-                        Intent i = new Intent(AppEntryActivity.this, null);
-                        startActivityForResult(i, REQUEST_EXTERNAL_STORAGE);
-                    }
-                    //
-
-                });
-                // END PERMISSIONS
-*/
-                Button newDatabase = (Button) dialog.findViewById(R.id.new_database);
+                Button newDatabase = dialog.findViewById(R.id.new_database);
                 newDatabase.setOnClickListener(new OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -168,7 +136,7 @@ public class AppEntryActivity extends Activity {
                     }
                 });
 
-                Button restoreDatabase = (Button) dialog.findViewById(R.id.restore_database);
+                Button restoreDatabase = dialog.findViewById(R.id.restore_database);
                 restoreDatabase.setOnClickListener(new OnClickListener() {
                     @Override
                     public void onClick(View v) {

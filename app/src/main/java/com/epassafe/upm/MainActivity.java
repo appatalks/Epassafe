@@ -6,11 +6,8 @@ import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
-// import androidx.appcompat.app.AppCompatActivity;
 
  public abstract class MainActivity extends Activity implements OnClickListener{
-// Future Compatibaility?
-// public abstract class MainActivity extends AppCompatActivity implements OnClickListener{
 
     /** Called when the activity is first created. */
     @Override
@@ -18,7 +15,7 @@ import android.widget.Button;
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
 
-        final Button countButton = (Button) findViewById(R.id.add);
+        final Button countButton = findViewById(R.id.add);
 
         countButton.setOnClickListener(new OnClickListener() {
             public void onClick(View v) {

@@ -1,6 +1,6 @@
 /*
  * Universal Password Manager
- \* Copyright (c) 2010-2011 Adrian Smith - MODDIFIED By Steven Bennett for UPM - Epassafe
+ * Copyright (c) 2010-2011 Adrian Smith - MODDIFIED By Steven Bennett for UPM - Epassafe
  *
  * This file is part of Universal Password Manager.
  *   
@@ -12,10 +12,6 @@
  * Universal Password Manager is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with Universal Password Manager; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  */
 package com.epassafe.upm;
 
@@ -64,15 +60,15 @@ public class ChangeMasterPassword extends Activity {
 
         setContentView(R.layout.change_master_password);
 
-        existingPasswordEditText = (EditText) findViewById(R.id.existing_master_password);
-        newPassword1EditText = (EditText) findViewById(R.id.new_master_password1);
-        newPassword2EditText = (EditText) findViewById(R.id.new_master_password2);
+        existingPasswordEditText = findViewById(R.id.existing_master_password);
+        newPassword1EditText = findViewById(R.id.new_master_password1);
+        newPassword2EditText = findViewById(R.id.new_master_password2);
 
         // Add UI elements for encryption options
-        modernEncryptionCheckbox = (CheckBox) findViewById(R.id.modern_encryption_checkbox);
-        useChaCha20Checkbox = (CheckBox) findViewById(R.id.use_chacha20_checkbox);
-        exportCsvCheckbox = (CheckBox) findViewById(R.id.export_csv_checkbox);
-        encryptionOptionsLayout = (LinearLayout) findViewById(R.id.encryption_options_layout);
+        modernEncryptionCheckbox = findViewById(R.id.modern_encryption_checkbox);
+        useChaCha20Checkbox = findViewById(R.id.use_chacha20_checkbox);
+        exportCsvCheckbox = findViewById(R.id.export_csv_checkbox);
+        encryptionOptionsLayout = findViewById(R.id.encryption_options_layout);
 
         // Set initial state based on current encryption
         final PasswordDatabase db = ((UPMApplication) getApplication()).getPasswordDatabase();
@@ -91,7 +87,7 @@ public class ChangeMasterPassword extends Activity {
             useChaCha20Checkbox.setEnabled(isUsingModern);
 
             // Add explanation text
-            TextView encryptionInfo = (TextView) findViewById(R.id.encryption_info);
+            TextView encryptionInfo = findViewById(R.id.encryption_info);
             if (encryptionInfo != null) {
                 encryptionInfo.setText(getString(R.string.current_encryption) + " " + db.getEncryptionAlgorithm());
             }
@@ -156,7 +152,7 @@ public class ChangeMasterPassword extends Activity {
             });
         }
 
-        Button okButton = (Button) findViewById(R.id.change_master_password_button);
+        Button okButton = findViewById(R.id.change_master_password_button);
         okButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

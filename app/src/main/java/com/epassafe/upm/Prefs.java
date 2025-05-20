@@ -43,9 +43,9 @@ public class Prefs extends PreferenceActivity implements OnPreferenceChangeListe
     // Configuration setting constants
     public static final String SYNC_METHOD = "sync.method";
 
-    public static interface SyncMethod {
-        public static final String DISABLED = "disabled";
-        public static final String HTTP = "http";
+    public interface SyncMethod {
+        String DISABLED = "disabled";
+        String HTTP = "http";
     }
 
     // Reference to the various preference objects
@@ -57,7 +57,7 @@ public class Prefs extends PreferenceActivity implements OnPreferenceChangeListe
     private String originalSyncMethod;
     private boolean saveRequired;
 
-    private String[] syncMethodValues = {
+    private final String[] syncMethodValues = {
             SyncMethod.DISABLED
     };
     private String[] syncMethodHuman;

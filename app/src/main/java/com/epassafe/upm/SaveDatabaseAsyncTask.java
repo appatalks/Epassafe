@@ -1,6 +1,6 @@
 /*
  * Universal Password Manager
- \* Copyright (c) 2010-2011 Adrian Smith - MODDIFIED By Steven Bennett for UPM - Epassafe
+ * Copyright (c) 2010-2011 Adrian Smith - MODDIFIED By Steven Bennett for UPM - Epassafe
  *
  * This file is part of Universal Password Manager.
  *   
@@ -12,10 +12,6 @@
  * Universal Password Manager is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with Universal Password Manager; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  */
 package com.epassafe.upm;
 
@@ -39,8 +35,8 @@ import android.util.Log;
 public class SaveDatabaseAsyncTask extends AsyncTask<PasswordDatabase, Void, String> {
 
     private ProgressDialog progressDialog;
-    private Activity activity;
-    private Callback callback;
+    private final Activity activity;
+    private final Callback callback;
 
     public SaveDatabaseAsyncTask(Activity activity, Callback callback) {
         this.activity = activity;

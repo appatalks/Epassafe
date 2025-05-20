@@ -1,6 +1,6 @@
 /*
  * Universal Password Manager
- \* Copyright (c) 2010-2011 Adrian Smith - MODDIFIED By Steven Bennett for UPM - Epassafe
+ * Copyright (c) 2010-2011 Adrian Smith - MODDIFIED By Steven Bennett for UPM - Epassafe
  *
  * This file is part of Universal Password Manager.
  *   
@@ -49,7 +49,7 @@ import java.util.TimerTask;
 public class AccountsList extends ListActivity {
 
     public static AccountInformation account;
-    private int editAccountResultCode = 0;
+    private final int editAccountResultCode = 0;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -67,7 +67,6 @@ public class AccountsList extends ListActivity {
             i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             startActivity(i);
             finish();
-            return;
 
            }
 
@@ -99,7 +98,7 @@ public class AccountsList extends ListActivity {
     // Android 13 New Feature - Clipboard Sensitive Data
     private void setClipboardText(String text) {
         ClipboardManager clipboard = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
-        ClipData clip = ClipData.newPlainText("Password", text.toString());
+        ClipData clip = ClipData.newPlainText("Password", text);
         PersistableBundle extras = new PersistableBundle();
         extras.putBoolean(ClipDescription.EXTRA_IS_SENSITIVE, true);
         clip.getDescription().setExtras(extras);
@@ -111,7 +110,7 @@ public class AccountsList extends ListActivity {
     }
 
     private String getPassword(AccountInformation account) {
-        return new String(account.getPassword());
+        return account.getPassword();
     }
 
     private void viewAccount(AccountInformation ai) {
