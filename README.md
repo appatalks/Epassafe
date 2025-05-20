@@ -15,7 +15,7 @@ Latest: **v3.9** MD5: ```[in flux]  app/release/app-release.apk``` ```May '25```
 Or get it from the [Google Play Store](https://play.google.com/store/apps/details?id=com.epassafe.upm&pcampaignid=web_share)
 
 > [!IMPORTANT]
-> If upgrading from version <v3.0, you will need to import your backup to `../Android/data/com.epassafe.upm/files/database/` from your PC or connected device. If this is the initial installation on the device, restore a blank database to automatically create the directory and permissions, then restore the backup as "`upm.db`".
+> Backup and Restore $PATH is through `../Android/data/com.epassafe.upm/files/database/`. If this is the initial installation on the device, restore a blank database to automatically create the directory and permissions, then restore the backup as "`upm.db`".
 
 <details>
 
