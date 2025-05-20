@@ -79,11 +79,6 @@ public class PassGenerator extends Activity implements OnClickListener{
     		case R.id.settings:
     			startActivity(new Intent(this, GenPrefs.class));
     			return true;
-    		
-    		
-    		/* case R.id.about:
-    			startActivity(new Intent(this, About.class));
-    			return true; */
     	}
     	
     	return false;
@@ -108,40 +103,40 @@ public class PassGenerator extends Activity implements OnClickListener{
     	 
     	//load length and show to conf list
     	optionLength = GenPrefs.getLength(this);
-    	Log.d(TAG, "Length: "+String.valueOf(optionLength));
+    	Log.d(TAG, "Length: "+ optionLength);
     	
-    	TextView txtLength = (TextView)findViewById(R.id.option_length);
+    	TextView txtLength = findViewById(R.id.option_length);
     	txtLength.setText(String.valueOf(optionLength));
     	
     	
     	optionLetters = GenPrefs.isIncludeLetters(this);
-    	Log.d(TAG, "Include Letters: " +  Boolean.toString(optionLetters));
+    	Log.d(TAG, "Include Letters: " + optionLetters);
     	
-    	ImageView imageLetters = (ImageView)findViewById(R.id.option_letters);
+    	ImageView imageLetters = findViewById(R.id.option_letters);
         imageLetters.setImageResource((optionLetters)?R.drawable.on:R.drawable.off);         
     	         
     	if (optionLetters){
     		optionCapitalLetters = GenPrefs.isIncludeCapitalLetters(this);
     	}else optionCapitalLetters = false;
-    	Log.d(TAG, "Include Capital Letters: " +  Boolean.toString(optionCapitalLetters));
+    	Log.d(TAG, "Include Capital Letters: " + optionCapitalLetters);
     	 
-    	ImageView imageCapitalLetters = (ImageView)findViewById(R.id.option_capital_letters);
+    	ImageView imageCapitalLetters = findViewById(R.id.option_capital_letters);
     	imageCapitalLetters.setImageResource((optionCapitalLetters)?R.drawable.on:R.drawable.off);  
     	 
     	optionNumbers = GenPrefs.isIncludeNumbers(this);
-    	Log.d(TAG, "Include Numbers: " +  Boolean.toString(optionNumbers));
+    	Log.d(TAG, "Include Numbers: " + optionNumbers);
     	 
-    	ImageView imageNumbers = (ImageView)findViewById(R.id.option_numbers);
+    	ImageView imageNumbers = findViewById(R.id.option_numbers);
     	imageNumbers.setImageResource((optionNumbers)?R.drawable.on:R.drawable.off);  
     	 
     	optionSymbols = GenPrefs.isIncludeSymbols(this);
-    	Log.d(TAG, "Include Symbols: " +  Boolean.toString(optionSymbols));
+    	Log.d(TAG, "Include Symbols: " + optionSymbols);
     	 
-    	ImageView imageSymbols = (ImageView)findViewById(R.id.option_symbols);
+    	ImageView imageSymbols = findViewById(R.id.option_symbols);
     	imageSymbols.setImageResource((optionSymbols)?R.drawable.on:R.drawable.off);  
     	
     	optionClipboard = GenPrefs.isEnabledClipboard(this);
-    	Log.d(TAG, "Enable clipboard: " +  Boolean.toString(optionClipboard));
+    	Log.d(TAG, "Enable clipboard: " + optionClipboard);
     	
     	
     	//setup clipboard block
@@ -168,7 +163,7 @@ public class PassGenerator extends Activity implements OnClickListener{
     	
     	String generatedPass = pass.generate();
     	
-    	TextView password = (TextView)findViewById(R.id.password);
+    	TextView password = findViewById(R.id.password);
     	password.setText(generatedPass);
     	
     	if (optionClipboard) lastPassword = generatedPass;

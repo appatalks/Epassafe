@@ -1,0 +1,171 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <string name="launch_url">Запустити URL</string>
+    <string name="copy_password">Копіювати пароль</string>
+    <string name="copy_username">Копіювати ім\'я користувача</string>
+    <string name="app_name_short">Epassafe</string>
+    <string name="enter_master_password">Введіть головний пароль</string>
+    <string name="request_new_master_password">Вкажіть головний пароль, який буде використовуватися для шифрування вашої бази даних паролів.</string>
+    <string name="ok_label">OK</string>
+    <string name="open_label">Відкрити</string>
+    <string name="request_master_password_dialog_title">Головний пароль</string>
+    <string name="passwords_dont_match">Паролі не співпадають</string>
+    <string name="no_accounts">Немає акаунтів</string>
+    <string name="generic_error">Виникла неочікувана помилка</string>
+    <string name="request_master_password">Будь ласка, введіть головний пароль</string>
+    <string name="invalid_password">Недійсний пароль</string>
+    <string name="add_account_prompt">Натисніть <b>Додати</b>, щоб додати акаунт до вашої нової бази даних</string>
+    <string name="decrypting_db">Розшифровування...</string>
+    <string name="account_name">Акаунт</string>
+    <string name="userid">ID користувача</string>
+    <string name="password">Пароль</string>
+    <string name="url">URL</string>
+    <string name="notes">Нотатки</string>
+    <string name="search_label">Пошук акаунтів</string>
+    <string name="search_results">Результати пошуку</string>
+    <string name="search">Пошук</string>
+    <string name="add">Додати</string>
+    <string name="save">Зберегти</string>
+    <string name="edit">Редагувати</string>
+    <string name="delete">Видалити</string>
+    <string name="delete_account" tools:ignore="MissingTranslation">Видалити акаунт</string>
+    <string name="add_account">Додати акаунт</string>
+    <string name="edit_account">Редагувати акаунт</string>
+    <string name="account_already_exists_error">Акаунт з такою назвою вже існує</string>
+    <string name="account_name_required_error">Назва акаунта обов\'язкова</string>
+    <string name="existing_master_password">Поточний головний пароль</string>
+    <string name="change_master_password">Змінити головний пароль</string>
+    <string name="more">Більше</string>
+    <string name="password_too_short">Головний пароль має бути довжиною не менше %1$d символів</string>
+    <string name="new_passwords_dont_match">Нові паролі не співпадають</string>
+    <string name="new_password">Новий пароль</string>
+    <string name="new_password_confirm">Підтвердження нового пароля</string>
+    <string name="no_accounts_found">Акаунти не знайдено</string>
+    <string name="restore">Відновити резервну копію</string>
+    <string name="backup">Резервна копія</string>
+    <string name="error_saving_after_delete">Помилка збереження бази даних після видалення</string>
+    <string name="account_deleted">Акаунт \'%s\' видалено</string>
+    <string name="about">Про програму</string>
+    <string name="close">Закрити</string>
+    <string name="homepage">Домашня сторінка</string>
+    <string name="homepageUrl">http://www.epassafe.com</string>
+    <string name="donate">Підтримати</string>
+    <string name="donateURL"></string>
+    <string name="aboutText">
+        UPM Epassafe дозволяє зберігати імена користувачів, паролі та
+        загальні нотатки в зашифрованій базі даних, захищеній єдиним головним
+        паролем.<br></br> https://github.com/appatalks/Epassafe/ \n\nВерсія: %s
+    </string>
+    <string name="file_problem">Помилка при виконанні файлової операції</string>
+    <string name="restore_file_doesnt_exist">Файл для відновлення не існує\n[%s]</string>
+    <string name="backup_file_exists">Резервна копія вже існує на вашій SD карті.\n%s\nБажаєте перезаписати?"</string>
+    <string name="confirm_restore_overwrite">Ви впевнені, що хочете замінити вашу існуючу базу даних тією, що на SD карті?"</string>
+    <string name="backup_complete">Резервна копія бази даних збережена в %s</string>
+    <string name="saving_database">Збереження бази даних</string>
+    <string name="emp_new_db_options">Бажаєте створити нову базу даних чи відкрити існуючу з віддаленого розташування?</string>
+    <string name="emp_create_new_database">Створити нову базу даних</string>
+    <string name="emp_open_remote_db">Отримати з HTTP</string>
+    <string name="new_database">Нова база даних</string>
+    <string name="download">Завантажити</string>
+    <string name="download_remote_database">Завантажити віддалену базу даних</string>
+    <string name="downloading_db">Завантаження бази даних…</string>
+    <string name="problem_downloading_db">Проблема при завантаженні бази даних</string>
+    <string name="not_password_database">Це не база даних паролів</string>
+    <string name="sync">Синхронізація</string>
+    <string name="problem_decrypying_db">Проблема при розшифруванні бази даних</string>
+    <string name="enter_password_cancalled">Пароль не надано</string>
+    <string name="generic_error_with_message">Неочікувана помилка…\n\n%s</string>
+    <string name="syncing_database">Синхронізація бази даних</string>
+    <string name="problem_reading_upm_db">Проблема читання бази даних</string>
+    <string name="new_db_downloaded">Нову базу даних завантажено</string>
+    <string name="db_uptodate">База даних актуальна</string>
+    <string name="preferences">Налаштування</string>
+    <string name="no_remote_db">Ця база даних не налаштована з віддаленим URL</string>
+    <string name="settings_title">Налаштування Epassafe</string>
+    <string name="shared_database_settings">Налаштування HTTP сервера</string>
+    <string name="shared_url">URL</string>
+    <string name="shared_url_summary">HTTP URL для спільної бази даних</string>
+    <string name="shared_url_auth">Акаунт HTTP аутентифікації</string>
+    <string name="shared_url_auth_summary">Потрібно, якщо URL захищений паролем</string>
+    <string name="problem_saving_db">Проблема збереження бази даних\n\n%s</string>
+    <string name="uploading_database">Вивантаження бази даних</string>
+    <string name="db_sync_complete">Синхронізацію бази даних завершено</string>
+    <string name="db_sync_error">Помилка синхронізації бази даних\n\n%s</string>
+    <string name="sync_required">Необхідна синхронізація перед виконанням цієї операції</string>
+    <string name="delete_db">Видалити базу даних</string>
+    <string name="confirm_delete_db">Ви впевнені, що хочете видалити вашу базу даних? Після видалення база даних зникне назавжди.</string>
+    <string name="confirm_exit_title">Вийти з UPM Epassafe?</string>
+    <string name="confirm_exit_message">Ви впевнені, що хочете заблокувати Epassafe?</string>
+    <string name="yes">Так</string>
+    <string name="no">Ні</string>
+    <string name="no_uri">Немає URL для цього акаунту</string>
+    <string name="import_cert">Імпортувати сертифікат</string>
+    <string name="delete_cert">Видалити сертифікат</string>
+    <string name="import_cert_message">Переконайтеся, що на вашій SD карті є файл %s у кореневій директорії</string>
+    <string name="cert_imported">Сертифікат імпортовано</string>
+    <string name="cert_deleted">Сертифікат видалено</string>
+    <string name="no_cert_available">Немає доступних сертифікатів</string>
+    <string name="trusted_hostname">Довірений хостнейм</string>
+    <string name="trusted_hostname_summary">Хостнейм, якому завжди довіряти</string>
+    <string name="cancel">Скасувати</string>
+    <string name="restore_database">Відновити базу даних з резервної копії</string>
+    <string name="create">Створити</string>
+    <string name="new_master_password_message">Обирайте головний пароль обережно. Він має бути складним для інших, але легким для запам\'ятовування вами.</string>
+    <string name="dont_forget_password_warning">Якщо ви забудете головний пароль, не буде можливості відкрити вашу базу даних паролів. Задніх дверей немає, і розробник UPM не зможе вам допомогти.</string>
+    <string name="backup_message">ПРИМІТКА: Якщо ви видалите UPM Epassafe, ваша база даних паролів буде видалена разом з ним. З цієї причини важливо регулярно робити резервні копії ваших даних (доступно в меню).</string>
+    <string name="search_hint">Пошук акаунтів</string>
+    <string name="sync_method">Метод синхронізації</string>
+    <string name="sync_method_disabled">Вимкнено</string>
+    <string name="sync_method_http">HTTP сервер</string>
+    <string name="sync_settings">Налаштування синхронізації</string>
+    <string name="problem_uploading">Проблема вивантаження бази даних</string>
+
+    <string name="confirm_delete_dialog" tools:ignore="MissingTranslation">Ви впевнені, що хочете видалити свій акаунт? Після видалення акаунт зникне назавжди.</string>
+
+    <string name="lock_timeout" tools:ignore="MissingTranslation">Час до автоблокування: %s </string>
+
+    <string name="app_name" tools:ignore="MissingTranslation">PassGenerator</string>
+    <string name="gen_settings_title" tools:ignore="MissingTranslation">Налаштування PassGenerator</string>
+    <string name="settings" tools:ignore="MissingTranslation">Налаштування</string>
+    <string name="password_settings" tools:ignore="MissingTranslation">Налаштування паролів</string>
+    <string name="option_length" tools:ignore="MissingTranslation">Довжина</string>
+    <string name="option_letters" tools:ignore="MissingTranslation">Включати літери</string>
+    <string name="option_capital_letters" tools:ignore="MissingTranslation">Включати великі літери</string>
+    <string name="option_numbers" tools:ignore="MissingTranslation">Включати цифри</string>
+    <string name="option_symbols" tools:ignore="MissingTranslation">Включати символи</string>
+    <string name="option_length_not_valid" tools:ignore="MissingTranslation">Ви повинні ввести число між #OPTION_LENGTH_MIN# та #OPTION_LENGTH_MAX#</string>
+    <string name="clipboard_settings" tools:ignore="MissingTranslation">Налаштування буфера обміну</string>
+    <string name="option_clipboard" tools:ignore="MissingTranslation">Увімкнути буфер обміну</string>
+    <string name="option_clipboard_summary" tools:ignore="MissingTranslation">Дозволяє копіювати пароль у буфер обміну</string>
+    <string name="generate" tools:ignore="MissingTranslation">Згенерувати</string>
+    <string name="clipboard_copy" tools:ignore="MissingTranslation">Копіювати в буфер обміну</string>
+    <string name="clipboard_empty" tools:ignore="MissingTranslation">Немає пароля для копіювання</string>
+    <string name="clipboard_copied" tools:ignore="MissingTranslation">Пароль скопійовано</string>
+    <string name="about_title" tools:ignore="MissingTranslation">Про PassGenerator</string>
+    <string name="about_text" tools:ignore="MissingTranslation">PassGenerator - це інструмент генерації паролів. За його допомогою ви можете згенерувати пароль і надіслати його в буфер обміну Android.</string>
+
+    <!-- Encryption options -->
+    <string name="current_encryption">Поточне шифрування:</string>
+    <string name="use_modern_encryption">Використовувати сучасне шифрування (AES-GCM)</string>
+    <string name="modern_encryption_description">Сучасне шифрування використовує пам\'ять-складну генерацію ключів для підвищеної безпеки від атак спеціалізованим обладнанням.</string>
+    <string name="use_chacha20">Використовувати ChaCha20-Poly1305 (замість AES-GCM)</string>
+    <string name="chacha20_description">ChaCha20 може бути швидшим на пристроях без апаратного прискорення AES.</string>
+    <string name="encryption_upgrade_success">Шифрування успішно оновлено!</string>
+    <string name="encryption_upgrade_failed">Помилка оновлення шифрування: %s</string>
+
+    <!-- Encryption Warning Strings -->
+    <string name="encryption_downgrade_warning_title">Попередження безпеки</string>
+    <string name="encryption_downgrade_warning">Застаріле шифрування доступне лише для сумісності імпорту. Неможливо повернутися до застарілого шифрування. Вимкнення поверне до AES-GCM.</string>
+
+    <!-- Change Password Strings -->
+    <string name="changing_master_password">Зміна головного пароля</string>
+    <string name="master_password_changed">Головний пароль успішно змінено</string>
+    <string name="master_password_change_failed">Не вдалося змінити головний пароль: %s</string>
+    <string name="incorrect_password">Неправильний пароль</string>
+
+    <!-- CSV Export Strings -->
+    <string name="exporting_csv">Експорт бази даних у CSV...</string>
+    <string name="export_csv_success">База даних експортована в: %s</string>
+    <string name="export_csv_failed">Не вдалося експортувати базу даних у CSV файл</string>
+    <string name="export_and_password_changed">Головний пароль змінено та база даних експортована в: %s</string>
+</resources>

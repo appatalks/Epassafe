@@ -1,7 +1,7 @@
 /* 
  * 
  * Universal Password Manager 
- \* Copyright (c) 2010-2011 Adrian Smith - MODDIFIED By Steven Bennett for UPM - Epassafe- MODDIFIED By Steven Bennett for UPM - Epassafe
+ * Copyright (c) 2010-2011 Adrian Smith - MODDIFIED By Steven Bennett for UPM - Epassafe- MODDIFIED By Steven Bennett for UPM - Epassafe
  *
  * This file is part of Universal Password Manager.
  *   
@@ -14,10 +14,6 @@
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with Universal Password Manager; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  */
 package com.epassafe.upm;
 
@@ -244,7 +240,7 @@ public class FullAccountList extends AccountsList {
                 }
 
                 View v = LayoutInflater.from(this).inflate(R.layout.dialog, null);
-                TextView text = (TextView) v.findViewById(R.id.dialogText);
+                TextView text = v.findViewById(R.id.dialogText);
                 text.setText(getString(R.string.aboutText, versionName));
 
                 dialogBuilder

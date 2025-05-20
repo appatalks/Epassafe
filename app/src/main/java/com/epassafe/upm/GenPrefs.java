@@ -16,9 +16,9 @@ public class GenPrefs extends PreferenceActivity implements OnPreferenceChangeLi
 	private static final String TAG = "PassGenerator";
 	
 	private static final String OPTION_LENGTH = "option_length";
-	private static int OPTION_LENGTH_DEFAULT = 16;
-	private static int OPTION_LENGTH_MIN = 4;
-	private static int OPTION_LENGTH_MAX = 42;
+	private static final int OPTION_LENGTH_DEFAULT = 16;
+	private static final int OPTION_LENGTH_MIN = 4;
+	private static final int OPTION_LENGTH_MAX = 42;
 	
 	private static final String OPTION_LETTERS = "option_letters";
 	private static final boolean OPTION_LETTERS_DEFAULT = true;

@@ -1,6 +1,6 @@
 /*
  * Universal Password Manager
- \* Copyright (c) 2010-2011 Adrian Smith - MODDIFIED By Steven Bennett for UPM - Epassafe
+ * Copyright (c) 2010-2011 Adrian Smith - MODDIFIED By Steven Bennett for UPM - Epassafe
  *
  * This file is part of Universal Password Manager.
  *   
@@ -92,16 +92,16 @@ public class AddEditAccount extends Activity implements OnClickListener {
         }
         setContentView(R.layout.add_edit_account_details);
 
-        saveButton = (Button) findViewById(R.id.save_button);
+        saveButton = findViewById(R.id.save_button);
         saveButton.setOnClickListener(this);
 
-        ((Button) findViewById(R.id.cancel_button)).setOnClickListener(this);
+        findViewById(R.id.cancel_button).setOnClickListener(this);
 
-        accountName = (EditText) findViewById(R.id.account_name);
-        userid = (EditText) findViewById(R.id.account_userid);
-        password = (EditText) findViewById(R.id.account_password);
-        url = (EditText) findViewById(R.id.account_url);
-        notes = (EditText) findViewById(R.id.account_notes);
+        accountName = findViewById(R.id.account_name);
+        userid = findViewById(R.id.account_userid);
+        password = findViewById(R.id.account_password);
+        url = findViewById(R.id.account_url);
+        notes = findViewById(R.id.account_notes);
 
         // Were we called to Add/Edit an Account
         Bundle extras = getIntent().getExtras();
@@ -137,10 +137,10 @@ public class AddEditAccount extends Activity implements OnClickListener {
 
                     // Populate the form with the account to edit
                     accountName.setText(accountToEdit.getAccountName());
-                    userid.setText(new String(accountToEdit.getUserId()));
-                    password.setText(new String(accountToEdit.getPassword()));
-                    url.setText(new String(accountToEdit.getUrl()));
-                    notes.setText(new String(accountToEdit.getNotes()));
+                    userid.setText(accountToEdit.getUserId());
+                    password.setText(accountToEdit.getPassword());
+                    url.setText(accountToEdit.getUrl());
+                    notes.setText(accountToEdit.getNotes());
                 } else {
                     Log.w("AddEditAccount", "accountToEdit was unexpectedly null");
                     this.finish();

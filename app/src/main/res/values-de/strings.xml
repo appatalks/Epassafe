@@ -113,15 +113,50 @@
     <string name="dont_forget_password_warning">Wenn Sie Ihr Hauptpasswort vergessen, gibt es keine Möglichkeit Ihre Passwort-Datenbank zu öffnen. Es gibt keine Hintertüren und somit können auch die UPM-Entwickler nicht helfen.</string>
     <string name="backup_message">HINWEIS: Wenn Sie UPM deinstallieren, wird auch Ihre Passwort-Datenbank gelöscht. Aus diesem Grund ist es wichtig, dass Sie Ihre Daten regelmäßig sichern (im Menü verfügbar).</string>
     <string name="search_hint">Suchen Konten</string>
-    <string name="retrieve_from_dropbox" tools:ignore="ExtraTranslation">Retrieve From Dropbox</string>
-    <string name="dropbox_problem">Problem communicating with Dropbox</string>
-    <string name="dropbox_files" tools:ignore="ExtraTranslation">Dropbox Files</string>
-    <string name="dropbox_get_file_list">Retrieving Filenames From Dropbox…</string>
     <string name="sync_method">Sync Method</string>
     <string name="sync_method_disabled">Disabled</string>
-    <string name="sync_method_dropbox">Dropbox</string>
     <string name="sync_method_http">HTTP Server</string>
     <string name="sync_settings">Sync Settings</string>
     <string name="problem_uploading">Problem Uploading Database</string>
-    <string name="no_database_files">No Database files on Dropbox</string>
+
+    <!-- Added strings -->
+    <string name="delete_account" tools:ignore="MissingTranslation">Konto löschen</string>
+    <string name="confirm_delete_dialog" tools:ignore="MissingTranslation">Sind Sie sicher, dass Sie Ihr Konto löschen möchten? Nach dem Löschen ist das Konto für immer verloren.</string>
+    <string name="lock_timeout" tools:ignore="MissingTranslation">Zeit bis zur automatischen Sperre: %s </string>
+    <string name="app_name" tools:ignore="MissingTranslation">PassGenerator</string>
+    <string name="gen_settings_title" tools:ignore="MissingTranslation">PassGenerator Einstellungen</string>
+    <string name="settings" tools:ignore="MissingTranslation">Einstellungen</string>
+    <string name="password_settings" tools:ignore="MissingTranslation">Passwort-Einstellungen</string>
+    <string name="option_length" tools:ignore="MissingTranslation">Länge</string>
+    <string name="option_letters" tools:ignore="MissingTranslation">Buchstaben einbeziehen</string>
+    <string name="option_capital_letters" tools:ignore="MissingTranslation">Großbuchstaben einbeziehen</string>
+    <string name="option_numbers" tools:ignore="MissingTranslation">Zahlen einbeziehen</string>
+    <string name="option_symbols" tools:ignore="MissingTranslation">Symbole einbeziehen</string>
+    <string name="option_length_not_valid" tools:ignore="MissingTranslation">Sie müssen eine Zahl zwischen #OPTION_LENGTH_MIN# und #OPTION_LENGTH_MAX# eingeben</string>
+    <string name="clipboard_settings" tools:ignore="MissingTranslation">Zwischenablage-Einstellungen</string>
+    <string name="option_clipboard" tools:ignore="MissingTranslation">Zwischenablage aktivieren</string>
+    <string name="option_clipboard_summary" tools:ignore="MissingTranslation">Ermöglicht das Kopieren des Passworts in die Zwischenablage</string>
+    <string name="generate" tools:ignore="MissingTranslation">Generieren</string>
+    <string name="clipboard_copy" tools:ignore="MissingTranslation">In Zwischenablage kopieren</string>
+    <string name="clipboard_empty" tools:ignore="MissingTranslation">Es gibt kein Passwort zum Kopieren</string>
+    <string name="clipboard_copied" tools:ignore="MissingTranslation">Passwort kopiert</string>
+    <string name="about_title" tools:ignore="MissingTranslation">Über PassGenerator</string>
+    <string name="about_text" tools:ignore="MissingTranslation">PassGenerator ist ein Passwort-Generierungswerkzeug. Damit können Sie ein Passwort generieren und an die Android-Zwischenablage senden.</string>
+    <string name="current_encryption">Aktuelle Verschlüsselung:</string>
+    <string name="use_modern_encryption">Moderne Verschlüsselung verwenden (AES-GCM)</string>
+    <string name="modern_encryption_description">Moderne Verschlüsselung verwendet speicherintensive Schlüsselableitung für erhöhte Sicherheit gegen spezialisierte Hardware-Angriffe.</string>
+    <string name="use_chacha20">ChaCha20-Poly1305 verwenden (statt AES-GCM)</string>
+    <string name="chacha20_description">ChaCha20 kann auf Geräten ohne Hardware-AES-Beschleunigung schneller sein.</string>
+    <string name="encryption_upgrade_success">Verschlüsselung erfolgreich aktualisiert!</string>
+    <string name="encryption_upgrade_failed">Verschlüsselungs-Upgrade fehlgeschlagen: %s</string>
+    <string name="encryption_downgrade_warning_title">Sicherheitswarnung</string>
+    <string name="encryption_downgrade_warning">Legacy-Verschlüsselung ist nur für Importkompatibilität verfügbar. Es ist nicht möglich, zur Legacy-Verschlüsselung zurückzukehren. Bei Deaktivierung wird auf AES-GCM zurückgegriffen.</string>
+    <string name="changing_master_password">Hauptpasswort wird geändert</string>
+    <string name="master_password_changed">Hauptpasswort erfolgreich geändert</string>
+    <string name="master_password_change_failed">Fehler beim Ändern des Hauptpassworts: %s</string>
+    <string name="incorrect_password">Falsches Passwort</string>
+    <string name="exporting_csv">Datenbank wird als CSV exportiert...</string>
+    <string name="export_csv_success">Datenbank exportiert nach: %s</string>
+    <string name="export_csv_failed">Fehler beim Exportieren der Datenbank als CSV-Datei</string>
+    <string name="export_and_password_changed">Hauptpasswort geändert und Datenbank exportiert nach: %s</string>
 </resources>

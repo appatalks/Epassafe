@@ -3,7 +3,6 @@ gen/
 *~
 .gradle/
 app/build/*
-app/build.gradle
 app/release/*
 app/build/intermediates/*
 build/reports/*
@@ -11,6 +10,9 @@ build/reports/*
 .idea/libraries/
 !app/build/outputs/apk/debug/
 !src/**/build/
+
+# Signing configuration
+signing.properties
 
 # Ignore Gradle GUI config
 gradle-app.setting
