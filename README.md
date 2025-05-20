@@ -19,7 +19,7 @@ Or get it from the [Google Play Store](https://play.google.com/store/apps/detail
 
 > ***History***
 
-> - **v3.8**: Major updates, including modern cryptography options, export-to-cvs, bug fixes
+> - **v3.8**: (May 2025) Major updates, including modern cryptography options, export-to-cvs, bug fixes
 > - **v3.7**: Android SDK Target 35; Minor updates, bug fixes.
 > - **v3.5**: General update, moved to [github.com/appatalks/Epassafe](https://github.com/appatalks/Epassafe)
 > - **v3.2**: Tweaked Exit code for better performance
