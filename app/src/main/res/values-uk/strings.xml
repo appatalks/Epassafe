@@ -114,15 +114,11 @@
     <string name="dont_forget_password_warning">Якщо ви забудете головний пароль, не буде можливості відкрити вашу базу даних паролів. Задніх дверей немає, і розробник UPM не зможе вам допомогти.</string>
     <string name="backup_message">ПРИМІТКА: Якщо ви видалите UPM Epassafe, ваша база даних паролів буде видалена разом з ним. З цієї причини важливо регулярно робити резервні копії ваших даних (доступно в меню).</string>
     <string name="search_hint">Пошук акаунтів</string>
-    <string name="dropbox_problem">Проблема зв\'язку з Dropbox</string>
-    <string name="dropbox_get_file_list">Отримання списку файлів з Dropbox…</string>
     <string name="sync_method">Метод синхронізації</string>
     <string name="sync_method_disabled">Вимкнено</string>
-    <string name="sync_method_dropbox">Dropbox</string>
     <string name="sync_method_http">HTTP сервер</string>
     <string name="sync_settings">Налаштування синхронізації</string>
     <string name="problem_uploading">Проблема вивантаження бази даних</string>
-    <string name="no_database_files">Немає файлів баз даних на Dropbox</string>
 
     <string name="confirm_delete_dialog" tools:ignore="MissingTranslation">Ви впевнені, що хочете видалити свій акаунт? Після видалення акаунт зникне назавжди.</string>
 
