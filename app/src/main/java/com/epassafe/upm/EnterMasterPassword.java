@@ -36,6 +36,7 @@ import com.epassafe.upm.database.ProblemReadingDatabaseFile;
 import java.io.File;
 import java.io.IOException;
 import java.security.GeneralSecurityException;
+import java.util.Arrays;
 
 /**
  * This Activity is responsible for prompting the user to enter their master
@@ -170,10 +171,12 @@ public class EnterMasterPassword extends Activity implements OnClickListener {
 
         private static final int ERROR_INVALID_PASSWORD = 1;
         private static final int ERROR_GENERIC_ERROR = 2;
+        private static final int ERROR_DATABASE_CORRUPTED = 3;
 
         private EnterMasterPassword activity;
         private String errorMessage;
         private char[] password;
+        private boolean passwordProcessed = false;
 
         public DecryptDatabase(EnterMasterPassword activity) {
             this.activity = activity;
@@ -181,6 +184,7 @@ public class EnterMasterPassword extends Activity implements OnClickListener {
 
         @Override
         protected void onPreExecute() {
+            // Get password securely
             password = activity.getPasswordField().getText().toString().toCharArray();
         }
 
@@ -188,25 +192,51 @@ public class EnterMasterPassword extends Activity implements OnClickListener {
         protected Integer doInBackground(Void... params) {
             int errorCode = 0;
             try {
-                // Attempt to decrypt the database
-                decryptedPasswordDatabase = 
-                        new PasswordDatabase(databaseFileToDecrypt, password);
+                // Create a defensive copy of the password for decryption
+                char[] passwordCopy = null;
+                try {
+                    // Make a copy of the password to prevent concurrent modification
+                    passwordCopy = new char[password.length];
+                    System.arraycopy(password, 0, passwordCopy, 0, password.length);
+
+                    // Attempt to decrypt the database with the copy
+                    decryptedPasswordDatabase =
+                            new PasswordDatabase(databaseFileToDecrypt, passwordCopy);
+
+                    // Mark that we've processed the password
+                    passwordProcessed = true;
+                } finally {
+                    // Clean up the password copy securely
+                    if (passwordCopy != null) {
+                        Arrays.fill(passwordCopy, '\0');
+                    }
+                }
             } catch (InvalidPasswordException e) {
-                Log.e("EnterMasterPassword", e.getMessage(), e);
+                Log.e("EnterMasterPassword", "Invalid password: " + e.getMessage(), e);
                 errorMessage = e.getMessage();
                 errorCode = ERROR_INVALID_PASSWORD;
             } catch (IOException e) {
-                Log.e("EnterMasterPassword", e.getMessage(), e);
+                Log.e("EnterMasterPassword", "IO error: " + e.getMessage(), e);
                 errorMessage = e.getMessage();
                 errorCode = ERROR_GENERIC_ERROR;
             } catch (GeneralSecurityException e) {
-                Log.e("EnterMasterPassword", e.getMessage(), e);
+                Log.e("EnterMasterPassword", "Security error: " + e.getMessage(), e);
                 errorMessage = e.getMessage();
                 errorCode = ERROR_GENERIC_ERROR;
             } catch (ProblemReadingDatabaseFile e) {
-                Log.e("EnterMasterPassword", e.getMessage(), e);
+                Log.e("EnterMasterPassword", "Database corrupted: " + e.getMessage(), e);
+                errorMessage = e.getMessage();
+                errorCode = ERROR_DATABASE_CORRUPTED;
+            } catch (Exception e) {
+                // Catch any unexpected exceptions to prevent app crashes
+                Log.e("EnterMasterPassword", "Unexpected error: " + e.getMessage(), e);
                 errorMessage = e.getMessage();
                 errorCode = ERROR_GENERIC_ERROR;
+            } finally {
+                // Always clear the original password from memory once we're done with it
+                if (password != null) {
+                    Arrays.fill(password, '\0');
+                }
             }
             
             return errorCode;
@@ -214,7 +244,19 @@ public class EnterMasterPassword extends Activity implements OnClickListener {
 
         @Override
         protected void onPostExecute(Integer result) {
-            activity.getProgressDialog().dismiss();
+            // Ensure the progress dialog is dismissed regardless of outcome
+            try {
+                if (activity != null && activity.getProgressDialog() != null) {
+                    activity.getProgressDialog().dismiss();
+                }
+            } catch (Exception e) {
+                Log.w("EnterMasterPassword", "Error dismissing dialog", e);
+            }
+
+            // If activity is gone, no point continuing
+            if (activity == null) {
+                return;
+            }
 
             switch (result) {
                 case ERROR_INVALID_PASSWORD:
@@ -224,15 +266,32 @@ public class EnterMasterPassword extends Activity implements OnClickListener {
                     // Set focus back to the password and select all characters
                     activity.getPasswordField().requestFocus();
                     activity.getPasswordField().selectAll();
+                    break;
 
-                    break; 
+                case ERROR_DATABASE_CORRUPTED:
+                    String corruptMessage = String.format(
+                            activity.getString(R.string.generic_error_with_message),
+                            "Database appears to be corrupted: " + errorMessage);
+                    UIUtilities.showToast(activity, corruptMessage, true);
+                    break;
+
                 case ERROR_GENERIC_ERROR:
-                    String message = String.format(activity.getText(R.string.generic_error_with_message).toString(), errorMessage);
+                    String message = String.format(
+                            activity.getString(R.string.generic_error_with_message),
+                            errorMessage);
                     UIUtilities.showToast(activity, message, true);
                     break;
-                default :
-                    activity.setResult(RESULT_OK);
-                    activity.finish();
+
+                default:
+                    // Success! Set result and finish activity
+                    if (passwordProcessed && decryptedPasswordDatabase != null) {
+                        activity.setResult(RESULT_OK);
+                        activity.finish();
+                    } else {
+                        // This should not happen - we got success but database wasn't loaded
+                        Log.e("EnterMasterPassword", "Database not properly loaded despite success code");
+                        UIUtilities.showToast(activity, "Error loading database. Please try again.", true);
+                    }
                     break;
             }
         }
@@ -240,7 +299,6 @@ public class EnterMasterPassword extends Activity implements OnClickListener {
         private void setActivity(EnterMasterPassword activity) {
             this.activity = activity;
         }
-
     }
 
 }
