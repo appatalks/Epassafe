@@ -51,6 +51,6 @@ dependencies {
     implementation 'androidx.window:window:1.0.0'  // Corrected dependency for edge-to-edge support
 
     // Add Bouncy Castle for cryptographic operations
-    implementation 'org.bouncycastle:bcprov-jdk18on:1.77'
+    implementation 'org.bouncycastle:bcprov-jdk18on:1.80'
 
 }
