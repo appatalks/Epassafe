@@ -39,18 +39,23 @@ android {
         sourceCompatibility JavaVersion.VERSION_17
         targetCompatibility JavaVersion.VERSION_17
     }
+
+    // Add packaging options to resolve manifest conflicts
+    packaging {
+        resources {
+            resources.excludes.add('META-INF/versions/9/OSGI-INF/MANIFEST.MF')
+        }
+    }
 }
 
 dependencies {
-    // implementation files('libs/httpmime-4.0.3.jar')
-    // implementation files('libs/json_simple-1.1.jar')
     implementation 'androidx.core:core-ktx:1.16.0'
     implementation 'androidx.appcompat:appcompat:1.7.0'
     implementation 'com.google.android.material:material:1.12.0'
     implementation 'androidx.preference:preference:1.2.1'
-    implementation 'androidx.window:window:1.0.0'  // Corrected dependency for edge-to-edge support
+    implementation 'androidx.window:window:1.4.0'  // Corrected dependency for edge-to-edge support
 
     // Add Bouncy Castle for cryptographic operations
-    implementation 'org.bouncycastle:bcprov-jdk18on:1.77'
+    implementation 'org.bouncycastle:bcprov-jdk18on:1.80'
 
 }

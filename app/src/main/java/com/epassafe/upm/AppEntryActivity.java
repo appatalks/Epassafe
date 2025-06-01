@@ -61,6 +61,7 @@ public class AppEntryActivity extends Activity {
             // in this case we should display the EnterMasterPassword activity
             if (savedInstanceState == null) {
                 Intent i = new Intent(AppEntryActivity.this, EnterMasterPassword.class);
+                i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 startActivityForResult(i, REQ_CODE_ENTER_PASSWORD);
             }
         } else {

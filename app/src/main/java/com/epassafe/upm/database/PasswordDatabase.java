@@ -246,7 +246,14 @@ public class PasswordDatabase {
         try {
             // Create a temporary service to validate the password
             ModernEncryptionService testService = new ModernEncryptionService(password, modernEncryptionService.getSalt());
-            return true;
+
+            // Generate some test data to verify encryption/decryption works
+            byte[] testData = "TEST_VERIFICATION".getBytes(StandardCharsets.UTF_8);
+            byte[] encrypted = testService.encrypt(testData);
+            byte[] decrypted = testService.decrypt(encrypted);
+
+            // Verify the decryption works correctly
+            return Arrays.equals(testData, decrypted);
         } catch (Exception e) {
             Log.e(TAG, "Password verification failed", e);
             return false;
