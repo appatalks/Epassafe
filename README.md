@@ -24,6 +24,7 @@ Or get it from the [Google Play Store](https://play.google.com/store/apps/detail
 ```markdown
 ***History***
 
+ - **v4.0**: Android Updates, double login patch fix
  - **v3.9**: Code cleanup, corrections - Argon2id not used.  
  - **v3.8**: (May 2025) Major updates, including modern cryptography options, export-to-cvs, bug fixes
  - **v3.7**: Android SDK Target 35; Minor updates, bug fixes.
