@@ -50,12 +50,12 @@ android {
 
 dependencies {
     implementation 'androidx.core:core-ktx:1.16.0'
-    implementation 'androidx.appcompat:appcompat:1.7.0'
+    implementation 'androidx.appcompat:appcompat:1.7.1'
     implementation 'com.google.android.material:material:1.12.0'
     implementation 'androidx.preference:preference:1.2.1'
     implementation 'androidx.window:window:1.4.0'  // Corrected dependency for edge-to-edge support
 
     // Add Bouncy Castle for cryptographic operations
-    implementation 'org.bouncycastle:bcprov-jdk18on:1.80'
+    implementation 'org.bouncycastle:bcprov-jdk18on:1.81'
 
 }
