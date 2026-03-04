@@ -144,18 +144,18 @@ public class FullAccountList extends AccountsList {
     @SuppressWarnings("deprecation")
 	@Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        boolean optionConsumed = false;
-
         int itemId = item.getItemId();
         if (itemId == R.id.search) {
             onSearchRequested();
-            optionConsumed = true;
+            return true;
         } else if (itemId == R.id.add) {
             Intent i = new Intent(FullAccountList.this, AddEditAccount.class);
             i.putExtra(AddEditAccount.MODE, AddEditAccount.ADD_MODE);
             startActivityForResult(i, AddEditAccount.EDIT_ACCOUNT_REQUEST_CODE);
+            return true;
         } else if (itemId == R.id.change_master_password) {
             startActivity(new Intent(FullAccountList.this, ChangeMasterPassword.class));
+            return true;
         } else if (itemId == R.id.restore) {
             // Check to ensure there's a file to restore
             File restoreFile = new File(getExternalFilesDir("database"), Utilities.DEFAULT_DATABASE_FILE);
@@ -166,6 +166,7 @@ public class FullAccountList extends AccountsList {
                 String message = String.format(messageRes, restoreFile.getAbsolutePath());
                 Toast.makeText(this, message, Toast.LENGTH_LONG).show();
             }
+            return true;
         } else if (itemId == R.id.backup) {
             // If there's already a backup file prompt the user if they want to overwrite
             File backupFile = new File(getExternalFilesDir("database"), Utilities.DEFAULT_DATABASE_FILE);
@@ -174,25 +175,30 @@ public class FullAccountList extends AccountsList {
             } else {
                 backupDatabase();
             }
+            return true;
         } else if (itemId == R.id.about) {
             showDialog(DIALOG_ABOUT);
+            return true;
         } else if (itemId == R.id.backup_downloads) {
             if (((UPMApplication) getApplication()).downloadsBackupExists(this)) {
                 showDialog(CONFIRM_OVERWRITE_BACKUP_DOWNLOADS);
             } else {
                 backupToDownloads();
             }
+            return true;
         } else if (itemId == R.id.restore_downloads) {
             // Launch SAF file picker to select a database file
             Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
             intent.addCategory(Intent.CATEGORY_OPENABLE);
             intent.setType("*/*");
             startActivityForResult(intent, REQ_CODE_PICK_RESTORE_FILE);
+            return true;
         } else if (itemId == R.id.delete_db) {
             showDialog(CONFIRM_DELETE_DB_DIALOG);
+            return true;
         }
 
-        return optionConsumed;
+        return super.onOptionsItemSelected(item);
     }
 
     @Override
@@ -203,7 +209,7 @@ public class FullAccountList extends AccountsList {
             case CONFIRM_RESTORE_DIALOG:
                 dialogBuilder.setMessage(getString(R.string.confirm_restore_overwrite))
                         .setCancelable(false)
-                        .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                        .setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int id) {
                                 ((UPMApplication) getApplication()).restoreDatabase(FullAccountList.this);
                                 // Clear the activity stack and bring up AppEntryActivity
@@ -214,7 +220,7 @@ public class FullAccountList extends AccountsList {
                                 finish();
                             }
                         })
-                        .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                        .setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int id) {
                                 dialog.cancel();
                             }
@@ -227,12 +233,12 @@ public class FullAccountList extends AccountsList {
 
                 dialogBuilder.setMessage(message)
                         .setCancelable(false)
-                        .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                        .setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int id) {
                                 backupDatabase();
                             }
                         })
-                        .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                        .setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int id) {
                                 dialog.cancel();
                             }
@@ -261,7 +267,7 @@ public class FullAccountList extends AccountsList {
             /* Clear Activity may be able to also allow Lock */
             case CONFIRM_DELETE_DB_DIALOG:
                 dialogBuilder.setMessage(getString(R.string.confirm_delete_db))
-                        .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                        .setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int id) {
                                 deleteDatabase();
                                 // Clear the activity stack and bring up AppEntryActivity
@@ -272,7 +278,7 @@ public class FullAccountList extends AccountsList {
                                 finish();
                             }
                         })
-                        .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                        .setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int id) {
                                 dialog.cancel();
                             }
@@ -282,12 +288,12 @@ public class FullAccountList extends AccountsList {
             case CONFIRM_OVERWRITE_BACKUP_DOWNLOADS:
                 dialogBuilder.setMessage(getString(R.string.backup_downloads_exists))
                         .setCancelable(false)
-                        .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                        .setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int id) {
                                 backupToDownloads();
                             }
                         })
-                        .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                        .setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int id) {
                                 dialog.cancel();
                             }
@@ -297,7 +303,7 @@ public class FullAccountList extends AccountsList {
             case CONFIRM_RESTORE_DOWNLOADS_DIALOG:
                 dialogBuilder.setMessage(getString(R.string.confirm_restore_downloads))
                         .setCancelable(false)
-                        .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                        .setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int id) {
                                 if (pendingRestoreUri != null) {
                                     boolean success = ((UPMApplication) getApplication())
@@ -315,7 +321,7 @@ public class FullAccountList extends AccountsList {
                                 }
                             }
                         })
-                        .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                        .setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int id) {
                                 pendingRestoreUri = null;
                                 dialog.cancel();
