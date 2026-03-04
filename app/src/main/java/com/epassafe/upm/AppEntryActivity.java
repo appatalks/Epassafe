@@ -1,6 +1,6 @@
 /*
  * Universal Password Manager
- * Copyright (c) 2010-2011 Adrian Smith - MODDIFIED By Steven Bennett for UPM - Epassafe
+ * Copyright (c) 2010-2011 Adrian Smith - MODIFIED By Steven Bennett for UPM - Epassafe
  *
  * This file is part of Universal Password Manager.
  *   
@@ -20,14 +20,12 @@
  */
 package com.epassafe.upm;
 
-import android.Manifest;
 import android.app.Activity;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnCancelListener;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Environment;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -87,7 +85,7 @@ public class AppEntryActivity extends Activity {
                 startActivityForResult(i, REQ_CODE_OPEN_DB);
             } else {
                 // User clicked Back from the EnterMasterPassword activity so quit
-            	System.exit(0);
+                finishAffinity();
             }
             break;
         case REQ_CODE_CREATE_DB:
@@ -162,7 +160,7 @@ public class AppEntryActivity extends Activity {
                 dialog.setOnCancelListener(new OnCancelListener() {
                     @Override
                     public void onCancel(DialogInterface dialog) {
-                    System.exit(0);  
+                        finishAffinity();
                     }
                 });
                 break;

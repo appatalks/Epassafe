@@ -29,7 +29,6 @@ import java.security.InvalidAlgorithmParameterException;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.security.NoSuchProviderException;
-import java.security.SecureRandom;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -44,7 +43,6 @@ import javax.crypto.SecretKey;
 import android.util.Log;
 
 import com.epassafe.upm.crypto.DESDecryptionService;
-import com.epassafe.upm.crypto.DatabaseConverter;
 import com.epassafe.upm.crypto.EncryptionService;
 import com.epassafe.upm.crypto.InvalidPasswordException;
 import com.epassafe.upm.crypto.ModernEncryptionService;
@@ -204,22 +202,6 @@ public class PasswordDatabase {
             // Create a new encryption service with the password copy
             encryptionService = new EncryptionService(passwordForEncryption);
 
-            // Get unencrypted database contents to re-encrypt with legacy encryption
-            ByteArrayOutputStream os = new ByteArrayOutputStream();
-
-            // Flatpack the database revision and options
-            revision.increment();
-            revision.flatPack(os);
-            dbOptions.flatPack(os);
-
-            // Flatpack the accounts
-            for (AccountInformation ai : accounts.values()) {
-                ai.flatPack(os);
-            }
-
-            byte[] databaseContents = os.toByteArray();
-            os.close();
-
             // Reset the modern encryption flags and service
             isUsingModernEncryption = false;
             preferChaCha20 = false;
@@ -304,42 +286,13 @@ public class PasswordDatabase {
                         preferChaCha20 = (encryptedBytes[0] == ModernEncryptionService.ALG_CHACHA20_POLY1305);
                     }
 
-                    // Attempt to decrypt the database
-                    try {
-                        // Extract password from SecretKey - FIXED: removed incorrect initialization
-                        char[] passwordChars = null;
-
-                        // Check if we're using a password directly or a SecretKey
-                        if (secretKey != null) {
-                            // Convert the key to a char array for modern encryption
-                            // This is a temporary measure - not cryptographically ideal but allows backward compatibility
-                            String keyStr = new String(secretKey.getEncoded());
-                            passwordChars = keyStr.toCharArray();
-                        }
-
-                        // Initialize the modern encryption service with the password
-                        modernEncryptionService = new ModernEncryptionService(passwordChars, salt);
-
-                        // Apply the detected algorithm preference to the encryption service
-                        if (preferChaCha20) {
-                            modernEncryptionService.setAlgorithm(true);
-                        }
-
-                        // Clear password from memory after use
-                        if (passwordChars != null) {
-                            Arrays.fill(passwordChars, '\0');
-                        }
-
-                        byte[] decryptedBytes = modernEncryptionService.decrypt(encryptedBytes);
-
-                        // Load the decrypted database contents
-                        is = new ByteArrayInputStream(decryptedBytes);
-                        revision = new Revision(is);
-                        dbOptions = new DatabaseOptions(is);
-                    } catch (Exception e) {
-                        Log.e(TAG, "Failed to decrypt database with modern encryption", e);
-                        throw new InvalidPasswordException("Failed to decrypt the database. Either the password is incorrect or the database is corrupted.");
-                    }
+                    // Modern format databases require the original password for PBKDF2 key derivation.
+                    // A SecretKey (derived from the legacy PBE algorithm) cannot be used here.
+                    // This code path should not be reached in normal operation since all external
+                    // callers use the char[] password constructor, which calls load(password, secretKey).
+                    throw new ProblemReadingDatabaseFile(
+                        "Modern format database requires the original password for decryption. " +
+                        "Cannot open with a SecretKey alone.");
                 } else {
                     throw new ProblemReadingDatabaseFile("Unsupported modern database format version: " + formatVersion);
                 }

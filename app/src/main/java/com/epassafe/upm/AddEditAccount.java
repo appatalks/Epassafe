@@ -1,6 +1,6 @@
 /*
  * Universal Password Manager
- * Copyright (c) 2010-2011 Adrian Smith - MODDIFIED By Steven Bennett for UPM - Epassafe
+ * Copyright (c) 2010-2011 Adrian Smith - MODIFIED By Steven Bennett for UPM - Epassafe
  *
  * This file is part of Universal Password Manager.
  *   
@@ -44,12 +44,6 @@ import android.widget.Toast;
 import com.epassafe.upm.database.AccountInformation;
 import com.epassafe.upm.database.PasswordDatabase;
 
-
-/* Button */
-import com.epassafe.upm.wrappers.CheckWrappers;
-import com.epassafe.upm.wrappers.honeycomb.WrapActionBar;
-/* END */ 
-
 public class AddEditAccount extends Activity implements OnClickListener {
 
     private static final int GENERIC_ERROR_DIALOG = 1;
@@ -87,9 +81,7 @@ public class AddEditAccount extends Activity implements OnClickListener {
         getWindow().addFlags(LayoutParams.FLAG_KEEP_SCREEN_ON);
         /* End */
         
-        if (Utilities.VERSION.SDK_INT >= Utilities.VERSION_CODES.HONEYCOMB) {
-            getWindow().setFlags(LayoutParams.FLAG_SECURE, LayoutParams.FLAG_SECURE);
-        }
+        getWindow().setFlags(LayoutParams.FLAG_SECURE, LayoutParams.FLAG_SECURE);
         setContentView(R.layout.add_edit_account_details);
 
         saveButton = findViewById(R.id.save_button);
@@ -167,8 +159,8 @@ public class AddEditAccount extends Activity implements OnClickListener {
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()) {
-        case R.id.save_button:
+        int viewId = v.getId();
+        if (viewId == R.id.save_button) {
             String accountNameStr = accountName.getText().toString();
 
             // Ensure all the required data has been entered before saving the
@@ -200,11 +192,8 @@ public class AddEditAccount extends Activity implements OnClickListener {
                     }
                 }
             }
-
-            break;
-        case R.id.cancel_button:
+        } else if (viewId == R.id.cancel_button) {
             this.finish();
-            break;
         }
     }
 
@@ -253,12 +242,8 @@ public class AddEditAccount extends Activity implements OnClickListener {
         /* PASS GEN BUTTON */        
     		MenuItem item = menu.add(0, R.id.app_name, 0, R.string.app_name);
     		item.setShortcut('4', 'b');
-    		if (CheckWrappers.mActionBarAvailable) {
-    			item.setIcon(R.drawable.options);
-    			WrapActionBar.showIfRoom(item);
-    		
-    		} else {
-    			item.setIcon(android.R.drawable.ic_menu_add);}
+    		item.setIcon(R.drawable.options);
+    		item.setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM);
     		return super.onCreateOptionsMenu(menu);
         }
     
@@ -266,15 +251,13 @@ public class AddEditAccount extends Activity implements OnClickListener {
     public boolean onOptionsItemSelected(MenuItem item) {
         boolean optionConsumed = false;
 
-        switch (item.getItemId()) {
-            case R.id.app_name:
-            	startActivity(new Intent(AddEditAccount.this, PassGenerator.class));
-                    break;
-           		case R.id.settings:
-           			startActivity(new Intent(AddEditAccount.this, GenPrefs.class));
-           			break;    
-    }
-		return optionConsumed;        
+        int itemId = item.getItemId();
+        if (itemId == R.id.app_name) {
+            startActivity(new Intent(AddEditAccount.this, PassGenerator.class));
+        } else if (itemId == R.id.settings) {
+            startActivity(new Intent(AddEditAccount.this, GenPrefs.class));
+        }
+		return optionConsumed;
         }
     /* PASSWORD GENERATOR END */
     
