@@ -79,7 +79,7 @@ public class PassGenerator extends Activity implements OnClickListener{
     		return true;
     	}
     	
-    	return false;
+    	return super.onOptionsItemSelected(item);
     }
     
     

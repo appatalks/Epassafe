@@ -86,19 +86,19 @@ public class ViewAccountDetails extends Activity {
     @SuppressWarnings("deprecation")
 	@Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        boolean optionConsumed = false;
-
         int itemId = item.getItemId();
         if (itemId == R.id.edit) {
             Intent i = new Intent(ViewAccountDetails.this, AddEditAccount.class);
             i.putExtra(AddEditAccount.MODE, AddEditAccount.EDIT_MODE);
             i.putExtra(AddEditAccount.ACCOUNT_TO_EDIT, account.getAccountName());
             startActivityForResult(i, AddEditAccount.EDIT_ACCOUNT_REQUEST_CODE);
+            return true;
         } else if (itemId == R.id.delete) {
             showDialog(CONFIRM_DELETE_DIALOG);
+            return true;
         }
 
-        return optionConsumed;
+        return super.onOptionsItemSelected(item);
     }
 
     @Override
@@ -108,10 +108,10 @@ public class ViewAccountDetails extends Activity {
         switch(id) {
         case CONFIRM_DELETE_DIALOG:
             AlertDialog.Builder builder = new AlertDialog.Builder(this);
-            builder.setMessage("Are you sure?")
-                .setTitle("Confirm Delete")
+            builder.setMessage(R.string.confirm_delete_dialog)
+                .setTitle(R.string.delete_account)
                 .setCancelable(false)
-                .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                .setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         getPasswordDatabase().deleteAccount(account.getAccountName());
                         final String accountName = account.getAccountName();
@@ -129,7 +129,7 @@ public class ViewAccountDetails extends Activity {
                         }).execute(getPasswordDatabase());
                     }
                 })
-                .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                .setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         dialog.cancel();
                     }
