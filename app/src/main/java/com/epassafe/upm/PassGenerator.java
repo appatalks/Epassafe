@@ -174,9 +174,8 @@ public class PassGenerator extends Activity implements OnClickListener{
     	ClipboardManager clip = (ClipboardManager)getSystemService(CLIPBOARD_SERVICE);
     	ClipData clipData = ClipData.newPlainText("generated_password", lastPassword);
     	// Mark as sensitive so Android 13+ hides the content in clipboard previews
-    	clipData.getDescription().getExtras();
     	android.os.PersistableBundle extras = new android.os.PersistableBundle();
-    	extras.putBoolean("android.content.extra.IS_SENSITIVE", true);
+    	extras.putBoolean(android.content.ClipDescription.EXTRA_IS_SENSITIVE, true);
     	clipData.getDescription().setExtras(extras);
     	clip.setPrimaryClip(clipData);
     	Toast.makeText(this, R.string.clipboard_copied, Toast.LENGTH_SHORT).show();
