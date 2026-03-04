@@ -23,6 +23,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager.NameNotFoundException;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.util.Log;
@@ -45,9 +46,14 @@ public class FullAccountList extends AccountsList {
     private static final int CONFIRM_OVERWRITE_BACKUP_FILE = 1;
     private static final int DIALOG_ABOUT = 2;
     private static final int CONFIRM_DELETE_DB_DIALOG = 3;
-    
+    private static final int CONFIRM_OVERWRITE_BACKUP_DOWNLOADS = 4;
+    private static final int CONFIRM_RESTORE_DOWNLOADS_DIALOG = 5;
+
     public static final int RESULT_EXIT = 0;
     public static final int RESULT_ENTER_PW = 1;
+
+    private static final int REQ_CODE_PICK_RESTORE_FILE = 100;
+    private Uri pendingRestoreUri;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -64,6 +70,12 @@ public class FullAccountList extends AccountsList {
             case ViewAccountDetails.VIEW_ACCOUNT_REQUEST_CODE:
                 if (resultCode == AddEditAccount.EDIT_ACCOUNT_RESULT_CODE_TRUE) {
                     populateAccountList();
+                }
+                break;
+            case REQ_CODE_PICK_RESTORE_FILE:
+                if (resultCode == RESULT_OK && intent != null && intent.getData() != null) {
+                    pendingRestoreUri = intent.getData();
+                    showDialog(CONFIRM_RESTORE_DOWNLOADS_DIALOG);
                 }
                 break;
         }
@@ -164,6 +176,18 @@ public class FullAccountList extends AccountsList {
             }
         } else if (itemId == R.id.about) {
             showDialog(DIALOG_ABOUT);
+        } else if (itemId == R.id.backup_downloads) {
+            if (((UPMApplication) getApplication()).downloadsBackupExists(this)) {
+                showDialog(CONFIRM_OVERWRITE_BACKUP_DOWNLOADS);
+            } else {
+                backupToDownloads();
+            }
+        } else if (itemId == R.id.restore_downloads) {
+            // Launch SAF file picker to select a database file
+            Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
+            intent.addCategory(Intent.CATEGORY_OPENABLE);
+            intent.setType("*/*");
+            startActivityForResult(intent, REQ_CODE_PICK_RESTORE_FILE);
         } else if (itemId == R.id.delete_db) {
             showDialog(CONFIRM_DELETE_DB_DIALOG);
         }
@@ -255,6 +279,50 @@ public class FullAccountList extends AccountsList {
                         });
                 break;
 
+            case CONFIRM_OVERWRITE_BACKUP_DOWNLOADS:
+                dialogBuilder.setMessage(getString(R.string.backup_downloads_exists))
+                        .setCancelable(false)
+                        .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                backupToDownloads();
+                            }
+                        })
+                        .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                dialog.cancel();
+                            }
+                        });
+                break;
+
+            case CONFIRM_RESTORE_DOWNLOADS_DIALOG:
+                dialogBuilder.setMessage(getString(R.string.confirm_restore_downloads))
+                        .setCancelable(false)
+                        .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                if (pendingRestoreUri != null) {
+                                    boolean success = ((UPMApplication) getApplication())
+                                            .restoreFromUri(FullAccountList.this, pendingRestoreUri);
+                                    pendingRestoreUri = null;
+                                    if (success) {
+                                        Toast.makeText(FullAccountList.this,
+                                                R.string.restore_downloads_success, Toast.LENGTH_LONG).show();
+                                        // Restart the app to load the restored database
+                                        Intent i = new Intent(FullAccountList.this, AppEntryActivity.class);
+                                        i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                                        startActivity(i);
+                                        finish();
+                                    }
+                                }
+                            }
+                        })
+                        .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                pendingRestoreUri = null;
+                                dialog.cancel();
+                            }
+                        });
+                break;
+
         }
         return dialogBuilder.create();
     }
@@ -270,6 +338,12 @@ public class FullAccountList extends AccountsList {
         if (((UPMApplication) getApplication()).copyFile(databaseFile, fileOnSDCard, this)) {
             String message = String.format(getString(R.string.backup_complete), fileOnSDCard.getAbsolutePath());
             UIUtilities.showToast(this, message, false);
+        }
+    }
+
+    private void backupToDownloads() {
+        if (((UPMApplication) getApplication()).backupToDownloads(this)) {
+            UIUtilities.showToast(this, getString(R.string.backup_downloads_complete), false);
         }
     }
 
