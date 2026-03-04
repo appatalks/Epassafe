@@ -168,4 +168,15 @@
     <string name="export_csv_success">База даних експортована в: %s</string>
     <string name="export_csv_failed">Не вдалося експортувати базу даних у CSV файл</string>
     <string name="export_and_password_changed">Головний пароль змінено та база даних експортована в: %s</string>
+
+    <!-- Downloads Backup/Restore Strings -->
+    <string name="backup_to_downloads">Резервне копіювання в Завантаження</string>
+    <string name="restore_from_downloads">Відновити з Завантажень</string>
+    <string name="backup_downloads_complete">База даних збережена в папку Завантаження</string>
+    <string name="backup_downloads_failed">Не вдалося зберегти базу даних в папку Завантаження</string>
+    <string name="backup_downloads_exists">Резервна копія вже існує в папці Завантаження.\nБажаєте перезаписати?</string>
+    <string name="confirm_restore_downloads">Ви впевнені, що хочете замінити вашу існуючу базу даних вибраним файлом?</string>
+    <string name="restore_downloads_select">Виберіть файл бази даних для відновлення</string>
+    <string name="restore_downloads_failed">Не вдалося відновити базу даних з вибраного файлу</string>
+    <string name="restore_downloads_success">База даних успішно відновлена з Завантажень</string>
 </resources>
