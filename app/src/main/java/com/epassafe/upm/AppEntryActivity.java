@@ -1,6 +1,6 @@
 /*
  * Universal Password Manager
- * Copyright (c) 2010-2011 Adrian Smith - MODDIFIED By Steven Bennett for UPM - Epassafe
+ * Copyright (c) 2010-2011 Adrian Smith - MODIFIED By Steven Bennett for UPM - Epassafe
  *
  * This file is part of Universal Password Manager.
  *   
@@ -20,14 +20,13 @@
  */
 package com.epassafe.upm;
 
-import android.Manifest;
 import android.app.Activity;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnCancelListener;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
-import android.os.Environment;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -45,6 +44,7 @@ public class AppEntryActivity extends Activity {
     private static final int REQ_CODE_DOWNLOAD_DB = 2;
     private static final int REQ_CODE_OPEN_DB = 3;
     private static final int REQ_CODE_GET_DB_FILE = 4;
+    private static final int REQ_CODE_PICK_RESTORE_DOWNLOADS = 5;
 
     @SuppressWarnings("deprecation")
 	@Override
@@ -87,7 +87,7 @@ public class AppEntryActivity extends Activity {
                 startActivityForResult(i, REQ_CODE_OPEN_DB);
             } else {
                 // User clicked Back from the EnterMasterPassword activity so quit
-            	System.exit(0);
+                finishAffinity();
             }
             break;
         case REQ_CODE_CREATE_DB:
@@ -114,6 +114,21 @@ public class AppEntryActivity extends Activity {
                 // weather EnterMasterPassword needs to be shown.
                 EnterMasterPassword.databaseFileToDecrypt = null;
                 finish();
+            }
+            break;
+        case REQ_CODE_PICK_RESTORE_DOWNLOADS:
+            if (resultCode == RESULT_OK && intent != null && intent.getData() != null) {
+                Uri restoreUri = intent.getData();
+                boolean success = ((UPMApplication) getApplication())
+                        .restoreFromUri(AppEntryActivity.this, restoreUri);
+                if (success) {
+                    Toast.makeText(this, R.string.restore_downloads_success, Toast.LENGTH_LONG).show();
+                    // Restart the app to load the restored database
+                    Intent i = new Intent(AppEntryActivity.this, AppEntryActivity.class);
+                    i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                    startActivity(i);
+                    finish();
+                }
             }
             break;
         }
@@ -158,11 +173,22 @@ public class AppEntryActivity extends Activity {
                     }
                 });
 
-                // Close this Activity if the dialog is cancelled 
+                Button restoreFromDownloads = dialog.findViewById(R.id.restore_from_downloads);
+                restoreFromDownloads.setOnClickListener(new OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
+                        intent.addCategory(Intent.CATEGORY_OPENABLE);
+                        intent.setType("*/*");
+                        startActivityForResult(intent, REQ_CODE_PICK_RESTORE_DOWNLOADS);
+                    }
+                });
+
+                // Close this Activity if the dialog is cancelled
                 dialog.setOnCancelListener(new OnCancelListener() {
                     @Override
                     public void onCancel(DialogInterface dialog) {
-                    System.exit(0);  
+                        finishAffinity();
                     }
                 });
                 break;

@@ -13,11 +13,11 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.content.Intent;
-import android.text.ClipboardManager;
+import android.content.ClipData;
+import android.content.ClipboardManager;
 import android.util.Log;
 
 
-@SuppressWarnings("deprecation")
 public class PassGenerator extends Activity implements OnClickListener{
 	
 	private static final String TAG = "PassGenerator";
@@ -74,28 +74,23 @@ public class PassGenerator extends Activity implements OnClickListener{
     @Override
     public boolean onOptionsItemSelected(MenuItem item){
     	
-    	switch(item.getItemId()){
-    		
-    		case R.id.settings:
-    			startActivity(new Intent(this, GenPrefs.class));
-    			return true;
+    	if (item.getItemId() == R.id.settings) {
+    		startActivity(new Intent(this, GenPrefs.class));
+    		return true;
     	}
     	
-    	return false;
+    	return super.onOptionsItemSelected(item);
     }
     
     
     @Override
     public void onClick(View v){
     	
-    	switch (v.getId()){    		
-    		case R.id.generate:
-    			generate();
-    		break;
-    		
-    		case R.id.clipboard_copy:
-    			copyToClipboard();
-    		break;
+    	int id = v.getId();
+    	if (id == R.id.generate) {
+    		generate();
+    	} else if (id == R.id.clipboard_copy) {
+    		copyToClipboard();
     	}
     }
     
@@ -177,7 +172,12 @@ public class PassGenerator extends Activity implements OnClickListener{
     	} 	
     	
     	ClipboardManager clip = (ClipboardManager)getSystemService(CLIPBOARD_SERVICE);
-    	clip.setText(lastPassword);    	
-    	Toast.makeText(this, R.string.clipboard_copied, Toast.LENGTH_SHORT).show();    	
+    	ClipData clipData = ClipData.newPlainText("generated_password", lastPassword);
+    	// Mark as sensitive so Android 13+ hides the content in clipboard previews
+    	android.os.PersistableBundle extras = new android.os.PersistableBundle();
+    	extras.putBoolean(android.content.ClipDescription.EXTRA_IS_SENSITIVE, true);
+    	clipData.getDescription().setExtras(extras);
+    	clip.setPrimaryClip(clipData);
+    	Toast.makeText(this, R.string.clipboard_copied, Toast.LENGTH_SHORT).show();
     }
 }

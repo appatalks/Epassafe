@@ -24,16 +24,5 @@
     native <methods>;
 }
 
-# For R8 compatibility
--keepclassmembers,allowobfuscation class * {
-  @com.google.gson.annotations.SerializedName <fields>;
-}
-
-# For native methods
--keepclasseswithmembernames class * {
-    native <methods>;
-}
-
 # Keep debug intact
 -renamesourcefileattribute SourceFile
--keepattributes SourceFile,LineNumberTable

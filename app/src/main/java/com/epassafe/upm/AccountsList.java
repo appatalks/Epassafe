@@ -1,6 +1,6 @@
 /*
  * Universal Password Manager
- * Copyright (c) 2010-2011 Adrian Smith - MODDIFIED By Steven Bennett for UPM - Epassafe
+ * Copyright (c) 2010-2011 Adrian Smith - MODIFIED By Steven Bennett for UPM - Epassafe
  *
  * This file is part of Universal Password Manager.
  *   
@@ -84,11 +84,11 @@ public class AccountsList extends ListActivity {
     @Override
     public boolean onContextItemSelected(MenuItem item) {
         AdapterContextMenuInfo info = (AdapterContextMenuInfo) item.getMenuInfo();
-        switch (item.getItemId()) {
-        case R.id.edit_account:
+        int itemId = item.getItemId();
+        if (itemId == R.id.edit_account) {
             editAccount(getAccount(info.targetView));
             return true;
-        case R.id.copy_password:
+        } else if (itemId == R.id.copy_password) {
             setClipboardText(getPassword(getAccount(info.targetView)));
             return true;
         }

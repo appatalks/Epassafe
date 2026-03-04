@@ -159,4 +159,13 @@
     <string name="export_csv_success">Datenbank exportiert nach: %s</string>
     <string name="export_csv_failed">Fehler beim Exportieren der Datenbank als CSV-Datei</string>
     <string name="export_and_password_changed">Hauptpasswort geändert und Datenbank exportiert nach: %s</string>
+    <string name="backup_to_downloads">Sicherung in Downloads</string>
+    <string name="restore_from_downloads">Aus Downloads wiederherstellen</string>
+    <string name="backup_downloads_complete">Datenbank in den Downloads-Ordner gesichert</string>
+    <string name="backup_downloads_failed">Fehler beim Sichern der Datenbank in den Downloads-Ordner</string>
+    <string name="backup_downloads_exists">Eine Sicherung existiert bereits im Downloads-Ordner.\nMöchten Sie diese überschreiben?</string>
+    <string name="confirm_restore_downloads">Sind Sie sicher, dass Sie Ihre bestehende Datenbank durch die ausgewählte Datei ersetzen wollen?</string>
+    <string name="restore_downloads_select">Datenbankdatei zum Wiederherstellen auswählen</string>
+    <string name="restore_downloads_failed">Fehler beim Wiederherstellen der Datenbank aus der ausgewählten Datei</string>
+    <string name="restore_downloads_success">Datenbank erfolgreich aus Downloads wiederhergestellt</string>
 </resources>

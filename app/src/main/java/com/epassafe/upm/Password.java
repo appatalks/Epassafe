@@ -1,6 +1,6 @@
 package com.epassafe.upm;
 
-import java.util.Random;
+import java.security.SecureRandom;
 
 import android.util.Log;
 
@@ -49,8 +49,8 @@ public class Password {
 		String chars = "";//we get chars from this
 		String lastChar="";//last cuted char
 		String letter = "";//sliced char
-		Random rnd = new Random();
-		
+		SecureRandom rnd = new SecureRandom();
+
 		if (letters) chars+=allowedLetters;
 		if (capitalLetters) chars+=allowedCapitalLetters;
 		if (numbers) chars+=allowedNumbers;

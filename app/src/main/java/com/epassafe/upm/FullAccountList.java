@@ -1,7 +1,7 @@
 /* 
  * 
  * Universal Password Manager 
- * Copyright (c) 2010-2011 Adrian Smith - MODDIFIED By Steven Bennett for UPM - Epassafe- MODDIFIED By Steven Bennett for UPM - Epassafe
+ * Copyright (c) 2010-2011 Adrian Smith - MODIFIED By Steven Bennett for UPM - Epassafe
  *
  * This file is part of Universal Password Manager.
  *   
@@ -23,6 +23,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager.NameNotFoundException;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.util.Log;
@@ -36,9 +37,6 @@ import android.widget.ArrayAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.epassafe.upm.wrappers.CheckWrappers;
-import com.epassafe.upm.wrappers.honeycomb.WrapActionBar;
-
 import java.io.File;
 /* END */ 
 
@@ -48,9 +46,14 @@ public class FullAccountList extends AccountsList {
     private static final int CONFIRM_OVERWRITE_BACKUP_FILE = 1;
     private static final int DIALOG_ABOUT = 2;
     private static final int CONFIRM_DELETE_DB_DIALOG = 3;
-    
+    private static final int CONFIRM_OVERWRITE_BACKUP_DOWNLOADS = 4;
+    private static final int CONFIRM_RESTORE_DOWNLOADS_DIALOG = 5;
+
     public static final int RESULT_EXIT = 0;
     public static final int RESULT_ENTER_PW = 1;
+
+    private static final int REQ_CODE_PICK_RESTORE_FILE = 100;
+    private Uri pendingRestoreUri;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -67,6 +70,12 @@ public class FullAccountList extends AccountsList {
             case ViewAccountDetails.VIEW_ACCOUNT_REQUEST_CODE:
                 if (resultCode == AddEditAccount.EDIT_ACCOUNT_RESULT_CODE_TRUE) {
                     populateAccountList();
+                }
+                break;
+            case REQ_CODE_PICK_RESTORE_FILE:
+                if (resultCode == RESULT_OK && intent != null && intent.getData() != null) {
+                    pendingRestoreUri = intent.getData();
+                    showDialog(CONFIRM_RESTORE_DOWNLOADS_DIALOG);
                 }
                 break;
         }
@@ -94,12 +103,8 @@ public class FullAccountList extends AccountsList {
         /* ADD BUTTON */        
     		MenuItem item = menu.add(0, R.id.add, 0, R.string.add);
     		item.setShortcut('4', 'a');
-    		if (CheckWrappers.mActionBarAvailable) {
-    			item.setIcon(R.drawable.ic_menu_add_password);
-    			WrapActionBar.showIfRoom(item);
-    		
-    		} else {
-    			item.setIcon(android.R.drawable.ic_menu_add);}
+    		item.setIcon(R.drawable.ic_menu_add_password);
+    		item.setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM);
     		return super.onCreateOptionsMenu(menu);
         }
         /* END ADD BUTTON */
@@ -139,51 +144,61 @@ public class FullAccountList extends AccountsList {
     @SuppressWarnings("deprecation")
 	@Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        boolean optionConsumed = false;
-
-        switch (item.getItemId()) {
-            case R.id.search:
-                onSearchRequested();
-                optionConsumed = true;
-                break;
-            case R.id.add:
-                Intent i = new Intent(FullAccountList.this, AddEditAccount.class);
-                i.putExtra(AddEditAccount.MODE, AddEditAccount.ADD_MODE);
-                startActivityForResult(i, AddEditAccount.EDIT_ACCOUNT_REQUEST_CODE);
-                break;
-            case R.id.change_master_password:
-                startActivity(new Intent(FullAccountList.this, ChangeMasterPassword.class));
-                break;
-            case R.id.restore:
-                // Check to ensure there's a file to restore
-                File restoreFile = new File(getExternalFilesDir("database"), Utilities.DEFAULT_DATABASE_FILE);
-                if (restoreFile.exists()) {
-                    showDialog(CONFIRM_RESTORE_DIALOG);
-                } else {
-                    String messageRes = getString(R.string.restore_file_doesnt_exist);
-                    String message = String.format(messageRes, restoreFile.getAbsolutePath());
-                    Toast.makeText(this, message, Toast.LENGTH_LONG).show();
-                }
-                break;
-            case R.id.backup:
-                // If there's already a backup file prompt the user if they want to overwrite
-                File backupFile = new File(getExternalFilesDir("database"), Utilities.DEFAULT_DATABASE_FILE);
-                if (backupFile.exists()) {
-                    showDialog(CONFIRM_OVERWRITE_BACKUP_FILE);
-                } else {
-                    backupDatabase();
-                }
-                break;
-            case R.id.about:
-                showDialog(DIALOG_ABOUT);
-                break;
-            case R.id.delete_db:
-                showDialog(CONFIRM_DELETE_DB_DIALOG);
-                break;
-                         
+        int itemId = item.getItemId();
+        if (itemId == R.id.search) {
+            onSearchRequested();
+            return true;
+        } else if (itemId == R.id.add) {
+            Intent i = new Intent(FullAccountList.this, AddEditAccount.class);
+            i.putExtra(AddEditAccount.MODE, AddEditAccount.ADD_MODE);
+            startActivityForResult(i, AddEditAccount.EDIT_ACCOUNT_REQUEST_CODE);
+            return true;
+        } else if (itemId == R.id.change_master_password) {
+            startActivity(new Intent(FullAccountList.this, ChangeMasterPassword.class));
+            return true;
+        } else if (itemId == R.id.restore) {
+            // Check to ensure there's a file to restore
+            File restoreFile = new File(getExternalFilesDir("database"), Utilities.DEFAULT_DATABASE_FILE);
+            if (restoreFile.exists()) {
+                showDialog(CONFIRM_RESTORE_DIALOG);
+            } else {
+                String messageRes = getString(R.string.restore_file_doesnt_exist);
+                String message = String.format(messageRes, restoreFile.getAbsolutePath());
+                Toast.makeText(this, message, Toast.LENGTH_LONG).show();
+            }
+            return true;
+        } else if (itemId == R.id.backup) {
+            // If there's already a backup file prompt the user if they want to overwrite
+            File backupFile = new File(getExternalFilesDir("database"), Utilities.DEFAULT_DATABASE_FILE);
+            if (backupFile.exists()) {
+                showDialog(CONFIRM_OVERWRITE_BACKUP_FILE);
+            } else {
+                backupDatabase();
+            }
+            return true;
+        } else if (itemId == R.id.about) {
+            showDialog(DIALOG_ABOUT);
+            return true;
+        } else if (itemId == R.id.backup_downloads) {
+            if (((UPMApplication) getApplication()).downloadsBackupExists(this)) {
+                showDialog(CONFIRM_OVERWRITE_BACKUP_DOWNLOADS);
+            } else {
+                backupToDownloads();
+            }
+            return true;
+        } else if (itemId == R.id.restore_downloads) {
+            // Launch SAF file picker to select a database file
+            Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
+            intent.addCategory(Intent.CATEGORY_OPENABLE);
+            intent.setType("*/*");
+            startActivityForResult(intent, REQ_CODE_PICK_RESTORE_FILE);
+            return true;
+        } else if (itemId == R.id.delete_db) {
+            showDialog(CONFIRM_DELETE_DB_DIALOG);
+            return true;
         }
 
-        return optionConsumed;
+        return super.onOptionsItemSelected(item);
     }
 
     @Override
@@ -194,7 +209,7 @@ public class FullAccountList extends AccountsList {
             case CONFIRM_RESTORE_DIALOG:
                 dialogBuilder.setMessage(getString(R.string.confirm_restore_overwrite))
                         .setCancelable(false)
-                        .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                        .setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int id) {
                                 ((UPMApplication) getApplication()).restoreDatabase(FullAccountList.this);
                                 // Clear the activity stack and bring up AppEntryActivity
@@ -205,7 +220,7 @@ public class FullAccountList extends AccountsList {
                                 finish();
                             }
                         })
-                        .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                        .setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int id) {
                                 dialog.cancel();
                             }
@@ -218,12 +233,12 @@ public class FullAccountList extends AccountsList {
 
                 dialogBuilder.setMessage(message)
                         .setCancelable(false)
-                        .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                        .setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int id) {
                                 backupDatabase();
                             }
                         })
-                        .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                        .setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int id) {
                                 dialog.cancel();
                             }
@@ -252,7 +267,7 @@ public class FullAccountList extends AccountsList {
             /* Clear Activity may be able to also allow Lock */
             case CONFIRM_DELETE_DB_DIALOG:
                 dialogBuilder.setMessage(getString(R.string.confirm_delete_db))
-                        .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                        .setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int id) {
                                 deleteDatabase();
                                 // Clear the activity stack and bring up AppEntryActivity
@@ -263,8 +278,52 @@ public class FullAccountList extends AccountsList {
                                 finish();
                             }
                         })
-                        .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                        .setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int id) {
+                                dialog.cancel();
+                            }
+                        });
+                break;
+
+            case CONFIRM_OVERWRITE_BACKUP_DOWNLOADS:
+                dialogBuilder.setMessage(getString(R.string.backup_downloads_exists))
+                        .setCancelable(false)
+                        .setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                backupToDownloads();
+                            }
+                        })
+                        .setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                dialog.cancel();
+                            }
+                        });
+                break;
+
+            case CONFIRM_RESTORE_DOWNLOADS_DIALOG:
+                dialogBuilder.setMessage(getString(R.string.confirm_restore_downloads))
+                        .setCancelable(false)
+                        .setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                if (pendingRestoreUri != null) {
+                                    boolean success = ((UPMApplication) getApplication())
+                                            .restoreFromUri(FullAccountList.this, pendingRestoreUri);
+                                    pendingRestoreUri = null;
+                                    if (success) {
+                                        Toast.makeText(FullAccountList.this,
+                                                R.string.restore_downloads_success, Toast.LENGTH_LONG).show();
+                                        // Restart the app to load the restored database
+                                        Intent i = new Intent(FullAccountList.this, AppEntryActivity.class);
+                                        i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                                        startActivity(i);
+                                        finish();
+                                    }
+                                }
+                            }
+                        })
+                        .setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                pendingRestoreUri = null;
                                 dialog.cancel();
                             }
                         });
@@ -285,6 +344,12 @@ public class FullAccountList extends AccountsList {
         if (((UPMApplication) getApplication()).copyFile(databaseFile, fileOnSDCard, this)) {
             String message = String.format(getString(R.string.backup_complete), fileOnSDCard.getAbsolutePath());
             UIUtilities.showToast(this, message, false);
+        }
+    }
+
+    private void backupToDownloads() {
+        if (((UPMApplication) getApplication()).backupToDownloads(this)) {
+            UIUtilities.showToast(this, getString(R.string.backup_downloads_complete), false);
         }
     }
 

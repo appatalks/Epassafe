@@ -160,6 +160,17 @@
     <string name="master_password_change_failed">Failed to change master password: %s</string>
     <string name="incorrect_password">Incorrect password</string>
 
+    <!-- Downloads Backup/Restore Strings -->
+    <string name="backup_to_downloads">Backup to Downloads</string>
+    <string name="restore_from_downloads">Restore from Downloads</string>
+    <string name="backup_downloads_complete">Database backed up to Downloads folder</string>
+    <string name="backup_downloads_failed">Failed to backup database to Downloads folder</string>
+    <string name="backup_downloads_exists">A backup already exists in the Downloads folder.\nDo you want to overwrite?</string>
+    <string name="confirm_restore_downloads">Are you sure you want to replace your existing database with the selected file?</string>
+    <string name="restore_downloads_select">Select database file to restore</string>
+    <string name="restore_downloads_failed">Failed to restore database from selected file</string>
+    <string name="restore_downloads_success">Database restored successfully from Downloads</string>
+
     <!-- CSV Export Strings -->
     <string name="exporting_csv">Exporting database to CSV...</string>
     <string name="export_csv_success">Database exported to: %s</string>
