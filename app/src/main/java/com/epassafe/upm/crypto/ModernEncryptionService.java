@@ -20,11 +20,9 @@ import java.nio.ByteBuffer;
 import java.nio.charset.StandardCharsets;
 import java.security.InvalidAlgorithmParameterException;
 import java.security.InvalidKeyException;
-import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.security.NoSuchProviderException;
 import java.security.SecureRandom;
-import java.security.Security;
 import java.security.spec.InvalidKeySpecException;
 import java.security.spec.KeySpec;
 import java.util.Arrays;
@@ -39,10 +37,7 @@ import javax.crypto.spec.GCMParameterSpec;
 import javax.crypto.spec.PBEKeySpec;
 import javax.crypto.spec.SecretKeySpec;
 
-import org.bouncycastle.jce.provider.BouncyCastleProvider;
-
 import android.util.Log;
-import android.os.Build;
 
 /**
  * Modern encryption service using AES-GCM or ChaCha20-Poly1305 with enhanced PBKDF2
@@ -79,12 +74,6 @@ public class ModernEncryptionService {
     private final byte[] salt;
     private byte algorithmId;
 
-    static {
-        // Register Bouncy Castle provider only for older Android versions
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.P) { // P is API 28
-            Security.addProvider(new BouncyCastleProvider());
-        }
-    }
 
     /**
      * Create a new encryption service with a password

@@ -1,7 +1,7 @@
 /* 
  * 
  * Universal Password Manager 
- * Copyright (c) 2010-2011 Adrian Smith - MODDIFIED By Steven Bennett for UPM - Epassafe- MODDIFIED By Steven Bennett for UPM - Epassafe
+ * Copyright (c) 2010-2011 Adrian Smith - MODIFIED By Steven Bennett for UPM - Epassafe
  *
  * This file is part of Universal Password Manager.
  *   
@@ -35,9 +35,6 @@ import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
-
-import com.epassafe.upm.wrappers.CheckWrappers;
-import com.epassafe.upm.wrappers.honeycomb.WrapActionBar;
 
 import java.io.File;
 /* END */ 
@@ -94,12 +91,8 @@ public class FullAccountList extends AccountsList {
         /* ADD BUTTON */        
     		MenuItem item = menu.add(0, R.id.add, 0, R.string.add);
     		item.setShortcut('4', 'a');
-    		if (CheckWrappers.mActionBarAvailable) {
-    			item.setIcon(R.drawable.ic_menu_add_password);
-    			WrapActionBar.showIfRoom(item);
-    		
-    		} else {
-    			item.setIcon(android.R.drawable.ic_menu_add);}
+    		item.setIcon(R.drawable.ic_menu_add_password);
+    		item.setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM);
     		return super.onCreateOptionsMenu(menu);
         }
         /* END ADD BUTTON */
@@ -141,46 +134,38 @@ public class FullAccountList extends AccountsList {
     public boolean onOptionsItemSelected(MenuItem item) {
         boolean optionConsumed = false;
 
-        switch (item.getItemId()) {
-            case R.id.search:
-                onSearchRequested();
-                optionConsumed = true;
-                break;
-            case R.id.add:
-                Intent i = new Intent(FullAccountList.this, AddEditAccount.class);
-                i.putExtra(AddEditAccount.MODE, AddEditAccount.ADD_MODE);
-                startActivityForResult(i, AddEditAccount.EDIT_ACCOUNT_REQUEST_CODE);
-                break;
-            case R.id.change_master_password:
-                startActivity(new Intent(FullAccountList.this, ChangeMasterPassword.class));
-                break;
-            case R.id.restore:
-                // Check to ensure there's a file to restore
-                File restoreFile = new File(getExternalFilesDir("database"), Utilities.DEFAULT_DATABASE_FILE);
-                if (restoreFile.exists()) {
-                    showDialog(CONFIRM_RESTORE_DIALOG);
-                } else {
-                    String messageRes = getString(R.string.restore_file_doesnt_exist);
-                    String message = String.format(messageRes, restoreFile.getAbsolutePath());
-                    Toast.makeText(this, message, Toast.LENGTH_LONG).show();
-                }
-                break;
-            case R.id.backup:
-                // If there's already a backup file prompt the user if they want to overwrite
-                File backupFile = new File(getExternalFilesDir("database"), Utilities.DEFAULT_DATABASE_FILE);
-                if (backupFile.exists()) {
-                    showDialog(CONFIRM_OVERWRITE_BACKUP_FILE);
-                } else {
-                    backupDatabase();
-                }
-                break;
-            case R.id.about:
-                showDialog(DIALOG_ABOUT);
-                break;
-            case R.id.delete_db:
-                showDialog(CONFIRM_DELETE_DB_DIALOG);
-                break;
-                         
+        int itemId = item.getItemId();
+        if (itemId == R.id.search) {
+            onSearchRequested();
+            optionConsumed = true;
+        } else if (itemId == R.id.add) {
+            Intent i = new Intent(FullAccountList.this, AddEditAccount.class);
+            i.putExtra(AddEditAccount.MODE, AddEditAccount.ADD_MODE);
+            startActivityForResult(i, AddEditAccount.EDIT_ACCOUNT_REQUEST_CODE);
+        } else if (itemId == R.id.change_master_password) {
+            startActivity(new Intent(FullAccountList.this, ChangeMasterPassword.class));
+        } else if (itemId == R.id.restore) {
+            // Check to ensure there's a file to restore
+            File restoreFile = new File(getExternalFilesDir("database"), Utilities.DEFAULT_DATABASE_FILE);
+            if (restoreFile.exists()) {
+                showDialog(CONFIRM_RESTORE_DIALOG);
+            } else {
+                String messageRes = getString(R.string.restore_file_doesnt_exist);
+                String message = String.format(messageRes, restoreFile.getAbsolutePath());
+                Toast.makeText(this, message, Toast.LENGTH_LONG).show();
+            }
+        } else if (itemId == R.id.backup) {
+            // If there's already a backup file prompt the user if they want to overwrite
+            File backupFile = new File(getExternalFilesDir("database"), Utilities.DEFAULT_DATABASE_FILE);
+            if (backupFile.exists()) {
+                showDialog(CONFIRM_OVERWRITE_BACKUP_FILE);
+            } else {
+                backupDatabase();
+            }
+        } else if (itemId == R.id.about) {
+            showDialog(DIALOG_ABOUT);
+        } else if (itemId == R.id.delete_db) {
+            showDialog(CONFIRM_DELETE_DB_DIALOG);
         }
 
         return optionConsumed;

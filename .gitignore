@@ -41,6 +41,9 @@ local.properties
 # Log files
 *.log
 
+# Heap dumps
+*.hprof
+
 # Captures (Android Studio screenshots)
 captures/
 

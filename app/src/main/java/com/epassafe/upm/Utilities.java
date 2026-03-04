@@ -1,6 +1,6 @@
 /*
  * Universal Password Manager
- * Copyright (c) 2010-2011 Adrian Smith - MODDIFIED By Steven Bennett for UPM - Epassafe
+ * Copyright (c) 2010-2011 Adrian Smith - MODIFIED By Steven Bennett for UPM - Epassafe
  *
  * This file is part of Universal Password Manager.
  *   
@@ -29,31 +29,13 @@ public class Utilities {
     public static final String AUTOMATIC_DATABASE_FILE = "aupm.db";
     public static final String PREFS_DB_FILE_NAME = "DB_FILE_NAME";
 
-    public static class VERSION_CODES {
-        public static final int HONEYCOMB = 11;
-    }
-
-    public static class VERSION {
-        /**
-         * The user-visible SDK version of the framework; its possible
-         * values are defined in {@link Build.VERSION_CODES}.
-         */
-        public static final int SDK_INT = Integer.parseInt(System.getProperty(
-                "ro.build.version.sdk", "0"));
-    }
 
     public static File getDatabaseFile(Activity activity) {
         String dbFileName = getDatabaseFileName(activity);
         if (dbFileName == null || dbFileName.equals("")) {
             return new File(activity.getFilesDir(), DEFAULT_DATABASE_FILE);
-            }
-        /* ADDED FOR AUTOBACKUP */
-        if (dbFileName == null || dbFileName.equals("")) {
-            return new File(activity.getFilesDir(), AUTOMATIC_DATABASE_FILE);
-        } /* END */
-        else {
-            return new File(activity.getFilesDir(), dbFileName);
         }
+        return new File(activity.getFilesDir(), dbFileName);
     }
 
     public static String getDatabaseFileName(Activity activity) {
@@ -78,21 +60,21 @@ public class Utilities {
         SharedPreferences settings = activity.getSharedPreferences(Prefs.PREFS_NAME, Activity.MODE_PRIVATE);
         SharedPreferences.Editor editor = settings.edit();
         editor.putString(PREFS_DB_FILE_NAME, dbFileName);
-        editor.commit();
+        editor.apply();
     }
 
     public static void setSyncMethod(String syncMethod, Activity activity) {
         SharedPreferences settings = activity.getSharedPreferences(Prefs.PREFS_NAME, Activity.MODE_PRIVATE);
         SharedPreferences.Editor editor = settings.edit();
         editor.putString(Prefs.SYNC_METHOD, syncMethod);
-        editor.commit();
+        editor.apply();
     }
 
     public static void setConfig(Context context, String fileName, String keyName, String value) {
         SharedPreferences settings = context.getSharedPreferences(fileName, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = settings.edit();
         editor.putString(keyName, value);
-        editor.commit();
+        editor.apply();
     }
 
     public static String getConfig(Context context, String fileName, String keyName) {

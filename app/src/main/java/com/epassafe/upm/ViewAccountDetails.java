@@ -1,6 +1,6 @@
 /*
  * Universal Password Manager
- \* Copyright (c) 2010-2011 Adrian Smith - MODDIFIED By Steven Bennett for UPM - Epassafe
+ \* Copyright (c) 2010-2011 Adrian Smith - MODIFIED By Steven Bennett for UPM - Epassafe
  *
  * This file is part of Universal Password Manager.
  *   
@@ -55,9 +55,7 @@ public class ViewAccountDetails extends Activity {
         getWindow().addFlags(LayoutParams.FLAG_KEEP_SCREEN_ON);
         /* End */
         
-        if (Utilities.VERSION.SDK_INT >= Utilities.VERSION_CODES.HONEYCOMB) {
-            getWindow().setFlags(LayoutParams.FLAG_SECURE, LayoutParams.FLAG_SECURE);
-        }
+        getWindow().setFlags(LayoutParams.FLAG_SECURE, LayoutParams.FLAG_SECURE);
         setContentView(R.layout.view_account_details);
     }
 
@@ -90,16 +88,14 @@ public class ViewAccountDetails extends Activity {
     public boolean onOptionsItemSelected(MenuItem item) {
         boolean optionConsumed = false;
 
-        switch (item.getItemId()) {
-        case R.id.edit:
+        int itemId = item.getItemId();
+        if (itemId == R.id.edit) {
             Intent i = new Intent(ViewAccountDetails.this, AddEditAccount.class);
             i.putExtra(AddEditAccount.MODE, AddEditAccount.EDIT_MODE);
             i.putExtra(AddEditAccount.ACCOUNT_TO_EDIT, account.getAccountName());
             startActivityForResult(i, AddEditAccount.EDIT_ACCOUNT_REQUEST_CODE);
-            break;
-        case R.id.delete:
+        } else if (itemId == R.id.delete) {
             showDialog(CONFIRM_DELETE_DIALOG);
-            break;
         }
 
         return optionConsumed;
