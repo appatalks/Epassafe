@@ -61,6 +61,10 @@ android {
         buildConfig = false
     }
 
+    testOptions {
+        unitTests.returnDefaultValues = true
+    }
+
     // Add packaging options to resolve manifest conflicts
     packaging {
         resources {
@@ -81,5 +85,8 @@ dependencies {
 
     // YubiKey NFC support — raw APDU challenge-response via IsoDep
     // No Yubico SDK needed; we talk directly to the YubiKey OTP applet
+
+    // Unit tests
+    testImplementation 'junit:junit:4.13.2'
 
 }
