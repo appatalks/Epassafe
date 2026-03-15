@@ -4,7 +4,7 @@
 
 ---
 
-**Epassafe (C) 2025** is a modern **no nonsense Password Manager** for Android devices.
+**Epassafe (C) 2026** is a modern **no nonsense Password Manager** for Android devices.
 
 Epassafe, a Password Manager of the most basic usage, that of encrypting your passwords using modern cryptography and allowing backups to be made to an external device (e.g., sdcard). 
 
