@@ -187,10 +187,21 @@
     <string name="yubikey_nfc_not_available">NFC ist auf diesem Gerät nicht verfügbar</string>
     <string name="yubikey_nfc_disabled">NFC ist deaktiviert. Bitte aktivieren Sie NFC in den Systemeinstellungen.</string>
     <string name="yubikey_wrong_key">Dies ist nicht der registrierte YubiKey. Bitte verwenden Sie den richtigen Schlüssel.</string>
-    <string name="yubikey_nfc_required_warning">⚠ NFC muss aktiviert sein. Wenn Sie Ihren YubiKey verlieren, können Sie Ihre Datenbank NICHT entsperren. Halten Sie einen Backup-YubiKey mit dem gleichen OATH-Geheimnis bereit.</string>
+    <string name="yubikey_nfc_required_warning">⚠ NFC muss aktiviert sein. Falls Sie Ihren YubiKey verlieren, verwenden Sie Ihren Wiederherstellungscode.</string>
     <string name="yubikey_verifying">YubiKey wird überprüft…</string>
     <string name="yubikey_verified">YubiKey überprüft ✓</string>
     <string name="yubikey_enrolling">YubiKey wird registriert…</string>
     <string name="yubikey_password_first">Bitte geben Sie zuerst Ihr Passwort ein</string>
     <string name="yubikey_require_tap">YubiKey 2FA ist aktiviert — tippen Sie Ihren YubiKey nach Eingabe des Passworts an</string>
+    <string name="yubikey_recovery_title">⚠ Wiederherstellungscode — NOTIEREN SIE DIESEN</string>
+    <string name="yubikey_recovery_message">Ihr YubiKey ist jetzt registriert. Wenn Sie Ihren YubiKey verlieren, benötigen Sie diesen Wiederherstellungscode plus Ihr Hauptpasswort.\n\nWiederherstellungscode:\n\n%s\n\nNotieren Sie diesen und bewahren Sie ihn sicher auf. Dieser Code wird NICHT erneut angezeigt.</string>
+    <string name="yubikey_recovery_saved">Ich habe meinen Wiederherstellungscode gespeichert</string>
+    <string name="yubikey_lost_key_link">YubiKey verloren? Tippen Sie hier zur Wiederherstellung</string>
+    <string name="yubikey_lost_key_title">Ohne YubiKey wiederherstellen</string>
+    <string name="yubikey_lost_key_message">Geben Sie unten Ihren Wiederherstellungscode ein. Dies entsperrt Ihre Datenbank und entfernt die YubiKey-Anforderung.\n\nSie benötigen Ihr Hauptpasswort (oben eingegeben) und Ihren Wiederherstellungscode.</string>
+    <string name="yubikey_recover_button">Wiederherstellen</string>
+    <string name="yubikey_recovery_code_hint">Wiederherstellungscode (z.B. A1B2-C3D4-…)</string>
+    <string name="yubikey_recovery_code_required">Bitte geben Sie den Wiederherstellungscode ein</string>
+    <string name="yubikey_recovery_success">Wiederherstellung erfolgreich! YubiKey entfernt. Datenbank verwendet nur noch Passwort.</string>
+    <string name="yubikey_recovery_failed">Wiederherstellung fehlgeschlagen: %s</string>
 </resources>

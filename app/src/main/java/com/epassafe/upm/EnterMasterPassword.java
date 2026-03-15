@@ -17,7 +17,9 @@
 package com.epassafe.upm;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.nfc.NfcAdapter;
 import android.nfc.Tag;
@@ -123,6 +125,18 @@ public class EnterMasterPassword extends Activity implements OnClickListener {
             yubiKeyEnrolled = true;
             yubiKeySection.setVisibility(View.VISIBLE);
             yubiKeyStatus.setText(R.string.yubikey_tap_to_unlock);
+
+            // Show "Lost YubiKey?" link if recovery file exists
+            TextView lostKeyLink = findViewById(R.id.yubikey_lost_key);
+            if (lostKeyLink != null && YubiKeyManager.hasRecoveryFile(databaseFileToDecrypt)) {
+                lostKeyLink.setVisibility(View.VISIBLE);
+                lostKeyLink.setOnClickListener(new OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        showRecoveryDialog();
+                    }
+                });
+            }
         }
 
         // Initialize NFC adapter
@@ -311,6 +325,115 @@ public class EnterMasterPassword extends Activity implements OnClickListener {
                 String msg = String.format(getString(R.string.yubikey_communication_error),
                         errorMessage != null ? errorMessage : "Unknown error");
                 UIUtilities.showToast(EnterMasterPassword.this, msg, true);
+            }
+        }
+    }
+
+    /**
+     * Show a dialog prompting for the recovery code when the user has lost their YubiKey.
+     */
+    private void showRecoveryDialog() {
+        final EditText recoveryInput = new EditText(this);
+        recoveryInput.setHint(R.string.yubikey_recovery_code_hint);
+        recoveryInput.setInputType(android.text.InputType.TYPE_CLASS_TEXT
+                | android.text.InputType.TYPE_TEXT_FLAG_CAP_CHARACTERS);
+        recoveryInput.setPadding(40, 20, 40, 20);
+
+        new AlertDialog.Builder(this)
+            .setTitle(R.string.yubikey_lost_key_title)
+            .setMessage(R.string.yubikey_lost_key_message)
+            .setView(recoveryInput)
+            .setPositiveButton(R.string.yubikey_recover_button, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    String code = recoveryInput.getText().toString().trim();
+                    if (code.isEmpty()) {
+                        UIUtilities.showToast(EnterMasterPassword.this,
+                                R.string.yubikey_recovery_code_required, false);
+                        return;
+                    }
+                    String pw = passwordField.getText().toString();
+                    if (pw.isEmpty()) {
+                        UIUtilities.showToast(EnterMasterPassword.this,
+                                R.string.yubikey_password_first, false);
+                        return;
+                    }
+                    // Run recovery in background
+                    new RecoverWithCodeTask(pw.toCharArray(), code).execute();
+                }
+            })
+            .setNegativeButton(R.string.cancel, null)
+            .show();
+    }
+
+    /**
+     * Background task to recover from a lost YubiKey using the recovery code.
+     * Decrypts recovery blob → reconstructs combined key → opens DB →
+     * re-encrypts with password only → deletes enrollment files.
+     */
+    private class RecoverWithCodeTask extends AsyncTask<Void, Void, Boolean> {
+        private final char[] password;
+        private final String recoveryCode;
+        private String errorMessage;
+
+        RecoverWithCodeTask(char[] password, String recoveryCode) {
+            this.password = password;
+            this.recoveryCode = recoveryCode;
+        }
+
+        @Override
+        protected Boolean doInBackground(Void... params) {
+            try {
+                // Decrypt the recovery blob to get the HMAC response
+                byte[] hmacResponse = YubiKeyManager.decryptRecoveryBlob(
+                        databaseFileToDecrypt, password, recoveryCode);
+                if (hmacResponse == null) {
+                    errorMessage = "Invalid recovery code or password";
+                    return false;
+                }
+
+                // Reconstruct the combined key (password + HMAC response)
+                char[] combinedKey = YubiKeyManager.combinePasswordWithYubiKeyResponse(
+                        password, hmacResponse);
+
+                // Open the database with the combined key
+                decryptedPasswordDatabase = new PasswordDatabase(
+                        databaseFileToDecrypt, combinedKey);
+
+                // Re-encrypt with password only (remove YubiKey requirement)
+                decryptedPasswordDatabase.changePassword(password.clone());
+                decryptedPasswordDatabase.save();
+
+                // Delete enrollment and recovery files
+                YubiKeyManager.removeAllEnrollment(databaseFileToDecrypt);
+
+                // Clean up
+                Arrays.fill(combinedKey, '\0');
+                Arrays.fill(hmacResponse, (byte) 0);
+
+                return true;
+            } catch (Exception e) {
+                Log.e("EnterMasterPassword", "Recovery failed", e);
+                errorMessage = e.getMessage();
+                return false;
+            } finally {
+                Arrays.fill(password, '\0');
+            }
+        }
+
+        @Override
+        protected void onPostExecute(Boolean success) {
+            if (success) {
+                UIUtilities.showToast(EnterMasterPassword.this,
+                        R.string.yubikey_recovery_success, true);
+                // Database is now open and re-encrypted without YubiKey
+                setResult(RESULT_OK);
+                finish();
+            } else {
+                UIUtilities.showToast(EnterMasterPassword.this,
+                        String.format(getString(R.string.yubikey_recovery_failed),
+                                errorMessage != null ? errorMessage : "Unknown error"),
+                        true);
             }
         }
     }

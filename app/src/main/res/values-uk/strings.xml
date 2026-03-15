@@ -198,10 +198,21 @@
     <string name="yubikey_nfc_not_available">NFC недоступний на цьому пристрої</string>
     <string name="yubikey_nfc_disabled">NFC вимкнено. Будь ласка, увімкніть NFC в налаштуваннях системи.</string>
     <string name="yubikey_wrong_key">Це не зареєстрований YubiKey. Будь ласка, використовуйте правильний ключ.</string>
-    <string name="yubikey_nfc_required_warning">⚠ NFC має бути увімкнено. Якщо ви втратите YubiKey, ви НЕ зможете розблокувати базу даних. Тримайте резервний YubiKey з тим же OATH секретом.</string>
+    <string name="yubikey_nfc_required_warning">⚠ NFC має бути увімкнено. Якщо ви втратите YubiKey, використовуйте код відновлення для доступу.</string>
     <string name="yubikey_verifying">Перевірка YubiKey…</string>
     <string name="yubikey_verified">YubiKey перевірено ✓</string>
     <string name="yubikey_enrolling">Реєстрація YubiKey…</string>
     <string name="yubikey_password_first">Будь ласка, спочатку введіть пароль</string>
     <string name="yubikey_require_tap">YubiKey 2FA увімкнено — торкніться YubiKey після введення пароля</string>
+    <string name="yubikey_recovery_title">⚠ Код відновлення — ЗАПИШІТЬ ЙОГО</string>
+    <string name="yubikey_recovery_message">Ваш YubiKey зареєстровано. Якщо ви втратите YubiKey, вам знадобиться цей код відновлення та ваш головний пароль.\n\nКод відновлення:\n\n%s\n\nЗапишіть його та зберігайте в безпечному місці. Цей код більше НЕ буде показано.</string>
+    <string name="yubikey_recovery_saved">Я зберіг код відновлення</string>
+    <string name="yubikey_lost_key_link">Втратили YubiKey? Натисніть тут для відновлення</string>
+    <string name="yubikey_lost_key_title">Відновлення без YubiKey</string>
+    <string name="yubikey_lost_key_message">Введіть код відновлення нижче. Це розблокує вашу базу даних та видалить вимогу YubiKey.\n\nВам потрібен головний пароль (введений вище) та код відновлення.</string>
+    <string name="yubikey_recover_button">Відновити</string>
+    <string name="yubikey_recovery_code_hint">Код відновлення (напр. A1B2-C3D4-…)</string>
+    <string name="yubikey_recovery_code_required">Будь ласка, введіть код відновлення</string>
+    <string name="yubikey_recovery_success">Відновлення успішне! YubiKey видалено. База даних тепер використовує лише пароль.</string>
+    <string name="yubikey_recovery_failed">Відновлення не вдалося: %s</string>
 </resources>

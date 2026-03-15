@@ -324,6 +324,7 @@ public class ChangeMasterPassword extends Activity {
         private final Tag tag;
         private final String existingPasswordStr;
         private String errorMessage;
+        private String recoveryCode; // Generated during enrollment, shown to user after
 
         EnrollYubiKeyTask(Tag tag) {
             this.tag = tag;
@@ -365,7 +366,6 @@ public class ChangeMasterPassword extends Activity {
                         if (slot == 2) {
                             Log.w("ChangeMasterPassword", "Slot 2 failed, trying slot 1", e);
                             slot = 1;
-                            // Need to reconnect after failed APDU
                             isoDep.close();
                             isoDep.connect();
                             response = YubiKeyManager.performChallengeResponse(isoDep, slot, challenge);
@@ -384,6 +384,10 @@ public class ChangeMasterPassword extends Activity {
 
                     // Save enrollment sidecar file
                     YubiKeyManager.saveEnrollment(dbFile, slot, challenge, response);
+
+                    // Generate recovery code and save recovery blob
+                    recoveryCode = YubiKeyManager.generateRecoveryCode();
+                    YubiKeyManager.saveRecoveryBlob(dbFile, existingPassword, recoveryCode, response);
 
                     // Clean up
                     Arrays.fill(combinedPassword, '\0');
@@ -417,8 +421,9 @@ public class ChangeMasterPassword extends Activity {
                 yubiKeyEnrollmentStatus.setText(R.string.yubikey_enrolled);
                 yubiKeyNfcPrompt.setVisibility(View.GONE);
                 yubiKeyEnrollButton.setText(R.string.yubikey_remove_button);
-                UIUtilities.showToast(ChangeMasterPassword.this,
-                        R.string.yubikey_enrollment_success, true);
+
+                // Show recovery code dialog — user MUST write this down
+                showRecoveryCodeDialog(recoveryCode);
             } else {
                 yubiKeyNfcPrompt.setText(R.string.yubikey_tap_to_enroll);
                 String msg = String.format(getString(R.string.yubikey_enrollment_failed),
@@ -426,6 +431,26 @@ public class ChangeMasterPassword extends Activity {
                 UIUtilities.showToast(ChangeMasterPassword.this, msg, true);
             }
         }
+    }
+
+    /**
+     * Show a dialog with the recovery code after YubiKey enrollment.
+     * The user must write this down — it's the only way to recover if the YubiKey is lost.
+     */
+    private void showRecoveryCodeDialog(String recoveryCode) {
+        new AlertDialog.Builder(this)
+            .setTitle(R.string.yubikey_recovery_title)
+            .setMessage(getString(R.string.yubikey_recovery_message, recoveryCode))
+            .setPositiveButton(R.string.yubikey_recovery_saved, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    UIUtilities.showToast(ChangeMasterPassword.this,
+                            R.string.yubikey_enrollment_success, true);
+                }
+            })
+            .setCancelable(false) // Force user to acknowledge
+            .setIcon(android.R.drawable.ic_dialog_info)
+            .show();
     }
 
     /**
@@ -482,8 +507,8 @@ public class ChangeMasterPassword extends Activity {
                     database.changePassword(existingPassword.clone());
                     database.save();
 
-                    // Remove enrollment
-                    YubiKeyManager.removeEnrollment(dbFile);
+                    // Remove enrollment and recovery files
+                    YubiKeyManager.removeAllEnrollment(dbFile);
 
                     Arrays.fill(existingPassword, '\0');
                     return true;
