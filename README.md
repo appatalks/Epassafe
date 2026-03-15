@@ -24,6 +24,7 @@ Or get it from the [Google Play Store](https://play.google.com/store/apps/detail
 ```markdown
 ***History***
 
+ - **v4.3**: Backup to Downloads & restore from file picker (no extra permissions), AGP 9.0.1, Gradle 9.1, removed legacy libraries, safety & localization improvements, AAB build support
  - **v4.1**: Android Updates, library updates
  - **v4.0**: Android Updates, double login patch fix
  - **v3.9**: Code cleanup, corrections - Argon2id not used.  
