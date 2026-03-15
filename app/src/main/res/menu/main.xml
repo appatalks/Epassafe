@@ -18,8 +18,6 @@
 <item android:icon="@android:drawable/ic_menu_more" android:alphabeticShortcut="m" android:title="@string/more" android:id="@+id/more">
         <menu>
 <item android:title="@string/change_master_password" android:id="@+id/change_master_password"></item>
-<item android:id="@+id/restore" android:title="@string/restore"></item>
-<item android:id="@+id/backup" android:title="@string/backup"></item>
 <item android:id="@+id/backup_downloads" android:title="@string/backup_to_downloads"></item>
 <item android:id="@+id/restore_downloads" android:title="@string/restore_from_downloads"></item>
 <item android:id="@+id/delete_db" android:title="@string/delete_db"></item>

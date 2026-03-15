@@ -34,8 +34,8 @@
     <string name="account_already_exists_error">Акаунт з такою назвою вже існує</string>
     <string name="account_name_required_error">Назва акаунта обов\'язкова</string>
     <string name="existing_master_password">Поточний головний пароль</string>
-    <string name="change_master_password">Змінити головний пароль</string>
-    <string name="more">Більше</string>
+    <string name="change_master_password">Конфігурація паролю</string>
+    <string name="more">Налаштування</string>
     <string name="password_too_short">Головний пароль має бути довжиною не менше %1$d символів</string>
     <string name="new_passwords_dont_match">Нові паролі не співпадають</string>
     <string name="new_password">Новий пароль</string>
@@ -170,8 +170,8 @@
     <string name="export_and_password_changed">Головний пароль змінено та база даних експортована в: %s</string>
 
     <!-- Downloads Backup/Restore Strings -->
-    <string name="backup_to_downloads">Резервне копіювання в Завантаження</string>
-    <string name="restore_from_downloads">Відновити з Завантажень</string>
+    <string name="backup_to_downloads">Резервне копіювання бази даних</string>
+    <string name="restore_from_downloads">Відновити базу даних</string>
     <string name="backup_downloads_complete">База даних збережена в папку Завантаження</string>
     <string name="backup_downloads_failed">Не вдалося зберегти базу даних в папку Завантаження</string>
     <string name="backup_downloads_exists">Резервна копія вже існує в папці Завантаження.\nБажаєте перезаписати?</string>
@@ -207,7 +207,7 @@
     <string name="yubikey_nfc_not_available">NFC недоступний на цьому пристрої</string>
     <string name="yubikey_nfc_disabled">NFC вимкнено. Будь ласка, увімкніть NFC в налаштуваннях системи.</string>
     <string name="yubikey_wrong_key">Це не зареєстрований YubiKey. Будь ласка, використовуйте правильний ключ.</string>
-    <string name="yubikey_nfc_required_warning">⚠ Потрібне NFC або USB з\'єднання. Якщо ви втратите YubiKey, використовуйте код відновлення.</string>
+    <string name="yubikey_nfc_required_warning">⚠ Потрібне NFC або USB з\'єднання. Якщо ви втратите YubiKey, використовуйте код відновлення. Після реєстрації вийдіть з налаштувань для завершення.</string>
     <string name="yubikey_verifying">Перевірка YubiKey…</string>
     <string name="yubikey_verified">YubiKey перевірено ✓</string>
     <string name="yubikey_enrolling">Реєстрація YubiKey…</string>

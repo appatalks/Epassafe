@@ -32,8 +32,8 @@ android {
         applicationId = "com.epassafe.upm"
         minSdk = 33
         targetSdk = 35
-        versionCode = 43
-        versionName = "4.3"
+        versionCode = 44
+        versionName = "4.4"
     }
 
     buildTypes {

@@ -34,8 +34,8 @@
     <string name="account_already_exists_error">An account with this name already exists</string>
     <string name="account_name_required_error">Account Name is required</string>
     <string name="existing_master_password">Existing master password</string>
-    <string name="change_master_password">Change Master Password</string>
-    <string name="more">More</string>
+    <string name="change_master_password">Password Configuration</string>
+    <string name="more">Settings</string>
     <string name="password_too_short">Master password must be at least %1$d characters long</string>
     <string name="new_passwords_dont_match">New passwords don\'t match</string>
     <string name="new_password">New Password</string>
@@ -161,8 +161,8 @@
     <string name="incorrect_password">Incorrect password</string>
 
     <!-- Downloads Backup/Restore Strings -->
-    <string name="backup_to_downloads">Backup to Downloads</string>
-    <string name="restore_from_downloads">Restore from Downloads</string>
+    <string name="backup_to_downloads">Backup Database</string>
+    <string name="restore_from_downloads">Restore Database</string>
     <string name="backup_downloads_complete">Database backed up to Downloads folder</string>
     <string name="backup_downloads_failed">Failed to backup database to Downloads folder</string>
     <string name="backup_downloads_exists">A backup already exists in the Downloads folder.\nDo you want to overwrite?</string>
@@ -207,7 +207,7 @@
     <string name="yubikey_usb_detected">🔌 YubiKey detected via USB</string>
     <string name="yubikey_plug_in_or_enable_nfc">Plug in your YubiKey via USB, or enable NFC and tap</string>
     <string name="yubikey_wrong_key">This is not the enrolled YubiKey. Please use the correct key.</string>
-    <string name="yubikey_nfc_required_warning">⚠ Requires NFC or USB connection. If you lose your YubiKey, use your recovery code to regain access.</string>
+    <string name="yubikey_nfc_required_warning">⚠ Requires NFC or USB connection. If you lose your YubiKey, use your recovery code to regain access. Leave settings after enrolled to complete.</string>
     <string name="yubikey_verifying">Verifying YubiKey…</string>
     <string name="yubikey_verified">YubiKey verified ✓</string>
     <string name="yubikey_enrolling">Enrolling YubiKey…</string>

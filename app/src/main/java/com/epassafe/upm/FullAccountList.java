@@ -156,26 +156,6 @@ public class FullAccountList extends AccountsList {
         } else if (itemId == R.id.change_master_password) {
             startActivity(new Intent(FullAccountList.this, ChangeMasterPassword.class));
             return true;
-        } else if (itemId == R.id.restore) {
-            // Check to ensure there's a file to restore
-            File restoreFile = new File(getExternalFilesDir("database"), Utilities.DEFAULT_DATABASE_FILE);
-            if (restoreFile.exists()) {
-                showDialog(CONFIRM_RESTORE_DIALOG);
-            } else {
-                String messageRes = getString(R.string.restore_file_doesnt_exist);
-                String message = String.format(messageRes, restoreFile.getAbsolutePath());
-                Toast.makeText(this, message, Toast.LENGTH_LONG).show();
-            }
-            return true;
-        } else if (itemId == R.id.backup) {
-            // If there's already a backup file prompt the user if they want to overwrite
-            File backupFile = new File(getExternalFilesDir("database"), Utilities.DEFAULT_DATABASE_FILE);
-            if (backupFile.exists()) {
-                showDialog(CONFIRM_OVERWRITE_BACKUP_FILE);
-            } else {
-                backupDatabase();
-            }
-            return true;
         } else if (itemId == R.id.about) {
             showDialog(DIALOG_ABOUT);
             return true;

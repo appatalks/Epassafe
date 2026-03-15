@@ -33,8 +33,8 @@
     <string name="account_already_exists_error">Ein Konto mit deisem Namen existiert bereits</string>
     <string name="account_name_required_error">Kontoname wird benötigt</string>
     <string name="existing_master_password">Bestehendes Hauptpasswort</string>
-    <string name="change_master_password">Geändertes Hauptpasswort</string>
-    <string name="more">Mehr</string>
+    <string name="change_master_password">Passwortkonfiguration</string>
+    <string name="more">Einstellungen</string>
     <string name="password_too_short">Hauptpasswort muss mindestens %1$d Zeichen lang sein</string>
     <string name="new_passwords_dont_match">Neue Passwörter stimmen nicht überein</string>
     <string name="new_password">Neues Passwort</string>
@@ -159,8 +159,8 @@
     <string name="export_csv_success">Datenbank exportiert nach: %s</string>
     <string name="export_csv_failed">Fehler beim Exportieren der Datenbank als CSV-Datei</string>
     <string name="export_and_password_changed">Hauptpasswort geändert und Datenbank exportiert nach: %s</string>
-    <string name="backup_to_downloads">Sicherung in Downloads</string>
-    <string name="restore_from_downloads">Aus Downloads wiederherstellen</string>
+    <string name="backup_to_downloads">Datenbank sichern</string>
+    <string name="restore_from_downloads">Datenbank wiederherstellen</string>
     <string name="backup_downloads_complete">Datenbank in den Downloads-Ordner gesichert</string>
     <string name="backup_downloads_failed">Fehler beim Sichern der Datenbank in den Downloads-Ordner</string>
     <string name="backup_downloads_exists">Eine Sicherung existiert bereits im Downloads-Ordner.\nMöchten Sie diese überschreiben?</string>
@@ -196,7 +196,7 @@
     <string name="yubikey_nfc_not_available">NFC ist auf diesem Gerät nicht verfügbar</string>
     <string name="yubikey_nfc_disabled">NFC ist deaktiviert. Bitte aktivieren Sie NFC in den Systemeinstellungen.</string>
     <string name="yubikey_wrong_key">Dies ist nicht der registrierte YubiKey. Bitte verwenden Sie den richtigen Schlüssel.</string>
-    <string name="yubikey_nfc_required_warning">⚠ NFC oder USB-Verbindung erforderlich. Falls Sie Ihren YubiKey verlieren, verwenden Sie Ihren Wiederherstellungscode.</string>
+    <string name="yubikey_nfc_required_warning">⚠ NFC oder USB-Verbindung erforderlich. Falls Sie Ihren YubiKey verlieren, verwenden Sie Ihren Wiederherstellungscode. Nach der Registrierung Einstellungen verlassen zum Abschließen.</string>
     <string name="yubikey_verifying">YubiKey wird überprüft…</string>
     <string name="yubikey_verified">YubiKey überprüft ✓</string>
     <string name="yubikey_enrolling">YubiKey wird registriert…</string>

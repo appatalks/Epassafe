@@ -399,19 +399,27 @@ public class YubiKeyManager {
 
         // Step 1: SELECT the OTP applet
         byte[] selectApdu = buildSelectApdu(OTP_AID);
+        Log.d(TAG, "Sending SELECT APDU (" + selectApdu.length + " bytes)");
         byte[] selectResponse = isoDep.transceive(selectApdu);
+        Log.d(TAG, "SELECT response: " + selectResponse.length + " bytes, SW="
+                + String.format("%04X", extractSW(selectResponse)));
         checkSW(selectResponse, "SELECT OTP applet");
 
         // Step 2: Send HMAC-SHA1 challenge
         byte slotP2 = (slot == 1) ? SLOT1_HMAC : SLOT2_HMAC;
         byte[] hmacApdu = buildHmacApdu(slotP2, challenge);
+        Log.d(TAG, "Sending HMAC APDU for slot " + slot + " (" + hmacApdu.length + " bytes)");
         byte[] hmacResponse = isoDep.transceive(hmacApdu);
+        Log.d(TAG, "HMAC response: " + hmacResponse.length + " bytes, SW="
+                + String.format("%04X", extractSW(hmacResponse)));
         checkSW(hmacResponse, "HMAC-SHA1 challenge-response");
 
         // Extract the 20-byte HMAC result (response minus 2-byte status word)
         if (hmacResponse.length < HMAC_RESPONSE_LENGTH + 2) {
-            throw new YubiKeyException("Response too short: expected at least "
-                    + (HMAC_RESPONSE_LENGTH + 2) + " bytes, got " + hmacResponse.length);
+            throw new YubiKeyException(
+                    "YubiKey slot " + slot + " did not return HMAC data (got " + hmacResponse.length
+                    + " bytes). Is HMAC-SHA1 Challenge-Response configured in slot " + slot
+                    + "? Use the YubiKey Manager desktop app to configure it.");
         }
 
         byte[] result = new byte[HMAC_RESPONSE_LENGTH];
@@ -419,6 +427,13 @@ public class YubiKeyManager {
 
         Log.i(TAG, "HMAC-SHA1 challenge-response successful (slot " + slot + ")");
         return result;
+    }
+
+    /** Extract SW1-SW2 from an APDU response (last 2 bytes). */
+    private static int extractSW(byte[] response) {
+        if (response == null || response.length < 2) return -1;
+        return ((response[response.length - 2] & 0xFF) << 8)
+                | (response[response.length - 1] & 0xFF);
     }
 
     /**
