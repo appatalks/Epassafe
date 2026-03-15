@@ -19,8 +19,14 @@ package com.epassafe.upm;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentFilter;
+import android.hardware.usb.UsbDevice;
+import android.hardware.usb.UsbDeviceConnection;
+import android.hardware.usb.UsbManager;
 import android.nfc.NfcAdapter;
 import android.nfc.Tag;
 import android.nfc.tech.IsoDep;
@@ -67,6 +73,7 @@ public class EnterMasterPassword extends Activity implements OnClickListener {
     private boolean yubiKeyResponseReceived = false;
     private byte[] yubiKeyResponse = null;
     private NfcAdapter nfcAdapter;
+    private UsbManager usbManager;
     private LinearLayout yubiKeySection;
     private TextView yubiKeyStatus;
     private TextView yubiKeyResult;
@@ -159,12 +166,33 @@ public class EnterMasterPassword extends Activity implements OnClickListener {
 
         // Initialize NFC adapter
         nfcAdapter = NfcAdapter.getDefaultAdapter(this);
-        if (yubiKeyEnrolled && nfcAdapter == null) {
-            yubiKeyStatus.setText(R.string.yubikey_nfc_not_available);
-            yubiKeyStatus.setTextColor(0xFFFF0000);
-        } else if (yubiKeyEnrolled && !nfcAdapter.isEnabled()) {
-            yubiKeyStatus.setText(R.string.yubikey_nfc_disabled);
-            yubiKeyStatus.setTextColor(0xFFFF9800);
+
+        // Initialize USB manager
+        usbManager = (UsbManager) getSystemService(Context.USB_SERVICE);
+
+        if (yubiKeyEnrolled) {
+            boolean hasNfc = nfcAdapter != null && nfcAdapter.isEnabled();
+            boolean hasUsb = usbManager != null;
+
+            if (!hasNfc && !hasUsb) {
+                yubiKeyStatus.setText(R.string.yubikey_no_transport);
+                yubiKeyStatus.setTextColor(0xFFFF0000);
+            } else if (!hasNfc && nfcAdapter != null) {
+                // NFC exists but disabled — USB still works
+                yubiKeyStatus.setTextColor(0xFFFF9800);
+            }
+
+            // Check if a YubiKey is already plugged in via USB
+            if (hasUsb) {
+                UsbDevice usbYubiKey = YubiKeyManager.findYubiKey(usbManager);
+                if (usbYubiKey != null) {
+                    yubiKeyStatus.setText(R.string.yubikey_usb_detected);
+                    // Auto-process if we have permission
+                    if (usbManager.hasPermission(usbYubiKey)) {
+                        processUsbYubiKey(usbYubiKey);
+                    }
+                }
+            }
         }
 
         decryptDatabaseTask = (DecryptDatabase) getLastNonConfigurationInstance();
@@ -227,6 +255,13 @@ public class EnterMasterPassword extends Activity implements OnClickListener {
                     android.app.PendingIntent.FLAG_MUTABLE);
             nfcAdapter.enableForegroundDispatch(this, pendingIntent, null, null);
         }
+
+        // Register USB device attached receiver
+        if (yubiKeyEnrolled && usbManager != null) {
+            IntentFilter usbFilter = new IntentFilter();
+            usbFilter.addAction(UsbManager.ACTION_USB_DEVICE_ATTACHED);
+            registerReceiver(usbReceiver, usbFilter);
+        }
     }
 
     @Override
@@ -236,15 +271,156 @@ public class EnterMasterPassword extends Activity implements OnClickListener {
         if (nfcAdapter != null) {
             nfcAdapter.disableForegroundDispatch(this);
         }
+        // Unregister USB receiver
+        try {
+            unregisterReceiver(usbReceiver);
+        } catch (IllegalArgumentException ignored) {
+            // Not registered
+        }
+    }
+
+    /** BroadcastReceiver for USB YubiKey plug-in events. */
+    private final BroadcastReceiver usbReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if (UsbManager.ACTION_USB_DEVICE_ATTACHED.equals(intent.getAction())) {
+                UsbDevice device = intent.getParcelableExtra(UsbManager.EXTRA_DEVICE, UsbDevice.class);
+                if (device != null && YubiKeyManager.isYubiKey(device) && yubiKeyEnrolled) {
+                    if (usbManager.hasPermission(device)) {
+                        processUsbYubiKey(device);
+                    } else {
+                        // Request USB permission
+                        android.app.PendingIntent pi = android.app.PendingIntent.getBroadcast(
+                                EnterMasterPassword.this, 0,
+                                new Intent("com.epassafe.upm.USB_PERMISSION"),
+                                android.app.PendingIntent.FLAG_MUTABLE);
+                        usbManager.requestPermission(device, pi);
+                    }
+                }
+            }
+        }
+    };
+
+    /**
+     * Initiate HMAC-SHA1 challenge-response with a USB-connected YubiKey.
+     */
+    private void processUsbYubiKey(UsbDevice device) {
+        if (!yubiKeyEnrolled || yubiKeyResponseReceived) return;
+
+        // Check password for PASSWORD_REQUIRED mode
+        if (yubiKeyMode == YubiKeyManager.UnlockMode.PASSWORD_REQUIRED) {
+            String passwordStr = passwordField.getText().toString();
+            if (passwordStr.isEmpty()) {
+                UIUtilities.showToast(this, R.string.yubikey_password_first, false);
+                return;
+            }
+        }
+
+        if (yubiKeyProgress != null) yubiKeyProgress.setVisibility(View.VISIBLE);
+        if (yubiKeyStatus != null) yubiKeyStatus.setText(R.string.yubikey_verifying);
+
+        new ProcessUsbYubiKeyTask(device).execute();
+    }
+
+    /**
+     * Background task to communicate with YubiKey via USB HID.
+     */
+    private class ProcessUsbYubiKeyTask extends AsyncTask<Void, Void, byte[]> {
+        private final UsbDevice device;
+        private String errorMessage;
+
+        ProcessUsbYubiKeyTask(UsbDevice device) {
+            this.device = device;
+        }
+
+        @Override
+        protected byte[] doInBackground(Void... params) {
+            try {
+                byte[] challenge = YubiKeyManager.loadChallenge(databaseFileToDecrypt);
+                if (challenge == null) {
+                    errorMessage = "No enrollment data found";
+                    return null;
+                }
+
+                int slot = YubiKeyManager.loadSlot(databaseFileToDecrypt);
+
+                UsbDeviceConnection connection = usbManager.openDevice(device);
+                if (connection == null) {
+                    errorMessage = "Cannot open USB device — permission denied?";
+                    return null;
+                }
+
+                try {
+                    byte[] response = YubiKeyManager.performChallengeResponseUsb(
+                            connection, device, slot, challenge);
+
+                    byte[] expectedResponse = YubiKeyManager.loadExpectedResponse(databaseFileToDecrypt);
+                    if (expectedResponse != null && !YubiKeyManager.verifyResponse(response, expectedResponse)) {
+                        errorMessage = getString(R.string.yubikey_wrong_key);
+                        return null;
+                    }
+
+                    return response;
+                } finally {
+                    connection.close();
+                }
+            } catch (YubiKeyManager.YubiKeyException e) {
+                Log.e("EnterMasterPassword", "USB YubiKey error", e);
+                errorMessage = e.getMessage();
+                return null;
+            } catch (Exception e) {
+                Log.e("EnterMasterPassword", "USB YubiKey error", e);
+                errorMessage = e.getMessage();
+                return null;
+            }
+        }
+
+        @Override
+        protected void onPostExecute(byte[] response) {
+            if (yubiKeyProgress != null) yubiKeyProgress.setVisibility(View.GONE);
+
+            if (response != null) {
+                yubiKeyResponse = response;
+                yubiKeyResponseReceived = true;
+
+                if (yubiKeyStatus != null) {
+                    yubiKeyStatus.setText(R.string.yubikey_verified);
+                    yubiKeyStatus.setTextColor(0xFF4CAF50);
+                }
+                if (yubiKeyResult != null) {
+                    yubiKeyResult.setText(R.string.yubikey_verified);
+                    yubiKeyResult.setVisibility(View.VISIBLE);
+                }
+
+                openDatabase();
+            } else {
+                if (yubiKeyStatus != null) {
+                    yubiKeyStatus.setText(R.string.yubikey_tap_to_unlock);
+                }
+                String msg = String.format(getString(R.string.yubikey_communication_error),
+                        errorMessage != null ? errorMessage : "Unknown error");
+                UIUtilities.showToast(EnterMasterPassword.this, msg, true);
+            }
+        }
     }
 
     @Override
     protected void onNewIntent(Intent intent) {
         super.onNewIntent(intent);
 
-        // Handle NFC YubiKey tap
         if (intent == null) return;
         String action = intent.getAction();
+
+        // Handle USB YubiKey plug-in
+        if (UsbManager.ACTION_USB_DEVICE_ATTACHED.equals(action)) {
+            UsbDevice device = intent.getParcelableExtra(UsbManager.EXTRA_DEVICE, UsbDevice.class);
+            if (device != null && YubiKeyManager.isYubiKey(device) && yubiKeyEnrolled) {
+                processUsbYubiKey(device);
+            }
+            return;
+        }
+
+        // Handle NFC YubiKey tap
         if (NfcAdapter.ACTION_TAG_DISCOVERED.equals(action)
                 || NfcAdapter.ACTION_TECH_DISCOVERED.equals(action)
                 || NfcAdapter.ACTION_NDEF_DISCOVERED.equals(action)) {

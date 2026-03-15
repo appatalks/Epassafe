@@ -181,22 +181,22 @@
     <string name="restore_downloads_success">База даних успішно відновлена з Завантажень</string>
 
     <!-- YubiKey 2FA Strings -->
-    <string name="yubikey_2fa_section_title">YubiKey 2FA (NFC)</string>
+    <string name="yubikey_2fa_section_title">YubiKey 2FA (NFC / USB)</string>
     <string name="yubikey_enrolled">YubiKey зареєстровано ✓</string>
     <string name="yubikey_not_enrolled">YubiKey не зареєстровано</string>
     <string name="yubikey_enable_2fa">Увімкнути YubiKey 2FA</string>
     <string name="yubikey_enroll_button">Зареєструвати YubiKey</string>
     <string name="yubikey_remove_button">Видалити YubiKey</string>
-    <string name="yubikey_tap_to_enroll">Торкніться YubiKey зараз для реєстрації…</string>
-    <string name="yubikey_tap_to_unlock">🔑 Введіть пароль, потім торкніться YubiKey</string>
-    <string name="yubikey_tap_to_unlock_passwordless">🔑 Торкніться YubiKey для розблокування</string>
-    <string name="yubikey_tap_to_unlock_optional">🔑 Введіть пароль АБО торкніться YubiKey</string>
-    <string name="yubikey_tap_now">Торкніться YubiKey зараз…</string>
-    <string name="yubikey_description">Додає другий фактор через NFC вашого YubiKey. Потрібно торкатися YubiKey кожного разу при розблокуванні бази даних. Потрібен YubiKey 5 NFC або сумісний.</string>
+    <string name="yubikey_tap_to_enroll">Торкніться або підключіть YubiKey для реєстрації…</string>
+    <string name="yubikey_tap_to_unlock">🔑 Введіть пароль, потім торкніться або підключіть YubiKey</string>
+    <string name="yubikey_tap_to_unlock_passwordless">🔑 Торкніться або підключіть YubiKey для розблокування</string>
+    <string name="yubikey_tap_to_unlock_optional">🔑 Введіть пароль АБО торкніться/підключіть YubiKey</string>
+    <string name="yubikey_tap_now">Торкніться або підключіть YubiKey…</string>
+    <string name="yubikey_description">Додає другий фактор через NFC або USB вашого YubiKey. Потрібен YubiKey 5 NFC/USB-C або сумісний.</string>
     <string name="yubikey_mode_password_required">🔒 Пароль + YubiKey (обидва потрібні)</string>
     <string name="yubikey_mode_passwordless">🔑 Тільки YubiKey (пароль не потрібен)</string>
     <string name="yubikey_mode_optional">🔓 Пароль АБО YubiKey (будь-що працює)</string>
-    <string name="yubikey_enter_password_or_tap">Введіть пароль або торкніться YubiKey для розблокування</string>
+    <string name="yubikey_enter_password_or_tap">Введіть пароль або торкніться/підключіть YubiKey</string>
     <string name="yubikey_enrollment_success">YubiKey успішно зареєстровано! База даних перешифрована з 2FA.</string>
     <string name="yubikey_enrollment_failed">Реєстрація YubiKey не вдалася: %s</string>
     <string name="yubikey_removed_success">YubiKey видалено. База даних перешифрована тільки з паролем.</string>
@@ -204,7 +204,7 @@
     <string name="yubikey_nfc_not_available">NFC недоступний на цьому пристрої</string>
     <string name="yubikey_nfc_disabled">NFC вимкнено. Будь ласка, увімкніть NFC в налаштуваннях системи.</string>
     <string name="yubikey_wrong_key">Це не зареєстрований YubiKey. Будь ласка, використовуйте правильний ключ.</string>
-    <string name="yubikey_nfc_required_warning">⚠ NFC має бути увімкнено. Якщо ви втратите YubiKey, використовуйте код відновлення для доступу.</string>
+    <string name="yubikey_nfc_required_warning">⚠ Потрібне NFC або USB з\'єднання. Якщо ви втратите YubiKey, використовуйте код відновлення.</string>
     <string name="yubikey_verifying">Перевірка YubiKey…</string>
     <string name="yubikey_verified">YubiKey перевірено ✓</string>
     <string name="yubikey_enrolling">Реєстрація YubiKey…</string>

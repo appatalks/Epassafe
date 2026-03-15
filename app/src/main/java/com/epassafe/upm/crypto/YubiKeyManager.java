@@ -16,6 +16,12 @@
  */
 package com.epassafe.upm.crypto;
 
+import android.hardware.usb.UsbConstants;
+import android.hardware.usb.UsbDevice;
+import android.hardware.usb.UsbDeviceConnection;
+import android.hardware.usb.UsbEndpoint;
+import android.hardware.usb.UsbInterface;
+import android.hardware.usb.UsbManager;
 import android.nfc.tech.IsoDep;
 import android.util.Base64;
 import android.util.Log;
@@ -469,6 +475,209 @@ public class YubiKeyManager {
         public YubiKeyException(String message) {
             super(message);
         }
+    }
+
+    // ═════════════════════════════════════════════════════════════════════
+    //  USB HID challenge-response (YubiKey plugged in via USB-C/USB-A)
+    // ═════════════════════════════════════════════════════════════════════
+
+    /** Yubico USB vendor ID. */
+    public static final int YUBICO_VENDOR_ID = 0x1050;
+
+    /** YubiKey HID frame size. */
+    private static final int HID_FRAME_SIZE = 64;
+
+    /** Slot command bytes for USB HID protocol. */
+    private static final byte USB_SLOT1_HMAC = 0x30;
+    private static final byte USB_SLOT2_HMAC = 0x38;
+
+    /** Status flags in HID response. */
+    private static final int STATUS_FLAG_RESPONSE_PENDING = 0x40;
+
+    /** USB timeout in milliseconds. */
+    private static final int USB_TIMEOUT_MS = 10000;
+
+    /**
+     * Check if a USB device is a YubiKey.
+     */
+    public static boolean isYubiKey(UsbDevice device) {
+        return device != null && device.getVendorId() == YUBICO_VENDOR_ID;
+    }
+
+    /**
+     * Find a connected YubiKey USB device, or null.
+     */
+    public static UsbDevice findYubiKey(UsbManager usbManager) {
+        if (usbManager == null) return null;
+        for (UsbDevice device : usbManager.getDeviceList().values()) {
+            if (isYubiKey(device)) return device;
+        }
+        return null;
+    }
+
+    /**
+     * Perform HMAC-SHA1 challenge-response with a YubiKey over USB HID.
+     *
+     * <p>The YubiKey USB HID protocol uses 64-byte frames. We write the
+     * challenge into a slot request frame and read back the HMAC response.
+     *
+     * @param connection An open USB device connection
+     * @param device     The YubiKey USB device
+     * @param slot       YubiKey slot (1 or 2)
+     * @param challenge  The challenge bytes (up to 64 bytes, typically 32)
+     * @return The 20-byte HMAC-SHA1 response
+     * @throws IOException if USB communication fails
+     * @throws YubiKeyException if the YubiKey returns an error
+     */
+    public static byte[] performChallengeResponseUsb(UsbDeviceConnection connection,
+                                                      UsbDevice device, int slot,
+                                                      byte[] challenge)
+            throws IOException, YubiKeyException {
+
+        // Find the HID interface and endpoints
+        UsbInterface hidInterface = null;
+        UsbEndpoint endpointIn = null;
+        UsbEndpoint endpointOut = null;
+
+        for (int i = 0; i < device.getInterfaceCount(); i++) {
+            UsbInterface iface = device.getInterface(i);
+            if (iface.getInterfaceClass() == UsbConstants.USB_CLASS_HID) {
+                hidInterface = iface;
+                for (int j = 0; j < iface.getEndpointCount(); j++) {
+                    UsbEndpoint ep = iface.getEndpoint(j);
+                    if (ep.getDirection() == UsbConstants.USB_DIR_IN) {
+                        endpointIn = ep;
+                    } else {
+                        endpointOut = ep;
+                    }
+                }
+                break;
+            }
+        }
+
+        if (hidInterface == null || endpointIn == null) {
+            throw new YubiKeyException("No HID interface found on YubiKey USB device");
+        }
+
+        if (!connection.claimInterface(hidInterface, true)) {
+            throw new YubiKeyException("Failed to claim YubiKey USB HID interface");
+        }
+
+        try {
+            // Build the challenge frame
+            // YubiKey HID frame: [challenge_data(64)] + [slot_cmd(1)] + [challenge_len(1)] + padding
+            // The frame structure for HMAC challenge:
+            //   Bytes 0-63:  challenge data (padded to 64 bytes)
+            //   Written as a series of HID reports
+            byte slotCmd = (slot == 1) ? USB_SLOT1_HMAC : USB_SLOT2_HMAC;
+
+            // Pad challenge to 64 bytes
+            byte[] paddedChallenge = new byte[64];
+            int challengeLen = Math.min(challenge.length, 64);
+            System.arraycopy(challenge, 0, paddedChallenge, 0, challengeLen);
+
+            // Build the 70-byte YubiKey frame:
+            // [64 bytes payload] [1 byte slot] [2 bytes CRC] [3 bytes padding]
+            byte[] frame = new byte[70];
+            System.arraycopy(paddedChallenge, 0, frame, 0, 64);
+            frame[64] = slotCmd;
+            // CRC16 over first 66 bytes (payload + slot)
+            int crc = crc16(frame, 65);
+            frame[65] = (byte) (crc & 0xFF);
+            frame[66] = (byte) ((crc >> 8) & 0xFF);
+
+            // Send frame in HID reports (8 bytes per report, with 1-byte sequence prefix)
+            // Each USB HID report: [seq_num] [8 bytes data]
+            for (int seq = 0; seq < 10; seq++) {
+                byte[] report = new byte[HID_FRAME_SIZE];
+                report[7] = (byte) seq; // Sequence number at byte 7
+                int offset = seq * 7;
+                int remaining = Math.min(7, frame.length - offset);
+                if (remaining > 0) {
+                    System.arraycopy(frame, offset, report, 0, remaining);
+                }
+
+                if (endpointOut != null) {
+                    int sent = connection.bulkTransfer(endpointOut, report, report.length, USB_TIMEOUT_MS);
+                    if (sent < 0) {
+                        throw new YubiKeyException("USB write failed at sequence " + seq);
+                    }
+                } else {
+                    // Fall back to control transfer for keyboards without OUT endpoint
+                    int sent = connection.controlTransfer(
+                            0x21, // REQUEST_TYPE: class, interface, host-to-device
+                            0x09, // SET_REPORT
+                            0x0200, // HID report type OUTPUT, report ID 0
+                            hidInterface.getId(),
+                            report, report.length, USB_TIMEOUT_MS);
+                    if (sent < 0) {
+                        throw new YubiKeyException("USB control transfer failed at sequence " + seq);
+                    }
+                }
+            }
+
+            // Read response — poll until we get a valid response
+            byte[] responseFrame = new byte[70];
+            int responseOffset = 0;
+            long startTime = System.currentTimeMillis();
+
+            while (System.currentTimeMillis() - startTime < USB_TIMEOUT_MS) {
+                byte[] readBuf = new byte[HID_FRAME_SIZE];
+                int read = connection.bulkTransfer(endpointIn, readBuf, readBuf.length, 1000);
+                if (read < 0) {
+                    // Timeout on this read, try again
+                    continue;
+                }
+
+                // Check status byte — byte index 7 is the sequence/status
+                int seqNum = readBuf[7] & 0xFF;
+                if (seqNum == 0xFF) {
+                    // Status frame — check if response is pending
+                    continue;
+                }
+
+                // Copy data bytes from this report into response frame
+                int copyLen = Math.min(7, responseFrame.length - responseOffset);
+                if (copyLen > 0) {
+                    System.arraycopy(readBuf, 0, responseFrame, responseOffset, copyLen);
+                    responseOffset += copyLen;
+                }
+
+                if (responseOffset >= 70) break;
+            }
+
+            if (responseOffset < 22) { // Need at least 20 bytes HMAC + 2 CRC
+                throw new YubiKeyException("USB response too short: got " + responseOffset + " bytes");
+            }
+
+            // Extract the 20-byte HMAC result
+            byte[] result = new byte[HMAC_RESPONSE_LENGTH];
+            System.arraycopy(responseFrame, 0, result, 0, HMAC_RESPONSE_LENGTH);
+
+            Log.i(TAG, "USB HMAC-SHA1 challenge-response successful (slot " + slot + ")");
+            return result;
+
+        } finally {
+            connection.releaseInterface(hidInterface);
+        }
+    }
+
+    /**
+     * CRC-16 used by YubiKey HID protocol (CRC-16/ISO 13239).
+     */
+    private static int crc16(byte[] data, int length) {
+        int crc = 0xFFFF;
+        for (int i = 0; i < length; i++) {
+            crc ^= (data[i] & 0xFF);
+            for (int j = 0; j < 8; j++) {
+                if ((crc & 1) != 0) {
+                    crc = (crc >> 1) ^ 0x8408;
+                } else {
+                    crc >>= 1;
+                }
+            }
+        }
+        return crc;
     }
 
 

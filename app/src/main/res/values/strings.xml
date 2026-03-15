@@ -178,18 +178,18 @@
     <string name="export_and_password_changed">Master password changed and database exported to: %s</string>
 
     <!-- YubiKey 2FA Strings -->
-    <string name="yubikey_2fa_section_title">YubiKey 2FA (NFC)</string>
+    <string name="yubikey_2fa_section_title">YubiKey 2FA (NFC / USB)</string>
     <string name="yubikey_enrolled">YubiKey enrolled ✓</string>
     <string name="yubikey_not_enrolled">No YubiKey enrolled</string>
     <string name="yubikey_enable_2fa">Enable YubiKey 2FA</string>
     <string name="yubikey_enroll_button">Enroll YubiKey</string>
     <string name="yubikey_remove_button">Remove YubiKey</string>
-    <string name="yubikey_tap_to_enroll">Tap your YubiKey now to enroll…</string>
-    <string name="yubikey_tap_to_unlock">🔑 Enter password, then tap YubiKey</string>
-    <string name="yubikey_tap_to_unlock_passwordless">🔑 Tap your YubiKey to unlock</string>
-    <string name="yubikey_tap_to_unlock_optional">🔑 Enter password OR tap YubiKey</string>
-    <string name="yubikey_tap_now">Tap your YubiKey now…</string>
-    <string name="yubikey_description">Adds a second factor using your YubiKey\'s NFC. You will need to tap your YubiKey each time you unlock the database. Requires a YubiKey 5 NFC or compatible.</string>
+    <string name="yubikey_tap_to_enroll">Tap or plug in your YubiKey now to enroll…</string>
+    <string name="yubikey_tap_to_unlock">🔑 Enter password, then tap or plug in YubiKey</string>
+    <string name="yubikey_tap_to_unlock_passwordless">🔑 Tap or plug in your YubiKey to unlock</string>
+    <string name="yubikey_tap_to_unlock_optional">🔑 Enter password OR tap/plug in YubiKey</string>
+    <string name="yubikey_tap_now">Tap or plug in your YubiKey now…</string>
+    <string name="yubikey_description">Adds a second factor using your YubiKey via NFC tap or USB plug-in. You will need your YubiKey each time you unlock the database. Requires a YubiKey 5 NFC/USB-C or compatible.</string>
     <string name="yubikey_mode_password_required">🔒 Password + YubiKey (both required)</string>
     <string name="yubikey_mode_passwordless">🔑 YubiKey only (no password needed)</string>
     <string name="yubikey_mode_optional">🔓 Password OR YubiKey (either works)</string>
@@ -200,8 +200,11 @@
     <string name="yubikey_communication_error">Failed to communicate with YubiKey: %s</string>
     <string name="yubikey_nfc_not_available">NFC is not available on this device</string>
     <string name="yubikey_nfc_disabled">NFC is disabled. Please enable NFC in system settings.</string>
+    <string name="yubikey_no_transport">Neither NFC nor USB host mode is available on this device</string>
+    <string name="yubikey_usb_detected">🔌 YubiKey detected via USB</string>
+    <string name="yubikey_plug_in_or_enable_nfc">Plug in your YubiKey via USB, or enable NFC and tap</string>
     <string name="yubikey_wrong_key">This is not the enrolled YubiKey. Please use the correct key.</string>
-    <string name="yubikey_nfc_required_warning">⚠ NFC must be enabled. If you lose your YubiKey, use your recovery code to regain access.</string>
+    <string name="yubikey_nfc_required_warning">⚠ Requires NFC or USB connection. If you lose your YubiKey, use your recovery code to regain access.</string>
     <string name="yubikey_verifying">Verifying YubiKey…</string>
     <string name="yubikey_verified">YubiKey verified ✓</string>
     <string name="yubikey_enrolling">Enrolling YubiKey…</string>

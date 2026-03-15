@@ -170,22 +170,22 @@
     <string name="restore_downloads_success">Datenbank erfolgreich aus Downloads wiederhergestellt</string>
 
     <!-- YubiKey 2FA Strings -->
-    <string name="yubikey_2fa_section_title">YubiKey 2FA (NFC)</string>
+    <string name="yubikey_2fa_section_title">YubiKey 2FA (NFC / USB)</string>
     <string name="yubikey_enrolled">YubiKey registriert ✓</string>
     <string name="yubikey_not_enrolled">Kein YubiKey registriert</string>
     <string name="yubikey_enable_2fa">YubiKey 2FA aktivieren</string>
     <string name="yubikey_enroll_button">YubiKey registrieren</string>
     <string name="yubikey_remove_button">YubiKey entfernen</string>
-    <string name="yubikey_tap_to_enroll">Tippen Sie jetzt Ihren YubiKey an…</string>
-    <string name="yubikey_tap_to_unlock">🔑 Passwort eingeben, dann YubiKey antippen</string>
-    <string name="yubikey_tap_to_unlock_passwordless">🔑 YubiKey antippen zum Entsperren</string>
-    <string name="yubikey_tap_to_unlock_optional">🔑 Passwort eingeben ODER YubiKey antippen</string>
-    <string name="yubikey_tap_now">Tippen Sie jetzt Ihren YubiKey an…</string>
-    <string name="yubikey_description">Fügt einen zweiten Faktor über NFC Ihres YubiKeys hinzu. Sie müssen Ihren YubiKey bei jedem Entsperren antippen. Erfordert einen YubiKey 5 NFC oder kompatibel.</string>
+    <string name="yubikey_tap_to_enroll">YubiKey antippen oder einstecken zum Registrieren…</string>
+    <string name="yubikey_tap_to_unlock">🔑 Passwort eingeben, dann YubiKey antippen oder einstecken</string>
+    <string name="yubikey_tap_to_unlock_passwordless">🔑 YubiKey antippen oder einstecken zum Entsperren</string>
+    <string name="yubikey_tap_to_unlock_optional">🔑 Passwort eingeben ODER YubiKey antippen/einstecken</string>
+    <string name="yubikey_tap_now">YubiKey antippen oder einstecken…</string>
+    <string name="yubikey_description">Fügt einen zweiten Faktor über NFC oder USB Ihres YubiKeys hinzu. Erfordert einen YubiKey 5 NFC/USB-C oder kompatibel.</string>
     <string name="yubikey_mode_password_required">🔒 Passwort + YubiKey (beide erforderlich)</string>
     <string name="yubikey_mode_passwordless">🔑 Nur YubiKey (kein Passwort nötig)</string>
     <string name="yubikey_mode_optional">🔓 Passwort ODER YubiKey (eines reicht)</string>
-    <string name="yubikey_enter_password_or_tap">Geben Sie Ihr Passwort ein oder tippen Sie Ihren YubiKey an</string>
+    <string name="yubikey_enter_password_or_tap">Passwort eingeben oder YubiKey antippen/einstecken</string>
     <string name="yubikey_enrollment_success">YubiKey erfolgreich registriert! Datenbank mit 2FA neu verschlüsselt.</string>
     <string name="yubikey_enrollment_failed">YubiKey-Registrierung fehlgeschlagen: %s</string>
     <string name="yubikey_removed_success">YubiKey entfernt. Datenbank nur mit Passwort neu verschlüsselt.</string>
@@ -193,7 +193,7 @@
     <string name="yubikey_nfc_not_available">NFC ist auf diesem Gerät nicht verfügbar</string>
     <string name="yubikey_nfc_disabled">NFC ist deaktiviert. Bitte aktivieren Sie NFC in den Systemeinstellungen.</string>
     <string name="yubikey_wrong_key">Dies ist nicht der registrierte YubiKey. Bitte verwenden Sie den richtigen Schlüssel.</string>
-    <string name="yubikey_nfc_required_warning">⚠ NFC muss aktiviert sein. Falls Sie Ihren YubiKey verlieren, verwenden Sie Ihren Wiederherstellungscode.</string>
+    <string name="yubikey_nfc_required_warning">⚠ NFC oder USB-Verbindung erforderlich. Falls Sie Ihren YubiKey verlieren, verwenden Sie Ihren Wiederherstellungscode.</string>
     <string name="yubikey_verifying">YubiKey wird überprüft…</string>
     <string name="yubikey_verified">YubiKey überprüft ✓</string>
     <string name="yubikey_enrolling">YubiKey wird registriert…</string>
