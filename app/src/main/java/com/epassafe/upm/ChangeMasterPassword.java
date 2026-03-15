@@ -43,6 +43,7 @@ import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
+import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -68,10 +69,12 @@ public class ChangeMasterPassword extends Activity {
     private TextView yubiKeyEnrollmentStatus;
     private TextView yubiKeyNfcPrompt;
     private ProgressBar yubiKeyEnrollProgress;
+    private RadioGroup yubiKeyModeGroup;
     private NfcAdapter nfcAdapter;
     private boolean waitingForYubiKeyEnroll = false;
     private boolean waitingForYubiKeyRemove = false;
     private boolean yubiKeyCurrentlyEnrolled = false;
+    private YubiKeyManager.UnlockMode selectedYubiKeyMode = YubiKeyManager.UnlockMode.PASSWORD_REQUIRED;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -187,8 +190,25 @@ public class ChangeMasterPassword extends Activity {
         yubiKeyEnrollmentStatus = findViewById(R.id.yubikey_enrollment_status);
         yubiKeyNfcPrompt = findViewById(R.id.yubikey_nfc_prompt);
         yubiKeyEnrollProgress = findViewById(R.id.yubikey_enroll_progress);
+        yubiKeyModeGroup = findViewById(R.id.yubikey_mode_group);
 
         nfcAdapter = NfcAdapter.getDefaultAdapter(this);
+
+        // Set up mode radio group listener
+        if (yubiKeyModeGroup != null) {
+            yubiKeyModeGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+                @Override
+                public void onCheckedChanged(RadioGroup group, int checkedId) {
+                    if (checkedId == R.id.yubikey_mode_password_required) {
+                        selectedYubiKeyMode = YubiKeyManager.UnlockMode.PASSWORD_REQUIRED;
+                    } else if (checkedId == R.id.yubikey_mode_passwordless) {
+                        selectedYubiKeyMode = YubiKeyManager.UnlockMode.PASSWORDLESS;
+                    } else if (checkedId == R.id.yubikey_mode_optional) {
+                        selectedYubiKeyMode = YubiKeyManager.UnlockMode.PASSWORD_OR_YUBIKEY;
+                    }
+                }
+            });
+        }
 
         if (db != null) {
             File dbFile = db.getDatabaseFile();
@@ -199,6 +219,22 @@ public class ChangeMasterPassword extends Activity {
                 yubiKeyEnableCheckbox.setChecked(true);
                 yubiKeyEnrollButton.setVisibility(View.VISIBLE);
                 yubiKeyEnrollButton.setText(R.string.yubikey_remove_button);
+                // Show current mode
+                selectedYubiKeyMode = YubiKeyManager.loadMode(dbFile);
+                if (yubiKeyModeGroup != null) {
+                    yubiKeyModeGroup.setVisibility(View.VISIBLE);
+                    switch (selectedYubiKeyMode) {
+                        case PASSWORDLESS:
+                            yubiKeyModeGroup.check(R.id.yubikey_mode_passwordless); break;
+                        case PASSWORD_OR_YUBIKEY:
+                            yubiKeyModeGroup.check(R.id.yubikey_mode_optional); break;
+                        default:
+                            yubiKeyModeGroup.check(R.id.yubikey_mode_password_required); break;
+                    }
+                    // Disable radio buttons when already enrolled (need to remove & re-enroll to change)
+                    for (int i = 0; i < yubiKeyModeGroup.getChildCount(); i++)
+                        yubiKeyModeGroup.getChildAt(i).setEnabled(false);
+                }
             } else {
                 yubiKeyEnrollmentStatus.setText(R.string.yubikey_not_enrolled);
                 yubiKeyEnableCheckbox.setChecked(false);
@@ -208,16 +244,22 @@ public class ChangeMasterPassword extends Activity {
                 @Override
                 public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                     if (isChecked && !yubiKeyCurrentlyEnrolled) {
-                        // Show enroll button
                         yubiKeyEnrollButton.setVisibility(View.VISIBLE);
                         yubiKeyEnrollButton.setText(R.string.yubikey_enroll_button);
+                        if (yubiKeyModeGroup != null) {
+                            yubiKeyModeGroup.setVisibility(View.VISIBLE);
+                            for (int i = 0; i < yubiKeyModeGroup.getChildCount(); i++)
+                                yubiKeyModeGroup.getChildAt(i).setEnabled(true);
+                            yubiKeyModeGroup.check(R.id.yubikey_mode_password_required);
+                        }
                     } else if (!isChecked && yubiKeyCurrentlyEnrolled) {
-                        // Show remove button
                         yubiKeyEnrollButton.setVisibility(View.VISIBLE);
                         yubiKeyEnrollButton.setText(R.string.yubikey_remove_button);
+                        if (yubiKeyModeGroup != null) yubiKeyModeGroup.setVisibility(View.GONE);
                     } else {
                         yubiKeyEnrollButton.setVisibility(View.GONE);
                         yubiKeyNfcPrompt.setVisibility(View.GONE);
+                        if (yubiKeyModeGroup != null) yubiKeyModeGroup.setVisibility(View.GONE);
                     }
                 }
             });
@@ -323,13 +365,14 @@ public class ChangeMasterPassword extends Activity {
     private class EnrollYubiKeyTask extends AsyncTask<Void, Void, Boolean> {
         private final Tag tag;
         private final String existingPasswordStr;
+        private final YubiKeyManager.UnlockMode mode;
         private String errorMessage;
-        private String recoveryCode; // Generated during enrollment, shown to user after
+        private String recoveryCode;
 
         EnrollYubiKeyTask(Tag tag) {
             this.tag = tag;
-            // Capture UI value on the main thread
             this.existingPasswordStr = existingPasswordEditText.getText().toString();
+            this.mode = selectedYubiKeyMode;
         }
 
         @Override
@@ -353,16 +396,13 @@ public class ChangeMasterPassword extends Activity {
                 isoDep.setTimeout(30000);
 
                 try {
-                    // Generate a random challenge
                     byte[] challenge = YubiKeyManager.generateChallenge();
                     int slot = YubiKeyManager.DEFAULT_SLOT;
 
-                    // Send challenge to YubiKey, get HMAC-SHA1 response
                     byte[] response;
                     try {
                         response = YubiKeyManager.performChallengeResponse(isoDep, slot, challenge);
                     } catch (YubiKeyManager.YubiKeyException e) {
-                        // If slot 2 fails, try slot 1
                         if (slot == 2) {
                             Log.w("ChangeMasterPassword", "Slot 2 failed, trying slot 1", e);
                             slot = 1;
@@ -374,23 +414,73 @@ public class ChangeMasterPassword extends Activity {
                         }
                     }
 
-                    // Combine password + YubiKey response for new encryption key
-                    char[] combinedPassword = YubiKeyManager.combinePasswordWithYubiKeyResponse(
-                            existingPassword, response);
-
-                    // Re-encrypt database with the combined key
-                    database.changePassword(combinedPassword);
-                    database.save();
-
-                    // Save enrollment sidecar file
-                    YubiKeyManager.saveEnrollment(dbFile, slot, challenge, response);
-
-                    // Generate recovery code and save recovery blob
+                    // Generate recovery code
                     recoveryCode = YubiKeyManager.generateRecoveryCode();
-                    YubiKeyManager.saveRecoveryBlob(dbFile, existingPassword, recoveryCode, response);
 
-                    // Clean up
-                    Arrays.fill(combinedPassword, '\0');
+                    byte[] ykWrappedKey = null;
+                    byte[] pwWrappedKey = null;
+
+                    switch (mode) {
+                        case PASSWORDLESS: {
+                            // Generate random DB key, re-encrypt DB with it
+                            byte[] dbKey = YubiKeyManager.generateDbKey();
+                            char[] dbPassword = YubiKeyManager.dbKeyToPassword(dbKey);
+
+                            database.changePassword(dbPassword);
+                            database.save();
+
+                            // Wrap DB key with YubiKey
+                            ykWrappedKey = YubiKeyManager.wrapDbKeyWithYubiKey(dbKey, response);
+
+                            // Recovery: encrypt DB key with recovery code only
+                            YubiKeyManager.saveRecoveryBlobForDbKey(dbFile, recoveryCode, dbKey);
+
+                            Arrays.fill(dbKey, (byte) 0);
+                            Arrays.fill(dbPassword, '\0');
+                            break;
+                        }
+
+                        case PASSWORD_OR_YUBIKEY: {
+                            // Generate random DB key, re-encrypt DB with it
+                            byte[] dbKey = YubiKeyManager.generateDbKey();
+                            char[] dbPassword = YubiKeyManager.dbKeyToPassword(dbKey);
+
+                            database.changePassword(dbPassword);
+                            database.save();
+
+                            // Wrap DB key with BOTH YubiKey AND password
+                            ykWrappedKey = YubiKeyManager.wrapDbKeyWithYubiKey(dbKey, response);
+                            pwWrappedKey = YubiKeyManager.wrapDbKeyWithPassword(dbKey, existingPassword);
+
+                            // Recovery: encrypt DB key with recovery code only
+                            YubiKeyManager.saveRecoveryBlobForDbKey(dbFile, recoveryCode, dbKey);
+
+                            Arrays.fill(dbKey, (byte) 0);
+                            Arrays.fill(dbPassword, '\0');
+                            break;
+                        }
+
+                        case PASSWORD_REQUIRED:
+                        default: {
+                            // Original mode — combine password + YubiKey response
+                            char[] combinedPassword = YubiKeyManager.combinePasswordWithYubiKeyResponse(
+                                    existingPassword, response);
+
+                            database.changePassword(combinedPassword);
+                            database.save();
+
+                            // Recovery: encrypt HMAC response with password + recovery code
+                            YubiKeyManager.saveRecoveryBlob(dbFile, existingPassword, recoveryCode, response);
+
+                            Arrays.fill(combinedPassword, '\0');
+                            break;
+                        }
+                    }
+
+                    // Save enrollment sidecar (v2 for modes 2/3, v1-compat for mode 1)
+                    YubiKeyManager.saveEnrollmentV2(dbFile, slot, challenge, response,
+                            mode, ykWrappedKey, pwWrappedKey);
+
                     Arrays.fill(existingPassword, '\0');
 
                     return true;

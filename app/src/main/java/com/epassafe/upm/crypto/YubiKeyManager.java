@@ -79,7 +79,26 @@ import javax.crypto.spec.SecretKeySpec;
  */
 public class YubiKeyManager {
 
-    private static final String TAG = "YubiKeyManager";
+    private static final String TAG = "YubiKeyManager"; // v2
+
+    // ── Unlock modes ─────────────────────────────────────────────────────
+
+    /** How the YubiKey interacts with password-based unlock. */
+    public enum UnlockMode {
+        /** Password + YubiKey both required (current default). DB key = SHA-256(pw||yk). */
+        PASSWORD_REQUIRED(0),
+        /** YubiKey only — no password needed. DB key = random, wrapped by YubiKey. */
+        PASSWORDLESS(1),
+        /** Either password alone OR YubiKey alone. DB key = random, wrapped by both. */
+        PASSWORD_OR_YUBIKEY(2);
+
+        public final int code;
+        UnlockMode(int code) { this.code = code; }
+        public static UnlockMode fromCode(int code) {
+            for (UnlockMode m : values()) if (m.code == code) return m;
+            return PASSWORD_REQUIRED;
+        }
+    }
 
     // ── YubiKey OTP applet APDU constants ────────────────────────────────
 
@@ -101,7 +120,8 @@ public class YubiKeyManager {
 
     private static final String SIDECAR_EXTENSION = ".yubikey";
     private static final byte[] MAGIC = "YKCH".getBytes(StandardCharsets.US_ASCII);
-    private static final byte FORMAT_VERSION = 1;
+    private static final byte FORMAT_VERSION_1 = 1;
+    private static final byte FORMAT_VERSION_2 = 2;
 
     /** Length of the challenge sent to the YubiKey. */
     public static final int CHALLENGE_LENGTH = 32;
@@ -112,8 +132,29 @@ public class YubiKeyManager {
     /** Default slot (2) for HMAC-SHA1 challenge-response. */
     public static final int DEFAULT_SLOT = 2;
 
-    /** Sidecar file size: magic(4) + version(1) + slot(1) + challenge(32) + response(20) = 58 */
-    private static final int SIDECAR_FILE_SIZE = MAGIC.length + 1 + 1 + CHALLENGE_LENGTH + HMAC_RESPONSE_LENGTH;
+    /** V1 sidecar file size: magic(4) + version(1) + slot(1) + challenge(32) + response(20) = 58 */
+    private static final int SIDECAR_V1_SIZE = MAGIC.length + 1 + 1 + CHALLENGE_LENGTH + HMAC_RESPONSE_LENGTH;
+
+    /** V2 header size: v1 header(58) + mode(1) = 59, followed by variable-length blobs */
+    private static final int SIDECAR_V2_HEADER_SIZE = SIDECAR_V1_SIZE + 1;
+
+    /** Length of random DB key used for PASSWORDLESS and PASSWORD_OR_YUBIKEY modes. */
+    public static final int DB_KEY_LENGTH = 32;
+
+    /** HKDF info string for deriving YubiKey wrapping key. */
+    private static final byte[] HKDF_INFO = "epassafe-yk-wrap".getBytes(StandardCharsets.US_ASCII);
+
+    /** AES-GCM parameters for key wrapping. */
+    private static final int WRAP_IV_LENGTH = 12;
+    private static final int WRAP_SALT_LENGTH = 16;
+    private static final int WRAP_TAG_BITS = 128;
+
+    /** PBKDF2 iterations for password-based wrapping key (mode 3). */
+    private static final int PBKDF2_WRAP_ITERATIONS = 310000;
+
+    /** Blob tags in v2 sidecar. */
+    private static final byte BLOB_TAG_YK_WRAPPED_KEY = 0x01;
+    private static final byte BLOB_TAG_PW_WRAPPED_KEY = 0x02;
 
     // ── Recovery file constants ──────────────────────────────────────────
 
@@ -130,7 +171,7 @@ public class YubiKeyManager {
 
 
     // ═════════════════════════════════════════════════════════════════════
-    //  Sidecar file operations
+    //  Sidecar file operations (v1 + v2)
     // ═════════════════════════════════════════════════════════════════════
 
     /** Get the sidecar file path for a given database file. */
@@ -141,7 +182,9 @@ public class YubiKeyManager {
     /** Check whether a YubiKey is enrolled for the given database. */
     public static boolean isEnrolled(File databaseFile) {
         File sidecar = getSidecarFile(databaseFile);
-        return sidecar.exists() && sidecar.length() == SIDECAR_FILE_SIZE;
+        if (!sidecar.exists()) return false;
+        long len = sidecar.length();
+        return len == SIDECAR_V1_SIZE || len >= SIDECAR_V2_HEADER_SIZE;
     }
 
     /** Remove YubiKey enrollment (delete the sidecar file). */
@@ -157,16 +200,37 @@ public class YubiKeyManager {
         return challenge;
     }
 
+    /** Generate a new random DB key for PASSWORDLESS / PASSWORD_OR_YUBIKEY modes. */
+    public static byte[] generateDbKey() {
+        byte[] key = new byte[DB_KEY_LENGTH];
+        new SecureRandom().nextBytes(key);
+        return key;
+    }
+
     /**
-     * Save enrollment data to the sidecar file.
+     * Save v1 enrollment (PASSWORD_REQUIRED mode — backward compatible).
+     */
+    public static void saveEnrollment(File databaseFile, int slot,
+                                      byte[] challenge, byte[] expectedResponse) throws IOException {
+        saveEnrollmentV2(databaseFile, slot, challenge, expectedResponse,
+                UnlockMode.PASSWORD_REQUIRED, null, null);
+    }
+
+    /**
+     * Save v2 enrollment with mode and optional key-wrap blobs.
      *
      * @param databaseFile     The database file
      * @param slot             YubiKey slot (1 or 2)
      * @param challenge        The 32-byte challenge
      * @param expectedResponse The 20-byte expected HMAC-SHA1 response
+     * @param mode             The unlock mode
+     * @param ykWrappedKey     YubiKey-wrapped DB key blob (modes 2,3), or null
+     * @param pwWrappedKey     Password-wrapped DB key blob (mode 3), or null
      */
-    public static void saveEnrollment(File databaseFile, int slot,
-                                      byte[] challenge, byte[] expectedResponse) throws IOException {
+    public static void saveEnrollmentV2(File databaseFile, int slot,
+                                        byte[] challenge, byte[] expectedResponse,
+                                        UnlockMode mode,
+                                        byte[] ykWrappedKey, byte[] pwWrappedKey) throws IOException {
         if (challenge.length != CHALLENGE_LENGTH)
             throw new IllegalArgumentException("Challenge must be " + CHALLENGE_LENGTH + " bytes");
         if (expectedResponse.length != HMAC_RESPONSE_LENGTH)
@@ -177,54 +241,126 @@ public class YubiKeyManager {
         File sidecar = getSidecarFile(databaseFile);
         try (FileOutputStream fos = new FileOutputStream(sidecar)) {
             fos.write(MAGIC);
-            fos.write(FORMAT_VERSION);
+
+            if (mode == UnlockMode.PASSWORD_REQUIRED && ykWrappedKey == null && pwWrappedKey == null) {
+                // Write v1 format for backward compatibility
+                fos.write(FORMAT_VERSION_1);
+            } else {
+                // Write v2 format
+                fos.write(FORMAT_VERSION_2);
+            }
+
             fos.write((byte) slot);
             fos.write(challenge);
             fos.write(expectedResponse);
+
+            if (mode != UnlockMode.PASSWORD_REQUIRED || ykWrappedKey != null || pwWrappedKey != null) {
+                // V2 extension: mode byte + TLV blobs
+                fos.write((byte) mode.code);
+
+                if (ykWrappedKey != null) {
+                    fos.write(BLOB_TAG_YK_WRAPPED_KEY);
+                    fos.write((ykWrappedKey.length >> 8) & 0xFF);
+                    fos.write(ykWrappedKey.length & 0xFF);
+                    fos.write(ykWrappedKey);
+                }
+                if (pwWrappedKey != null) {
+                    fos.write(BLOB_TAG_PW_WRAPPED_KEY);
+                    fos.write((pwWrappedKey.length >> 8) & 0xFF);
+                    fos.write(pwWrappedKey.length & 0xFF);
+                    fos.write(pwWrappedKey);
+                }
+            }
             fos.flush();
         }
-        Log.i(TAG, "YubiKey enrollment saved (" + sidecar.getName() + ", slot " + slot + ")");
+        Log.i(TAG, "YubiKey enrollment saved (slot " + slot + ", mode " + mode + ")");
     }
 
-    /** Load the saved slot number (1 or 2), or -1 if not enrolled. */
+    /** Load the saved slot number. */
     public static int loadSlot(File databaseFile) {
-        byte[] data = readSidecar(databaseFile);
-        return data != null ? (data[MAGIC.length + 1] & 0xFF) : DEFAULT_SLOT;
+        byte[] data = readSidecarRaw(databaseFile);
+        if (data == null) return DEFAULT_SLOT;
+        return data[MAGIC.length + 1] & 0xFF;
     }
 
-    /** Load the 32-byte challenge from the sidecar, or null if not enrolled. */
+    /** Load the 32-byte challenge, or null. */
     public static byte[] loadChallenge(File databaseFile) {
-        byte[] data = readSidecar(databaseFile);
+        byte[] data = readSidecarRaw(databaseFile);
         if (data == null) return null;
         byte[] challenge = new byte[CHALLENGE_LENGTH];
         System.arraycopy(data, MAGIC.length + 2, challenge, 0, CHALLENGE_LENGTH);
         return challenge;
     }
 
-    /** Load the 20-byte expected response from the sidecar, or null if not enrolled. */
+    /** Load the 20-byte expected response, or null. */
     public static byte[] loadExpectedResponse(File databaseFile) {
-        byte[] data = readSidecar(databaseFile);
+        byte[] data = readSidecarRaw(databaseFile);
         if (data == null) return null;
         byte[] response = new byte[HMAC_RESPONSE_LENGTH];
         System.arraycopy(data, MAGIC.length + 2 + CHALLENGE_LENGTH, response, 0, HMAC_RESPONSE_LENGTH);
         return response;
     }
 
-    /** Read and validate the entire sidecar file, or return null. */
-    private static byte[] readSidecar(File databaseFile) {
+    /** Load the unlock mode from the sidecar. V1 files return PASSWORD_REQUIRED. */
+    public static UnlockMode loadMode(File databaseFile) {
+        byte[] data = readSidecarRaw(databaseFile);
+        if (data == null) return UnlockMode.PASSWORD_REQUIRED;
+        int version = data[MAGIC.length] & 0xFF;
+        if (version < 2 || data.length < SIDECAR_V2_HEADER_SIZE) return UnlockMode.PASSWORD_REQUIRED;
+        return UnlockMode.fromCode(data[SIDECAR_V1_SIZE] & 0xFF);
+    }
+
+    /** Load a specific TLV blob from a v2 sidecar, or null. */
+    public static byte[] loadBlob(File databaseFile, byte tag) {
+        byte[] data = readSidecarRaw(databaseFile);
+        if (data == null) return null;
+        int version = data[MAGIC.length] & 0xFF;
+        if (version < 2 || data.length < SIDECAR_V2_HEADER_SIZE) return null;
+
+        // Parse TLV blobs starting after v2 header
+        int offset = SIDECAR_V2_HEADER_SIZE;
+        while (offset + 3 <= data.length) {
+            byte blobTag = data[offset];
+            int blobLen = ((data[offset + 1] & 0xFF) << 8) | (data[offset + 2] & 0xFF);
+            offset += 3;
+            if (offset + blobLen > data.length) break;
+            if (blobTag == tag) {
+                byte[] blob = new byte[blobLen];
+                System.arraycopy(data, offset, blob, 0, blobLen);
+                return blob;
+            }
+            offset += blobLen;
+        }
+        return null;
+    }
+
+    /** Load YubiKey-wrapped DB key blob, or null. */
+    public static byte[] loadYkWrappedKey(File databaseFile) {
+        return loadBlob(databaseFile, BLOB_TAG_YK_WRAPPED_KEY);
+    }
+
+    /** Load password-wrapped DB key blob, or null. */
+    public static byte[] loadPwWrappedKey(File databaseFile) {
+        return loadBlob(databaseFile, BLOB_TAG_PW_WRAPPED_KEY);
+    }
+
+    /** Read the entire sidecar file raw, validating magic only. */
+    private static byte[] readSidecarRaw(File databaseFile) {
         File sidecar = getSidecarFile(databaseFile);
-        if (!sidecar.exists() || sidecar.length() != SIDECAR_FILE_SIZE) return null;
+        if (!sidecar.exists()) return null;
 
         try (FileInputStream fis = new FileInputStream(sidecar)) {
-            byte[] data = new byte[SIDECAR_FILE_SIZE];
-            if (fis.read(data) != SIDECAR_FILE_SIZE) return null;
+            byte[] data = new byte[(int) sidecar.length()];
+            if (fis.read(data) != data.length) return null;
 
             // Verify magic
+            if (data.length < MAGIC.length + 1) return null;
             for (int i = 0; i < MAGIC.length; i++) {
                 if (data[i] != MAGIC[i]) return null;
             }
-            // Verify version
-            if (data[MAGIC.length] != FORMAT_VERSION) return null;
+            // Verify version is known
+            int version = data[MAGIC.length] & 0xFF;
+            if (version != FORMAT_VERSION_1 && version != FORMAT_VERSION_2) return null;
 
             return data;
         } catch (IOException e) {
@@ -337,6 +473,165 @@ public class YubiKeyManager {
 
 
     // ═════════════════════════════════════════════════════════════════════
+    //  HKDF + Key wrapping for PASSWORDLESS / PASSWORD_OR_YUBIKEY modes
+    // ═════════════════════════════════════════════════════════════════════
+
+    /**
+     * HKDF-SHA256 extract-and-expand (RFC 5869).
+     * Derives a 256-bit key from the YubiKey HMAC response.
+     */
+    public static byte[] hkdfSha256(byte[] ikm, byte[] salt, byte[] info, int outputLen) {
+        try {
+            javax.crypto.Mac mac = javax.crypto.Mac.getInstance("HmacSHA256");
+            // Extract
+            if (salt == null || salt.length == 0) salt = new byte[32];
+            mac.init(new SecretKeySpec(salt, "HmacSHA256"));
+            byte[] prk = mac.doFinal(ikm);
+            // Expand
+            int n = (outputLen + 31) / 32;
+            byte[] okm = new byte[outputLen];
+            byte[] t = new byte[0];
+            int offset = 0;
+            for (int i = 1; i <= n; i++) {
+                mac.init(new SecretKeySpec(prk, "HmacSHA256"));
+                mac.update(t);
+                if (info != null) mac.update(info);
+                mac.update((byte) i);
+                t = mac.doFinal();
+                int len = Math.min(32, outputLen - offset);
+                System.arraycopy(t, 0, okm, offset, len);
+                offset += len;
+            }
+            Arrays.fill(prk, (byte) 0);
+            return okm;
+        } catch (Exception e) {
+            throw new RuntimeException("HKDF-SHA256 failed", e);
+        }
+    }
+
+    /**
+     * Wrap (encrypt) a DB key using a YubiKey HMAC response via HKDF + AES-GCM.
+     * @return blob: salt(16) + iv(12) + ciphertext+tag
+     */
+    public static byte[] wrapDbKeyWithYubiKey(byte[] dbKey, byte[] hmacResponse) throws Exception {
+        byte[] salt = new byte[WRAP_SALT_LENGTH];
+        new SecureRandom().nextBytes(salt);
+        byte[] wrappingKey = hkdfSha256(hmacResponse, salt, HKDF_INFO, 32);
+
+        byte[] iv = new byte[WRAP_IV_LENGTH];
+        new SecureRandom().nextBytes(iv);
+
+        Cipher cipher = Cipher.getInstance("AES/GCM/NoPadding");
+        cipher.init(Cipher.ENCRYPT_MODE, new SecretKeySpec(wrappingKey, "AES"),
+                new GCMParameterSpec(WRAP_TAG_BITS, iv));
+        byte[] ciphertext = cipher.doFinal(dbKey);
+        Arrays.fill(wrappingKey, (byte) 0);
+
+        // Assemble blob: salt + iv + ciphertext
+        byte[] blob = new byte[salt.length + iv.length + ciphertext.length];
+        System.arraycopy(salt, 0, blob, 0, salt.length);
+        System.arraycopy(iv, 0, blob, salt.length, iv.length);
+        System.arraycopy(ciphertext, 0, blob, salt.length + iv.length, ciphertext.length);
+        return blob;
+    }
+
+    /**
+     * Unwrap (decrypt) a DB key using a YubiKey HMAC response.
+     * @param blob  The blob from wrapDbKeyWithYubiKey
+     * @return The 32-byte DB key, or null on failure
+     */
+    public static byte[] unwrapDbKeyWithYubiKey(byte[] blob, byte[] hmacResponse) {
+        try {
+            if (blob.length < WRAP_SALT_LENGTH + WRAP_IV_LENGTH + 1) return null;
+
+            byte[] salt = new byte[WRAP_SALT_LENGTH];
+            byte[] iv = new byte[WRAP_IV_LENGTH];
+            System.arraycopy(blob, 0, salt, 0, WRAP_SALT_LENGTH);
+            System.arraycopy(blob, WRAP_SALT_LENGTH, iv, 0, WRAP_IV_LENGTH);
+            byte[] ciphertext = new byte[blob.length - WRAP_SALT_LENGTH - WRAP_IV_LENGTH];
+            System.arraycopy(blob, WRAP_SALT_LENGTH + WRAP_IV_LENGTH, ciphertext, 0, ciphertext.length);
+
+            byte[] wrappingKey = hkdfSha256(hmacResponse, salt, HKDF_INFO, 32);
+            Cipher cipher = Cipher.getInstance("AES/GCM/NoPadding");
+            cipher.init(Cipher.DECRYPT_MODE, new SecretKeySpec(wrappingKey, "AES"),
+                    new GCMParameterSpec(WRAP_TAG_BITS, iv));
+            byte[] dbKey = cipher.doFinal(ciphertext);
+            Arrays.fill(wrappingKey, (byte) 0);
+            return dbKey;
+        } catch (Exception e) {
+            Log.e(TAG, "Failed to unwrap DB key with YubiKey", e);
+            return null;
+        }
+    }
+
+    /**
+     * Wrap (encrypt) a DB key using a password via PBKDF2 + AES-GCM.
+     * @return blob: salt(16) + iv(12) + ciphertext+tag
+     */
+    public static byte[] wrapDbKeyWithPassword(byte[] dbKey, char[] password) throws Exception {
+        byte[] salt = new byte[WRAP_SALT_LENGTH];
+        new SecureRandom().nextBytes(salt);
+
+        PBEKeySpec spec = new PBEKeySpec(password, salt, PBKDF2_WRAP_ITERATIONS, 256);
+        SecretKeyFactory factory = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA512");
+        byte[] keyBytes = factory.generateSecret(spec).getEncoded();
+
+        byte[] iv = new byte[WRAP_IV_LENGTH];
+        new SecureRandom().nextBytes(iv);
+
+        Cipher cipher = Cipher.getInstance("AES/GCM/NoPadding");
+        cipher.init(Cipher.ENCRYPT_MODE, new SecretKeySpec(keyBytes, "AES"),
+                new GCMParameterSpec(WRAP_TAG_BITS, iv));
+        byte[] ciphertext = cipher.doFinal(dbKey);
+        Arrays.fill(keyBytes, (byte) 0);
+
+        byte[] blob = new byte[salt.length + iv.length + ciphertext.length];
+        System.arraycopy(salt, 0, blob, 0, salt.length);
+        System.arraycopy(iv, 0, blob, salt.length, iv.length);
+        System.arraycopy(ciphertext, 0, blob, salt.length + iv.length, ciphertext.length);
+        return blob;
+    }
+
+    /**
+     * Unwrap (decrypt) a DB key using a password.
+     * @return The 32-byte DB key, or null on failure
+     */
+    public static byte[] unwrapDbKeyWithPassword(byte[] blob, char[] password) {
+        try {
+            if (blob.length < WRAP_SALT_LENGTH + WRAP_IV_LENGTH + 1) return null;
+
+            byte[] salt = new byte[WRAP_SALT_LENGTH];
+            byte[] iv = new byte[WRAP_IV_LENGTH];
+            System.arraycopy(blob, 0, salt, 0, WRAP_SALT_LENGTH);
+            System.arraycopy(blob, WRAP_SALT_LENGTH, iv, 0, WRAP_IV_LENGTH);
+            byte[] ciphertext = new byte[blob.length - WRAP_SALT_LENGTH - WRAP_IV_LENGTH];
+            System.arraycopy(blob, WRAP_SALT_LENGTH + WRAP_IV_LENGTH, ciphertext, 0, ciphertext.length);
+
+            PBEKeySpec spec = new PBEKeySpec(password, salt, PBKDF2_WRAP_ITERATIONS, 256);
+            SecretKeyFactory factory = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA512");
+            byte[] keyBytes = factory.generateSecret(spec).getEncoded();
+
+            Cipher cipher = Cipher.getInstance("AES/GCM/NoPadding");
+            cipher.init(Cipher.DECRYPT_MODE, new SecretKeySpec(keyBytes, "AES"),
+                    new GCMParameterSpec(WRAP_TAG_BITS, iv));
+            byte[] dbKey = cipher.doFinal(ciphertext);
+            Arrays.fill(keyBytes, (byte) 0);
+            return dbKey;
+        } catch (Exception e) {
+            Log.e(TAG, "Failed to unwrap DB key with password", e);
+            return null;
+        }
+    }
+
+    /**
+     * Convert a raw DB key to a char[] suitable for PasswordDatabase/PBKDF2.
+     */
+    public static char[] dbKeyToPassword(byte[] dbKey) {
+        return Base64.encodeToString(dbKey, Base64.NO_WRAP | Base64.NO_PADDING).toCharArray();
+    }
+
+
+    // ═════════════════════════════════════════════════════════════════════
     //  Key combination — merge password + YubiKey response
     // ═════════════════════════════════════════════════════════════════════
 
@@ -439,46 +734,49 @@ public class YubiKeyManager {
     }
 
     /**
-     * Save a recovery blob: the YubiKey HMAC response encrypted with a key
-     * derived from (password + recovery_code).
-     *
-     * <p>File format:
-     * <ul>
-     *   <li>4 bytes: magic "YKRC"</li>
-     *   <li>1 byte: version</li>
-     *   <li>16 bytes: PBKDF2 salt</li>
-     *   <li>12 bytes: AES-GCM IV</li>
-     *   <li>remaining: AES-GCM ciphertext (20-byte HMAC response + 16-byte auth tag)</li>
-     * </ul>
-     *
-     * @param databaseFile  The database file
-     * @param password      The user's master password
-     * @param recoveryCode  The recovery code (with or without dashes)
-     * @param hmacResponse  The 20-byte YubiKey HMAC response to protect
+     * Save a recovery blob protecting the HMAC response (mode 1: PASSWORD_REQUIRED).
+     * Key = PBKDF2(password + recovery_code).
      */
     public static void saveRecoveryBlob(File databaseFile, char[] password,
                                         String recoveryCode, byte[] hmacResponse) throws Exception {
+        saveRecoveryBlobInternal(databaseFile, password, recoveryCode, hmacResponse);
+    }
+
+    /**
+     * Save a recovery blob protecting a raw DB key (modes 2, 3).
+     * Key = PBKDF2(recovery_code) — no password component needed since the
+     * DB key is the secret, not tied to any password.
+     */
+    public static void saveRecoveryBlobForDbKey(File databaseFile,
+                                                String recoveryCode, byte[] dbKey) throws Exception {
+        saveRecoveryBlobInternal(databaseFile, null, recoveryCode, dbKey);
+    }
+
+    private static void saveRecoveryBlobInternal(File databaseFile, char[] password,
+                                                  String recoveryCode, byte[] secret) throws Exception {
         String normalized = normalizeRecoveryCode(recoveryCode);
 
-        // Derive encryption key from password + recovery code
+        // Derive encryption key from password + recovery code (or just recovery code)
         byte[] salt = new byte[16];
         new SecureRandom().nextBytes(salt);
 
-        char[] combined = combineForRecovery(password, normalized);
-        PBEKeySpec spec = new PBEKeySpec(combined, salt, PBKDF2_RECOVERY_ITERATIONS, 256);
+        char[] keyInput = (password != null)
+                ? combineForRecovery(password, normalized)
+                : normalized.toCharArray();
+        PBEKeySpec spec = new PBEKeySpec(keyInput, salt, PBKDF2_RECOVERY_ITERATIONS, 256);
         SecretKeyFactory factory = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA256");
         byte[] keyBytes = factory.generateSecret(spec).getEncoded();
         SecretKeySpec key = new SecretKeySpec(keyBytes, "AES");
-        Arrays.fill(combined, '\0');
+        Arrays.fill(keyInput, '\0');
         Arrays.fill(keyBytes, (byte) 0);
 
-        // Encrypt the HMAC response with AES-GCM
+        // Encrypt the secret with AES-GCM
         byte[] iv = new byte[AES_GCM_IV_LENGTH];
         new SecureRandom().nextBytes(iv);
 
         Cipher cipher = Cipher.getInstance("AES/GCM/NoPadding");
         cipher.init(Cipher.ENCRYPT_MODE, key, new GCMParameterSpec(AES_GCM_TAG_BITS, iv));
-        byte[] ciphertext = cipher.doFinal(hmacResponse);
+        byte[] ciphertext = cipher.doFinal(secret);
 
         // Write recovery file
         File recoveryFile = getRecoveryFile(databaseFile);
@@ -494,20 +792,35 @@ public class YubiKeyManager {
     }
 
     /**
-     * Decrypt the recovery blob to recover the YubiKey HMAC response.
+     * Decrypt the recovery blob. Tries password+code first, then code-only.
      *
-     * @param databaseFile  The database file
-     * @param password      The user's master password
-     * @param recoveryCode  The recovery code entered by the user
-     * @return The 20-byte HMAC response, or null if decryption fails
+     * @return The protected secret (HMAC response or DB key), or null on failure
      */
     public static byte[] decryptRecoveryBlob(File databaseFile, char[] password,
                                              String recoveryCode) {
+        // Try with password+code first (mode 1)
+        byte[] result = decryptRecoveryBlobWithKey(databaseFile,
+                combineForRecovery(password, normalizeRecoveryCode(recoveryCode)));
+        if (result != null) return result;
+
+        // Try code-only (modes 2, 3)
+        return decryptRecoveryBlobWithKey(databaseFile,
+                normalizeRecoveryCode(recoveryCode).toCharArray());
+    }
+
+    /**
+     * Decrypt recovery blob using code only (no password). For modes 2/3.
+     */
+    public static byte[] decryptRecoveryBlobCodeOnly(File databaseFile, String recoveryCode) {
+        return decryptRecoveryBlobWithKey(databaseFile,
+                normalizeRecoveryCode(recoveryCode).toCharArray());
+    }
+
+    private static byte[] decryptRecoveryBlobWithKey(File databaseFile, char[] keyInput) {
         File recoveryFile = getRecoveryFile(databaseFile);
         if (!recoveryFile.exists()) return null;
 
         try (FileInputStream fis = new FileInputStream(recoveryFile)) {
-            // Read and validate header
             byte[] magic = new byte[RECOVERY_MAGIC.length];
             if (fis.read(magic) != magic.length) return null;
             if (!Arrays.equals(magic, RECOVERY_MAGIC)) return null;
@@ -515,35 +828,29 @@ public class YubiKeyManager {
             int version = fis.read();
             if (version != RECOVERY_VERSION) return null;
 
-            // Read salt
             byte[] salt = new byte[16];
             if (fis.read(salt) != salt.length) return null;
 
-            // Read IV
             byte[] iv = new byte[AES_GCM_IV_LENGTH];
             if (fis.read(iv) != iv.length) return null;
 
-            // Read ciphertext (rest of file)
             byte[] ciphertext = new byte[fis.available()];
             if (fis.read(ciphertext) != ciphertext.length) return null;
 
             // Derive decryption key
-            String normalized = normalizeRecoveryCode(recoveryCode);
-            char[] combined = combineForRecovery(password, normalized);
-            PBEKeySpec spec = new PBEKeySpec(combined, salt, PBKDF2_RECOVERY_ITERATIONS, 256);
+            PBEKeySpec spec = new PBEKeySpec(keyInput, salt, PBKDF2_RECOVERY_ITERATIONS, 256);
             SecretKeyFactory factory = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA256");
             byte[] keyBytes = factory.generateSecret(spec).getEncoded();
             SecretKeySpec key = new SecretKeySpec(keyBytes, "AES");
-            Arrays.fill(combined, '\0');
+            Arrays.fill(keyInput, '\0');
             Arrays.fill(keyBytes, (byte) 0);
 
-            // Decrypt
             Cipher cipher = Cipher.getInstance("AES/GCM/NoPadding");
             cipher.init(Cipher.DECRYPT_MODE, key, new GCMParameterSpec(AES_GCM_TAG_BITS, iv));
             return cipher.doFinal(ciphertext);
 
         } catch (Exception e) {
-            Log.e(TAG, "Failed to decrypt recovery blob", e);
+            Log.d(TAG, "Recovery blob decryption attempt failed", e);
             return null;
         }
     }

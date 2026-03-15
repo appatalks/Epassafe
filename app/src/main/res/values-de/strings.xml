@@ -178,8 +178,14 @@
     <string name="yubikey_remove_button">YubiKey entfernen</string>
     <string name="yubikey_tap_to_enroll">Tippen Sie jetzt Ihren YubiKey an…</string>
     <string name="yubikey_tap_to_unlock">🔑 Passwort eingeben, dann YubiKey antippen</string>
+    <string name="yubikey_tap_to_unlock_passwordless">🔑 YubiKey antippen zum Entsperren</string>
+    <string name="yubikey_tap_to_unlock_optional">🔑 Passwort eingeben ODER YubiKey antippen</string>
     <string name="yubikey_tap_now">Tippen Sie jetzt Ihren YubiKey an…</string>
     <string name="yubikey_description">Fügt einen zweiten Faktor über NFC Ihres YubiKeys hinzu. Sie müssen Ihren YubiKey bei jedem Entsperren antippen. Erfordert einen YubiKey 5 NFC oder kompatibel.</string>
+    <string name="yubikey_mode_password_required">🔒 Passwort + YubiKey (beide erforderlich)</string>
+    <string name="yubikey_mode_passwordless">🔑 Nur YubiKey (kein Passwort nötig)</string>
+    <string name="yubikey_mode_optional">🔓 Passwort ODER YubiKey (eines reicht)</string>
+    <string name="yubikey_enter_password_or_tap">Geben Sie Ihr Passwort ein oder tippen Sie Ihren YubiKey an</string>
     <string name="yubikey_enrollment_success">YubiKey erfolgreich registriert! Datenbank mit 2FA neu verschlüsselt.</string>
     <string name="yubikey_enrollment_failed">YubiKey-Registrierung fehlgeschlagen: %s</string>
     <string name="yubikey_removed_success">YubiKey entfernt. Datenbank nur mit Passwort neu verschlüsselt.</string>

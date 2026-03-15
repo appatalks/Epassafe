@@ -186,8 +186,14 @@
     <string name="yubikey_remove_button">Remove YubiKey</string>
     <string name="yubikey_tap_to_enroll">Tap your YubiKey now to enroll…</string>
     <string name="yubikey_tap_to_unlock">🔑 Enter password, then tap YubiKey</string>
+    <string name="yubikey_tap_to_unlock_passwordless">🔑 Tap your YubiKey to unlock</string>
+    <string name="yubikey_tap_to_unlock_optional">🔑 Enter password OR tap YubiKey</string>
     <string name="yubikey_tap_now">Tap your YubiKey now…</string>
     <string name="yubikey_description">Adds a second factor using your YubiKey\'s NFC. You will need to tap your YubiKey each time you unlock the database. Requires a YubiKey 5 NFC or compatible.</string>
+    <string name="yubikey_mode_password_required">🔒 Password + YubiKey (both required)</string>
+    <string name="yubikey_mode_passwordless">🔑 YubiKey only (no password needed)</string>
+    <string name="yubikey_mode_optional">🔓 Password OR YubiKey (either works)</string>
+    <string name="yubikey_enter_password_or_tap">Enter your password or tap your YubiKey to unlock</string>
     <string name="yubikey_enrollment_success">YubiKey enrolled successfully! Database re-encrypted with 2FA.</string>
     <string name="yubikey_enrollment_failed">YubiKey enrollment failed: %s</string>
     <string name="yubikey_removed_success">YubiKey removed. Database re-encrypted with password only.</string>

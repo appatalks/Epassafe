@@ -189,8 +189,14 @@
     <string name="yubikey_remove_button">Видалити YubiKey</string>
     <string name="yubikey_tap_to_enroll">Торкніться YubiKey зараз для реєстрації…</string>
     <string name="yubikey_tap_to_unlock">🔑 Введіть пароль, потім торкніться YubiKey</string>
+    <string name="yubikey_tap_to_unlock_passwordless">🔑 Торкніться YubiKey для розблокування</string>
+    <string name="yubikey_tap_to_unlock_optional">🔑 Введіть пароль АБО торкніться YubiKey</string>
     <string name="yubikey_tap_now">Торкніться YubiKey зараз…</string>
     <string name="yubikey_description">Додає другий фактор через NFC вашого YubiKey. Потрібно торкатися YubiKey кожного разу при розблокуванні бази даних. Потрібен YubiKey 5 NFC або сумісний.</string>
+    <string name="yubikey_mode_password_required">🔒 Пароль + YubiKey (обидва потрібні)</string>
+    <string name="yubikey_mode_passwordless">🔑 Тільки YubiKey (пароль не потрібен)</string>
+    <string name="yubikey_mode_optional">🔓 Пароль АБО YubiKey (будь-що працює)</string>
+    <string name="yubikey_enter_password_or_tap">Введіть пароль або торкніться YubiKey для розблокування</string>
     <string name="yubikey_enrollment_success">YubiKey успішно зареєстровано! База даних перешифрована з 2FA.</string>
     <string name="yubikey_enrollment_failed">Реєстрація YubiKey не вдалася: %s</string>
     <string name="yubikey_removed_success">YubiKey видалено. База даних перешифрована тільки з паролем.</string>
