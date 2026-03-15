@@ -79,7 +79,7 @@ import javax.crypto.spec.SecretKeySpec;
  */
 public class YubiKeyManager {
 
-    private static final String TAG = "YubiKeyManager"; // v2
+    private static final String TAG = "YubiKeyManager";
 
     // ── Unlock modes ─────────────────────────────────────────────────────
 

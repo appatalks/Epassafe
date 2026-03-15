@@ -385,6 +385,20 @@ public class ChangeMasterPassword extends Activity {
                 // Verify existing password first
                 new PasswordDatabase(dbFile, existingPassword.clone());
 
+                // Create a pre-enrollment backup of the database
+                // This is the last-resort safety net if both unlock and recovery fail
+                File backupFile = new File(dbFile.getParentFile(),
+                        dbFile.getName() + ".pre-yubikey-backup");
+                try {
+                    ((UPMApplication) getApplication()).copyFile(dbFile, backupFile,
+                            ChangeMasterPassword.this);
+                    Log.i("ChangeMasterPassword",
+                            "Pre-enrollment backup saved: " + backupFile.getAbsolutePath());
+                } catch (Exception backupErr) {
+                    Log.w("ChangeMasterPassword",
+                            "Could not create pre-enrollment backup", backupErr);
+                }
+
                 // Connect to YubiKey via NFC
                 IsoDep isoDep = IsoDep.get(tag);
                 if (isoDep == null) {
