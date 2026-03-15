@@ -187,6 +187,9 @@
     <string name="yubikey_enable_2fa">Увімкнути YubiKey 2FA</string>
     <string name="yubikey_enroll_button">Зареєструвати YubiKey</string>
     <string name="yubikey_remove_button">Видалити YubiKey</string>
+    <string name="yubikey_change_mode_button">Змінити режим розблокування</string>
+    <string name="yubikey_tap_to_change_mode">Торкніться або підключіть YubiKey для підтвердження зміни режиму…</string>
+    <string name="yubikey_mode_change_failed">Зміна режиму не вдалася: %s</string>
     <string name="yubikey_tap_to_enroll">Торкніться або підключіть YubiKey для реєстрації…</string>
     <string name="yubikey_tap_to_unlock">🔑 Введіть пароль, потім торкніться або підключіть YubiKey</string>
     <string name="yubikey_tap_to_unlock_passwordless">🔑 Торкніться або підключіть YubiKey для розблокування</string>

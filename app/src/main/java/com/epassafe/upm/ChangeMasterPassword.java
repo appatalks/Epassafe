@@ -80,8 +80,10 @@ public class ChangeMasterPassword extends Activity {
     private UsbManager usbManager;
     private boolean waitingForYubiKeyEnroll = false;
     private boolean waitingForYubiKeyRemove = false;
+    private boolean waitingForYubiKeyModeChange = false;
     private boolean yubiKeyCurrentlyEnrolled = false;
     private YubiKeyManager.UnlockMode selectedYubiKeyMode = YubiKeyManager.UnlockMode.PASSWORD_REQUIRED;
+    private YubiKeyManager.UnlockMode currentEnrolledMode = YubiKeyManager.UnlockMode.PASSWORD_REQUIRED;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -214,6 +216,17 @@ public class ChangeMasterPassword extends Activity {
                     } else if (checkedId == R.id.yubikey_mode_optional) {
                         selectedYubiKeyMode = YubiKeyManager.UnlockMode.PASSWORD_OR_YUBIKEY;
                     }
+
+                    // If enrolled and mode changed, show "Change Mode" button
+                    if (yubiKeyCurrentlyEnrolled && yubiKeyEnableCheckbox.isChecked()) {
+                        if (selectedYubiKeyMode != currentEnrolledMode) {
+                            yubiKeyEnrollButton.setVisibility(View.VISIBLE);
+                            yubiKeyEnrollButton.setText(R.string.yubikey_change_mode_button);
+                        } else {
+                            // Same mode — show remove button
+                            yubiKeyEnrollButton.setText(R.string.yubikey_remove_button);
+                        }
+                    }
                 }
             });
         }
@@ -227,11 +240,12 @@ public class ChangeMasterPassword extends Activity {
                 yubiKeyEnableCheckbox.setChecked(true);
                 yubiKeyEnrollButton.setVisibility(View.VISIBLE);
                 yubiKeyEnrollButton.setText(R.string.yubikey_remove_button);
-                // Show current mode
-                selectedYubiKeyMode = YubiKeyManager.loadMode(dbFile);
+                // Show current mode — radio buttons stay enabled for mode switching
+                currentEnrolledMode = YubiKeyManager.loadMode(dbFile);
+                selectedYubiKeyMode = currentEnrolledMode;
                 if (yubiKeyModeGroup != null) {
                     yubiKeyModeGroup.setVisibility(View.VISIBLE);
-                    switch (selectedYubiKeyMode) {
+                    switch (currentEnrolledMode) {
                         case PASSWORDLESS:
                             yubiKeyModeGroup.check(R.id.yubikey_mode_passwordless); break;
                         case PASSWORD_OR_YUBIKEY:
@@ -239,9 +253,6 @@ public class ChangeMasterPassword extends Activity {
                         default:
                             yubiKeyModeGroup.check(R.id.yubikey_mode_password_required); break;
                     }
-                    // Disable radio buttons when already enrolled (need to remove & re-enroll to change)
-                    for (int i = 0; i < yubiKeyModeGroup.getChildCount(); i++)
-                        yubiKeyModeGroup.getChildAt(i).setEnabled(false);
                 }
             } else {
                 yubiKeyEnrollmentStatus.setText(R.string.yubikey_not_enrolled);
@@ -282,19 +293,29 @@ public class ChangeMasterPassword extends Activity {
                         return;
                     }
 
-                    if (yubiKeyCurrentlyEnrolled && !yubiKeyEnableCheckbox.isChecked()) {
+                    // Determine what action to take
+                    if (yubiKeyCurrentlyEnrolled && yubiKeyEnableCheckbox.isChecked()
+                            && selectedYubiKeyMode != currentEnrolledMode) {
+                        // Mode change
+                        waitingForYubiKeyModeChange = true;
+                        waitingForYubiKeyEnroll = false;
+                        waitingForYubiKeyRemove = false;
+                    } else if (yubiKeyCurrentlyEnrolled && !yubiKeyEnableCheckbox.isChecked()) {
+                        // Remove
                         waitingForYubiKeyRemove = true;
                         waitingForYubiKeyEnroll = false;
+                        waitingForYubiKeyModeChange = false;
                     } else {
+                        // New enrollment
                         waitingForYubiKeyEnroll = true;
                         waitingForYubiKeyRemove = false;
+                        waitingForYubiKeyModeChange = false;
                     }
 
                     // Check if a YubiKey is already plugged in via USB
                     if (usbManager != null) {
                         UsbDevice usbYubiKey = YubiKeyManager.findYubiKey(usbManager);
                         if (usbYubiKey != null && usbManager.hasPermission(usbYubiKey)) {
-                            // Process USB YubiKey directly
                             yubiKeyEnrollProgress.setVisibility(View.VISIBLE);
                             yubiKeyNfcPrompt.setText(R.string.yubikey_enrolling);
                             yubiKeyNfcPrompt.setVisibility(View.VISIBLE);
@@ -302,6 +323,8 @@ public class ChangeMasterPassword extends Activity {
                                 new EnrollYubiKeyUsbTask(usbYubiKey).execute();
                             } else if (waitingForYubiKeyRemove) {
                                 new RemoveYubiKeyUsbTask(usbYubiKey).execute();
+                            } else if (waitingForYubiKeyModeChange) {
+                                new ChangeModeUsbTask(usbYubiKey).execute();
                             }
                             return;
                         }
@@ -321,9 +344,13 @@ public class ChangeMasterPassword extends Activity {
                     }
 
                     yubiKeyNfcPrompt.setVisibility(View.VISIBLE);
-                    yubiKeyNfcPrompt.setText(waitingForYubiKeyEnroll
-                            ? R.string.yubikey_tap_to_enroll
-                            : R.string.yubikey_tap_now);
+                    if (waitingForYubiKeyModeChange) {
+                        yubiKeyNfcPrompt.setText(R.string.yubikey_tap_to_change_mode);
+                    } else {
+                        yubiKeyNfcPrompt.setText(waitingForYubiKeyEnroll
+                                ? R.string.yubikey_tap_to_enroll
+                                : R.string.yubikey_tap_now);
+                    }
                 }
             });
         }
@@ -367,7 +394,7 @@ public class ChangeMasterPassword extends Activity {
             return;
         }
 
-        if (!waitingForYubiKeyEnroll && !waitingForYubiKeyRemove) {
+        if (!waitingForYubiKeyEnroll && !waitingForYubiKeyRemove && !waitingForYubiKeyModeChange) {
             return; // Not waiting for a tap
         }
 
@@ -381,6 +408,8 @@ public class ChangeMasterPassword extends Activity {
             new EnrollYubiKeyTask(tag).execute();
         } else if (waitingForYubiKeyRemove) {
             new RemoveYubiKeyTask(tag).execute();
+        } else if (waitingForYubiKeyModeChange) {
+            new ChangeModeNfcTask(tag).execute();
         }
     }
 
@@ -878,6 +907,210 @@ public class ChangeMasterPassword extends Activity {
                         errorMessage != null ? errorMessage : "Unknown error");
                 UIUtilities.showToast(ChangeMasterPassword.this, msg, true);
             }
+        }
+    }
+
+    /**
+     * Shared mode-change logic. Verifies the YubiKey, then re-encrypts the DB
+     * for the new mode. Returns error message or null on success.
+     */
+    private String doModeChange(byte[] yubiKeyResponse, YubiKeyManager.UnlockMode newMode) {
+        try {
+            PasswordDatabase database = ((UPMApplication) getApplication()).getPasswordDatabase();
+            char[] existingPassword = existingPasswordEditText.getText().toString().toCharArray();
+            File dbFile = database.getDatabaseFile();
+            YubiKeyManager.UnlockMode oldMode = YubiKeyManager.loadMode(dbFile);
+
+            // Verify this is the correct YubiKey
+            byte[] expectedResponse = YubiKeyManager.loadExpectedResponse(dbFile);
+            if (!YubiKeyManager.verifyResponse(yubiKeyResponse, expectedResponse)) {
+                return "Wrong YubiKey";
+            }
+
+            // First, decrypt the current DB key depending on old mode
+            // We need to open the DB to re-encrypt it
+            char[] currentDbPassword;
+            switch (oldMode) {
+                case PASSWORDLESS:
+                case PASSWORD_OR_YUBIKEY: {
+                    byte[] ykBlob = YubiKeyManager.loadYkWrappedKey(dbFile);
+                    if (ykBlob == null) return "Cannot read current enrollment data";
+                    byte[] dbKey = YubiKeyManager.unwrapDbKeyWithYubiKey(ykBlob, yubiKeyResponse);
+                    if (dbKey == null) return "Failed to unwrap current DB key";
+                    currentDbPassword = YubiKeyManager.dbKeyToPassword(dbKey);
+                    Arrays.fill(dbKey, (byte) 0);
+                    break;
+                }
+                default: {
+                    currentDbPassword = YubiKeyManager.combinePasswordWithYubiKeyResponse(
+                            existingPassword, yubiKeyResponse);
+                    break;
+                }
+            }
+
+            // Verify we can open the database
+            new PasswordDatabase(dbFile, currentDbPassword.clone());
+
+            // Backup before re-encryption
+            File backupFile = new File(dbFile.getParentFile(),
+                    dbFile.getName() + ".pre-yubikey-backup");
+            try {
+                ((UPMApplication) getApplication()).copyFile(dbFile, backupFile,
+                        ChangeMasterPassword.this);
+            } catch (Exception ignored) {}
+
+            // Re-encrypt for the new mode
+            byte[] challenge = YubiKeyManager.loadChallenge(dbFile);
+            int slot = YubiKeyManager.loadSlot(dbFile);
+            String recoveryCode = YubiKeyManager.generateRecoveryCode();
+            byte[] ykWrappedKey = null;
+            byte[] pwWrappedKey = null;
+
+            switch (newMode) {
+                case PASSWORDLESS: {
+                    byte[] dbKey = YubiKeyManager.generateDbKey();
+                    char[] dbPassword = YubiKeyManager.dbKeyToPassword(dbKey);
+                    database.changePassword(dbPassword);
+                    database.save();
+                    ykWrappedKey = YubiKeyManager.wrapDbKeyWithYubiKey(dbKey, yubiKeyResponse);
+                    YubiKeyManager.saveRecoveryBlobForDbKey(dbFile, recoveryCode, dbKey);
+                    Arrays.fill(dbKey, (byte) 0);
+                    Arrays.fill(dbPassword, '\0');
+                    break;
+                }
+                case PASSWORD_OR_YUBIKEY: {
+                    byte[] dbKey = YubiKeyManager.generateDbKey();
+                    char[] dbPassword = YubiKeyManager.dbKeyToPassword(dbKey);
+                    database.changePassword(dbPassword);
+                    database.save();
+                    ykWrappedKey = YubiKeyManager.wrapDbKeyWithYubiKey(dbKey, yubiKeyResponse);
+                    pwWrappedKey = YubiKeyManager.wrapDbKeyWithPassword(dbKey, existingPassword);
+                    YubiKeyManager.saveRecoveryBlobForDbKey(dbFile, recoveryCode, dbKey);
+                    Arrays.fill(dbKey, (byte) 0);
+                    Arrays.fill(dbPassword, '\0');
+                    break;
+                }
+                case PASSWORD_REQUIRED:
+                default: {
+                    char[] combined = YubiKeyManager.combinePasswordWithYubiKeyResponse(
+                            existingPassword, yubiKeyResponse);
+                    database.changePassword(combined);
+                    database.save();
+                    YubiKeyManager.saveRecoveryBlob(dbFile, existingPassword, recoveryCode, yubiKeyResponse);
+                    Arrays.fill(combined, '\0');
+                    break;
+                }
+            }
+
+            YubiKeyManager.saveEnrollmentV2(dbFile, slot, challenge, yubiKeyResponse,
+                    newMode, ykWrappedKey, pwWrappedKey);
+
+            Arrays.fill(currentDbPassword, '\0');
+            Arrays.fill(existingPassword, '\0');
+
+            // Store recovery code for UI to show
+            lastRecoveryCode = recoveryCode;
+            return null; // success
+
+        } catch (Exception e) {
+            Log.e("ChangeMasterPassword", "Mode change error", e);
+            return e.getMessage();
+        }
+    }
+
+    private volatile String lastRecoveryCode;
+
+    /** Post-execute handler shared by both NFC and USB mode change tasks. */
+    private void onModeChangeComplete(boolean success, String errorMessage) {
+        yubiKeyEnrollProgress.setVisibility(View.GONE);
+        yubiKeyNfcPrompt.setVisibility(View.GONE);
+        waitingForYubiKeyModeChange = false;
+
+        if (success) {
+            currentEnrolledMode = selectedYubiKeyMode;
+            yubiKeyEnrollButton.setText(R.string.yubikey_remove_button);
+            showRecoveryCodeDialog(lastRecoveryCode);
+        } else {
+            String msg = String.format(getString(R.string.yubikey_mode_change_failed),
+                    errorMessage != null ? errorMessage : "Unknown error");
+            UIUtilities.showToast(ChangeMasterPassword.this, msg, true);
+        }
+    }
+
+    /**
+     * NFC-based mode change task.
+     */
+    private class ChangeModeNfcTask extends AsyncTask<Void, Void, Boolean> {
+        private final Tag tag;
+        private String errorMessage;
+
+        ChangeModeNfcTask(Tag tag) { this.tag = tag; }
+
+        @Override
+        protected Boolean doInBackground(Void... params) {
+            try {
+                File dbFile = ((UPMApplication) getApplication()).getPasswordDatabase().getDatabaseFile();
+                byte[] challenge = YubiKeyManager.loadChallenge(dbFile);
+                int slot = YubiKeyManager.loadSlot(dbFile);
+
+                IsoDep isoDep = IsoDep.get(tag);
+                if (isoDep == null) { errorMessage = "Not a compatible NFC device"; return false; }
+                isoDep.connect();
+                isoDep.setTimeout(30000);
+                try {
+                    byte[] response = YubiKeyManager.performChallengeResponse(isoDep, slot, challenge);
+                    errorMessage = doModeChange(response, selectedYubiKeyMode);
+                    return errorMessage == null;
+                } finally {
+                    isoDep.close();
+                }
+            } catch (Exception e) {
+                errorMessage = e.getMessage();
+                return false;
+            }
+        }
+
+        @Override
+        protected void onPostExecute(Boolean success) {
+            onModeChangeComplete(success, errorMessage);
+        }
+    }
+
+    /**
+     * USB-based mode change task.
+     */
+    private class ChangeModeUsbTask extends AsyncTask<Void, Void, Boolean> {
+        private final UsbDevice device;
+        private String errorMessage;
+
+        ChangeModeUsbTask(UsbDevice device) { this.device = device; }
+
+        @Override
+        protected Boolean doInBackground(Void... params) {
+            try {
+                File dbFile = ((UPMApplication) getApplication()).getPasswordDatabase().getDatabaseFile();
+                byte[] challenge = YubiKeyManager.loadChallenge(dbFile);
+                int slot = YubiKeyManager.loadSlot(dbFile);
+
+                UsbDeviceConnection connection = usbManager.openDevice(device);
+                if (connection == null) { errorMessage = "Cannot open USB device"; return false; }
+                try {
+                    byte[] response = YubiKeyManager.performChallengeResponseUsb(
+                            connection, device, slot, challenge);
+                    errorMessage = doModeChange(response, selectedYubiKeyMode);
+                    return errorMessage == null;
+                } finally {
+                    connection.close();
+                }
+            } catch (Exception e) {
+                errorMessage = e.getMessage();
+                return false;
+            }
+        }
+
+        @Override
+        protected void onPostExecute(Boolean success) {
+            onModeChangeComplete(success, errorMessage);
         }
     }
 

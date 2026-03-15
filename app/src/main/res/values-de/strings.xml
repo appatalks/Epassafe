@@ -176,6 +176,9 @@
     <string name="yubikey_enable_2fa">YubiKey 2FA aktivieren</string>
     <string name="yubikey_enroll_button">YubiKey registrieren</string>
     <string name="yubikey_remove_button">YubiKey entfernen</string>
+    <string name="yubikey_change_mode_button">Entsperrmodus ändern</string>
+    <string name="yubikey_tap_to_change_mode">YubiKey antippen oder einstecken um Modusänderung zu bestätigen…</string>
+    <string name="yubikey_mode_change_failed">Modusänderung fehlgeschlagen: %s</string>
     <string name="yubikey_tap_to_enroll">YubiKey antippen oder einstecken zum Registrieren…</string>
     <string name="yubikey_tap_to_unlock">🔑 Passwort eingeben, dann YubiKey antippen oder einstecken</string>
     <string name="yubikey_tap_to_unlock_passwordless">🔑 YubiKey antippen oder einstecken zum Entsperren</string>
