@@ -17,7 +17,19 @@
 package com.epassafe.upm;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.content.IntentFilter;
+import android.hardware.usb.UsbDevice;
+import android.hardware.usb.UsbDeviceConnection;
+import android.hardware.usb.UsbManager;
+import android.nfc.NfcAdapter;
+import android.nfc.Tag;
+import android.nfc.tech.IsoDep;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
@@ -27,9 +39,13 @@ import android.view.View.OnClickListener;
 import android.view.View.OnKeyListener;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
+import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.epassafe.upm.crypto.InvalidPasswordException;
+import com.epassafe.upm.crypto.YubiKeyManager;
 import com.epassafe.upm.database.PasswordDatabase;
 import com.epassafe.upm.database.ProblemReadingDatabaseFile;
 
@@ -51,6 +67,18 @@ public class EnterMasterPassword extends Activity implements OnClickListener {
     private EditText passwordField;
     private DecryptDatabase decryptDatabaseTask;
     private ProgressDialog progressDialog;
+
+    // YubiKey NFC support
+    private boolean yubiKeyEnrolled = false;
+    private boolean yubiKeyResponseReceived = false;
+    private byte[] yubiKeyResponse = null;
+    private NfcAdapter nfcAdapter;
+    private UsbManager usbManager;
+    private LinearLayout yubiKeySection;
+    private TextView yubiKeyStatus;
+    private TextView yubiKeyResult;
+    private ProgressBar yubiKeyProgress;
+    private YubiKeyManager.UnlockMode yubiKeyMode = YubiKeyManager.UnlockMode.PASSWORD_REQUIRED;
 
     /* SAVE DATABASE BACKUP FILE ON EXIT */
     /* AUTOMATIC BACKUP TO FILE aupm.db THAN MANUAL BACKUP upm.db*/
@@ -94,6 +122,79 @@ public class EnterMasterPassword extends Activity implements OnClickListener {
             }
         });
 
+        // YubiKey NFC setup
+        yubiKeySection = findViewById(R.id.yubikey_section);
+        yubiKeyStatus = findViewById(R.id.yubikey_status);
+        yubiKeyResult = findViewById(R.id.yubikey_result);
+        yubiKeyProgress = findViewById(R.id.yubikey_progress);
+
+        // Check if YubiKey is enrolled for this database
+        if (databaseFileToDecrypt != null && YubiKeyManager.isEnrolled(databaseFileToDecrypt)) {
+            yubiKeyEnrolled = true;
+            yubiKeyMode = YubiKeyManager.loadMode(databaseFileToDecrypt);
+            yubiKeySection.setVisibility(View.VISIBLE);
+
+            switch (yubiKeyMode) {
+                case PASSWORDLESS:
+                    yubiKeyStatus.setText(R.string.yubikey_tap_to_unlock_passwordless);
+                    passwordField.setVisibility(View.GONE);
+                    // Hide the password prompt text too
+                    TextView pwMsg = findViewById(R.id.master_password_message);
+                    if (pwMsg != null) pwMsg.setVisibility(View.GONE);
+                    break;
+                case PASSWORD_OR_YUBIKEY:
+                    yubiKeyStatus.setText(R.string.yubikey_tap_to_unlock_optional);
+                    break;
+                case PASSWORD_REQUIRED:
+                default:
+                    yubiKeyStatus.setText(R.string.yubikey_tap_to_unlock);
+                    break;
+            }
+
+            // Show "Lost YubiKey?" link if recovery file exists
+            TextView lostKeyLink = findViewById(R.id.yubikey_lost_key);
+            if (lostKeyLink != null && YubiKeyManager.hasRecoveryFile(databaseFileToDecrypt)) {
+                lostKeyLink.setVisibility(View.VISIBLE);
+                lostKeyLink.setOnClickListener(new OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        showRecoveryDialog();
+                    }
+                });
+            }
+        }
+
+        // Initialize NFC adapter
+        nfcAdapter = NfcAdapter.getDefaultAdapter(this);
+
+        // Initialize USB manager
+        usbManager = (UsbManager) getSystemService(Context.USB_SERVICE);
+
+        if (yubiKeyEnrolled) {
+            boolean hasNfc = nfcAdapter != null && nfcAdapter.isEnabled();
+            boolean hasUsb = usbManager != null;
+
+            if (!hasNfc && !hasUsb) {
+                yubiKeyStatus.setText(R.string.yubikey_no_transport);
+                yubiKeyStatus.setTextColor(0xFFFF0000);
+            } else if (!hasNfc && nfcAdapter != null) {
+                // NFC exists but disabled — USB still works
+                yubiKeyStatus.setTextColor(0xFFFF9800);
+            }
+
+            // Check if a YubiKey is already plugged in via USB
+            if (hasUsb) {
+                UsbDevice usbYubiKey = YubiKeyManager.findYubiKey(usbManager);
+                if (usbYubiKey != null) {
+                    yubiKeyStatus.setText(R.string.yubikey_usb_detected);
+                    // Auto-process if we have permission
+                    if (usbManager.hasPermission(usbYubiKey)) {
+                        processUsbYubiKey(usbYubiKey);
+                    }
+                }
+            }
+        }
+
         decryptDatabaseTask = (DecryptDatabase) getLastNonConfigurationInstance();
         if (decryptDatabaseTask != null) {
             // Associate the async task with the new activity
@@ -116,7 +217,456 @@ public class EnterMasterPassword extends Activity implements OnClickListener {
     @Override
     public void onClick(View v) {
         if (v.getId() == R.id.master_password_open_button) {
+            switch (yubiKeyMode) {
+                case PASSWORDLESS:
+                    // Can't open without YubiKey in passwordless mode
+                    if (!yubiKeyResponseReceived) {
+                        UIUtilities.showToast(this, R.string.yubikey_require_tap, false);
+                        return;
+                    }
+                    break;
+                case PASSWORD_OR_YUBIKEY:
+                    // Either password or YubiKey is fine — allow through
+                    if (!yubiKeyResponseReceived && passwordField.getText().toString().isEmpty()) {
+                        UIUtilities.showToast(this, R.string.yubikey_enter_password_or_tap, false);
+                        return;
+                    }
+                    break;
+                case PASSWORD_REQUIRED:
+                default:
+                    if (yubiKeyEnrolled && !yubiKeyResponseReceived) {
+                        UIUtilities.showToast(this, R.string.yubikey_require_tap, false);
+                        return;
+                    }
+                    break;
+            }
             openDatabase();
+        }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        // Enable NFC foreground dispatch so YubiKey taps come to this activity
+        if (nfcAdapter != null && nfcAdapter.isEnabled()) {
+            android.app.PendingIntent pendingIntent = android.app.PendingIntent.getActivity(
+                    this, 0,
+                    new Intent(this, getClass()).addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP),
+                    android.app.PendingIntent.FLAG_MUTABLE);
+            nfcAdapter.enableForegroundDispatch(this, pendingIntent, null, null);
+        }
+
+        // Register USB device attached receiver
+        if (yubiKeyEnrolled && usbManager != null) {
+            IntentFilter usbFilter = new IntentFilter();
+            usbFilter.addAction(UsbManager.ACTION_USB_DEVICE_ATTACHED);
+            registerReceiver(usbReceiver, usbFilter);
+        }
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        // Disable NFC foreground dispatch
+        if (nfcAdapter != null) {
+            nfcAdapter.disableForegroundDispatch(this);
+        }
+        // Unregister USB receiver
+        try {
+            unregisterReceiver(usbReceiver);
+        } catch (IllegalArgumentException ignored) {
+            // Not registered
+        }
+    }
+
+    /** BroadcastReceiver for USB YubiKey plug-in events. */
+    private final BroadcastReceiver usbReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if (UsbManager.ACTION_USB_DEVICE_ATTACHED.equals(intent.getAction())) {
+                UsbDevice device = intent.getParcelableExtra(UsbManager.EXTRA_DEVICE, UsbDevice.class);
+                if (device != null && YubiKeyManager.isYubiKey(device) && yubiKeyEnrolled) {
+                    if (usbManager.hasPermission(device)) {
+                        processUsbYubiKey(device);
+                    } else {
+                        // Request USB permission
+                        android.app.PendingIntent pi = android.app.PendingIntent.getBroadcast(
+                                EnterMasterPassword.this, 0,
+                                new Intent("com.epassafe.upm.USB_PERMISSION"),
+                                android.app.PendingIntent.FLAG_MUTABLE);
+                        usbManager.requestPermission(device, pi);
+                    }
+                }
+            }
+        }
+    };
+
+    /**
+     * Initiate HMAC-SHA1 challenge-response with a USB-connected YubiKey.
+     */
+    private void processUsbYubiKey(UsbDevice device) {
+        if (!yubiKeyEnrolled || yubiKeyResponseReceived) return;
+
+        // Check password for PASSWORD_REQUIRED mode
+        if (yubiKeyMode == YubiKeyManager.UnlockMode.PASSWORD_REQUIRED) {
+            String passwordStr = passwordField.getText().toString();
+            if (passwordStr.isEmpty()) {
+                UIUtilities.showToast(this, R.string.yubikey_password_first, false);
+                return;
+            }
+        }
+
+        if (yubiKeyProgress != null) yubiKeyProgress.setVisibility(View.VISIBLE);
+        if (yubiKeyStatus != null) yubiKeyStatus.setText(R.string.yubikey_verifying);
+
+        new ProcessUsbYubiKeyTask(device).execute();
+    }
+
+    /**
+     * Background task to communicate with YubiKey via USB HID.
+     */
+    private class ProcessUsbYubiKeyTask extends AsyncTask<Void, Void, byte[]> {
+        private final UsbDevice device;
+        private String errorMessage;
+
+        ProcessUsbYubiKeyTask(UsbDevice device) {
+            this.device = device;
+        }
+
+        @Override
+        protected byte[] doInBackground(Void... params) {
+            try {
+                byte[] challenge = YubiKeyManager.loadChallenge(databaseFileToDecrypt);
+                if (challenge == null) {
+                    errorMessage = "No enrollment data found";
+                    return null;
+                }
+
+                int slot = YubiKeyManager.loadSlot(databaseFileToDecrypt);
+
+                UsbDeviceConnection connection = usbManager.openDevice(device);
+                if (connection == null) {
+                    errorMessage = "Cannot open USB device — permission denied?";
+                    return null;
+                }
+
+                try {
+                    byte[] response = YubiKeyManager.performChallengeResponseUsb(
+                            connection, device, slot, challenge);
+
+                    byte[] expectedResponse = YubiKeyManager.loadExpectedResponse(databaseFileToDecrypt);
+                    if (expectedResponse != null && !YubiKeyManager.verifyResponse(response, expectedResponse)) {
+                        errorMessage = getString(R.string.yubikey_wrong_key);
+                        return null;
+                    }
+
+                    return response;
+                } finally {
+                    connection.close();
+                }
+            } catch (YubiKeyManager.YubiKeyException e) {
+                Log.e("EnterMasterPassword", "USB YubiKey error", e);
+                errorMessage = e.getMessage();
+                return null;
+            } catch (Exception e) {
+                Log.e("EnterMasterPassword", "USB YubiKey error", e);
+                errorMessage = e.getMessage();
+                return null;
+            }
+        }
+
+        @Override
+        protected void onPostExecute(byte[] response) {
+            if (yubiKeyProgress != null) yubiKeyProgress.setVisibility(View.GONE);
+
+            if (response != null) {
+                yubiKeyResponse = response;
+                yubiKeyResponseReceived = true;
+
+                if (yubiKeyStatus != null) {
+                    yubiKeyStatus.setText(R.string.yubikey_verified);
+                    yubiKeyStatus.setTextColor(0xFF4CAF50);
+                }
+                if (yubiKeyResult != null) {
+                    yubiKeyResult.setText(R.string.yubikey_verified);
+                    yubiKeyResult.setVisibility(View.VISIBLE);
+                }
+
+                openDatabase();
+            } else {
+                if (yubiKeyStatus != null) {
+                    yubiKeyStatus.setText(R.string.yubikey_tap_to_unlock);
+                }
+                String msg = String.format(getString(R.string.yubikey_communication_error),
+                        errorMessage != null ? errorMessage : "Unknown error");
+                UIUtilities.showToast(EnterMasterPassword.this, msg, true);
+            }
+        }
+    }
+
+    @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+
+        if (intent == null) return;
+        String action = intent.getAction();
+
+        // Handle USB YubiKey plug-in
+        if (UsbManager.ACTION_USB_DEVICE_ATTACHED.equals(action)) {
+            UsbDevice device = intent.getParcelableExtra(UsbManager.EXTRA_DEVICE, UsbDevice.class);
+            if (device != null && YubiKeyManager.isYubiKey(device) && yubiKeyEnrolled) {
+                processUsbYubiKey(device);
+            }
+            return;
+        }
+
+        // Handle NFC YubiKey tap
+        if (NfcAdapter.ACTION_TAG_DISCOVERED.equals(action)
+                || NfcAdapter.ACTION_TECH_DISCOVERED.equals(action)
+                || NfcAdapter.ACTION_NDEF_DISCOVERED.equals(action)) {
+
+            if (!yubiKeyEnrolled) {
+                // Not enrolled, ignore NFC taps
+                return;
+            }
+
+            // Check password is entered (only required for PASSWORD_REQUIRED mode)
+            if (yubiKeyMode == YubiKeyManager.UnlockMode.PASSWORD_REQUIRED) {
+                String passwordStr = passwordField.getText().toString();
+                if (passwordStr.isEmpty()) {
+                    UIUtilities.showToast(this, R.string.yubikey_password_first, false);
+                    return;
+                }
+            }
+
+            Tag tag = intent.getParcelableExtra(NfcAdapter.EXTRA_TAG, Tag.class);
+            if (tag == null) return;
+
+            // Show progress
+            if (yubiKeyProgress != null) yubiKeyProgress.setVisibility(View.VISIBLE);
+            if (yubiKeyStatus != null) yubiKeyStatus.setText(R.string.yubikey_verifying);
+
+            // Process YubiKey on background thread
+            new ProcessYubiKeyTask(tag).execute();
+        }
+    }
+
+    /**
+     * Background task to communicate with YubiKey via NFC and perform
+     * HMAC-SHA1 challenge-response.
+     */
+    private class ProcessYubiKeyTask extends AsyncTask<Void, Void, byte[]> {
+        private final Tag tag;
+        private String errorMessage;
+
+        ProcessYubiKeyTask(Tag tag) {
+            this.tag = tag;
+        }
+
+        @Override
+        protected byte[] doInBackground(Void... params) {
+            try {
+                // Load challenge from sidecar file
+                byte[] challenge = YubiKeyManager.loadChallenge(databaseFileToDecrypt);
+                if (challenge == null) {
+                    errorMessage = "No enrollment data found";
+                    return null;
+                }
+
+                int slot = YubiKeyManager.loadSlot(databaseFileToDecrypt);
+
+                // Connect to YubiKey via NFC
+                IsoDep isoDep = IsoDep.get(tag);
+                if (isoDep == null) {
+                    errorMessage = "Not a YubiKey NFC device";
+                    return null;
+                }
+
+                isoDep.connect();
+                isoDep.setTimeout(30000); // 30 second timeout
+
+                try {
+                    // Send HMAC-SHA1 challenge-response via raw APDU
+                    byte[] response = YubiKeyManager.performChallengeResponse(isoDep, slot, challenge);
+
+                    // Verify against expected response
+                    byte[] expectedResponse = YubiKeyManager.loadExpectedResponse(databaseFileToDecrypt);
+                    if (expectedResponse != null && !YubiKeyManager.verifyResponse(response, expectedResponse)) {
+                        errorMessage = getString(R.string.yubikey_wrong_key);
+                        return null;
+                    }
+
+                    return response;
+                } finally {
+                    isoDep.close();
+                }
+            } catch (YubiKeyManager.YubiKeyException e) {
+                Log.e("EnterMasterPassword", "YubiKey error", e);
+                errorMessage = e.getMessage();
+                return null;
+            } catch (Exception e) {
+                Log.e("EnterMasterPassword", "YubiKey error", e);
+                errorMessage = e.getMessage();
+                return null;
+            }
+        }
+
+        @Override
+        protected void onPostExecute(byte[] response) {
+            if (yubiKeyProgress != null) yubiKeyProgress.setVisibility(View.GONE);
+
+            if (response != null) {
+                // Success! Store the response
+                yubiKeyResponse = response;
+                yubiKeyResponseReceived = true;
+
+                if (yubiKeyStatus != null) {
+                    yubiKeyStatus.setText(R.string.yubikey_verified);
+                    yubiKeyStatus.setTextColor(0xFF4CAF50);
+                }
+                if (yubiKeyResult != null) {
+                    yubiKeyResult.setText(R.string.yubikey_verified);
+                    yubiKeyResult.setVisibility(View.VISIBLE);
+                }
+
+                // Auto-trigger database open
+                openDatabase();
+            } else {
+                // Failure
+                if (yubiKeyStatus != null) {
+                    yubiKeyStatus.setText(R.string.yubikey_tap_to_unlock);
+                }
+                String msg = String.format(getString(R.string.yubikey_communication_error),
+                        errorMessage != null ? errorMessage : "Unknown error");
+                UIUtilities.showToast(EnterMasterPassword.this, msg, true);
+            }
+        }
+    }
+
+    /**
+     * Show a dialog prompting for the recovery code when the user has lost their YubiKey.
+     */
+    private void showRecoveryDialog() {
+        final EditText recoveryInput = new EditText(this);
+        recoveryInput.setHint(R.string.yubikey_recovery_code_hint);
+        recoveryInput.setInputType(android.text.InputType.TYPE_CLASS_TEXT
+                | android.text.InputType.TYPE_TEXT_FLAG_CAP_CHARACTERS);
+        recoveryInput.setPadding(40, 20, 40, 20);
+
+        new AlertDialog.Builder(this)
+            .setTitle(R.string.yubikey_lost_key_title)
+            .setMessage(R.string.yubikey_lost_key_message)
+            .setView(recoveryInput)
+            .setPositiveButton(R.string.yubikey_recover_button, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    String code = recoveryInput.getText().toString().trim();
+                    if (code.isEmpty()) {
+                        UIUtilities.showToast(EnterMasterPassword.this,
+                                R.string.yubikey_recovery_code_required, false);
+                        return;
+                    }
+                    String pw = passwordField.getText().toString();
+                    if (pw.isEmpty()) {
+                        UIUtilities.showToast(EnterMasterPassword.this,
+                                R.string.yubikey_password_first, false);
+                        return;
+                    }
+                    // Run recovery in background
+                    new RecoverWithCodeTask(pw.toCharArray(), code).execute();
+                }
+            })
+            .setNegativeButton(R.string.cancel, null)
+            .show();
+    }
+
+    /**
+     * Background task to recover from a lost YubiKey using the recovery code.
+     * Decrypts recovery blob → reconstructs combined key → opens DB →
+     * re-encrypts with password only → deletes enrollment files.
+     */
+    private class RecoverWithCodeTask extends AsyncTask<Void, Void, Boolean> {
+        private final char[] password;
+        private final String recoveryCode;
+        private String errorMessage;
+
+        RecoverWithCodeTask(char[] password, String recoveryCode) {
+            this.password = password;
+            this.recoveryCode = recoveryCode;
+        }
+
+        @Override
+        protected Boolean doInBackground(Void... params) {
+            try {
+                YubiKeyManager.UnlockMode mode = YubiKeyManager.loadMode(databaseFileToDecrypt);
+                char[] dbPassword;
+
+                if (mode == YubiKeyManager.UnlockMode.PASSWORD_REQUIRED) {
+                    // Mode 1: recovery blob contains HMAC response
+                    byte[] hmacResponse = YubiKeyManager.decryptRecoveryBlob(
+                            databaseFileToDecrypt, password, recoveryCode);
+                    if (hmacResponse == null) {
+                        errorMessage = "Invalid recovery code or password";
+                        return false;
+                    }
+                    dbPassword = YubiKeyManager.combinePasswordWithYubiKeyResponse(
+                            password, hmacResponse);
+                    Arrays.fill(hmacResponse, (byte) 0);
+                } else {
+                    // Modes 2/3: recovery blob contains DB key
+                    byte[] dbKey = YubiKeyManager.decryptRecoveryBlobCodeOnly(
+                            databaseFileToDecrypt, recoveryCode);
+                    if (dbKey == null) {
+                        // Try with password too in case it was mode 1-style
+                        dbKey = YubiKeyManager.decryptRecoveryBlob(
+                                databaseFileToDecrypt, password, recoveryCode);
+                    }
+                    if (dbKey == null) {
+                        errorMessage = "Invalid recovery code";
+                        return false;
+                    }
+                    dbPassword = YubiKeyManager.dbKeyToPassword(dbKey);
+                    Arrays.fill(dbKey, (byte) 0);
+                }
+
+                // Open the database
+                decryptedPasswordDatabase = new PasswordDatabase(
+                        databaseFileToDecrypt, dbPassword);
+
+                // Re-encrypt with password only (remove YubiKey requirement)
+                if (password.length > 0) {
+                    decryptedPasswordDatabase.changePassword(password.clone());
+                }
+                decryptedPasswordDatabase.save();
+
+                // Delete enrollment and recovery files
+                YubiKeyManager.removeAllEnrollment(databaseFileToDecrypt);
+
+                Arrays.fill(dbPassword, '\0');
+                return true;
+            } catch (Exception e) {
+                Log.e("EnterMasterPassword", "Recovery failed", e);
+                errorMessage = e.getMessage();
+                return false;
+            } finally {
+                Arrays.fill(password, '\0');
+            }
+        }
+
+        @Override
+        protected void onPostExecute(Boolean success) {
+            if (success) {
+                UIUtilities.showToast(EnterMasterPassword.this,
+                        R.string.yubikey_recovery_success, true);
+                // Database is now open and re-encrypted without YubiKey
+                setResult(RESULT_OK);
+                finish();
+            } else {
+                UIUtilities.showToast(EnterMasterPassword.this,
+                        String.format(getString(R.string.yubikey_recovery_failed),
+                                errorMessage != null ? errorMessage : "Unknown error"),
+                        true);
+            }
         }
     }
 
@@ -147,15 +697,16 @@ public class EnterMasterPassword extends Activity implements OnClickListener {
         progressDialog = ProgressDialog.show(
                 this, "", this.getString(R.string.decrypting_db));
 
-        // In certain situations (which I'm not clear on) databaseFileToDecrypt
-        // can be null. Check here to ensure we don't end up crashing.
+        // In certain situations databaseFileToDecrypt can be null
         if (EnterMasterPassword.databaseFileToDecrypt == null) {
             Log.w("EnterMasterPassword", "databaseFileToDecrypt was unexpectedly null");
             EnterMasterPassword.databaseFileToDecrypt = Utilities.getDatabaseFile(this);
         }
 
         // Create and execute the background task that will decrypt the db
+        // Pass YubiKey response if available
         decryptDatabaseTask = new DecryptDatabase(this);
+        decryptDatabaseTask.setYubiKeyResponse(yubiKeyResponse);
         decryptDatabaseTask.execute();
     }
 
@@ -174,10 +725,15 @@ public class EnterMasterPassword extends Activity implements OnClickListener {
         private EnterMasterPassword activity;
         private String errorMessage;
         private char[] password;
+        private byte[] yubiKeyResponse;
         private boolean passwordProcessed = false;
 
         public DecryptDatabase(EnterMasterPassword activity) {
             this.activity = activity;
+        }
+
+        public void setYubiKeyResponse(byte[] response) {
+            this.yubiKeyResponse = response;
         }
 
         @Override
@@ -190,24 +746,82 @@ public class EnterMasterPassword extends Activity implements OnClickListener {
         protected Integer doInBackground(Void... params) {
             int errorCode = 0;
             try {
-                // Create a defensive copy of the password for decryption
-                char[] passwordCopy = null;
+                char[] effectivePassword = null;
                 try {
-                    // Make a copy of the password to prevent concurrent modification
-                    passwordCopy = new char[password.length];
-                    System.arraycopy(password, 0, passwordCopy, 0, password.length);
+                    YubiKeyManager.UnlockMode mode = YubiKeyManager.loadMode(databaseFileToDecrypt);
 
-                    // Attempt to decrypt the database with the copy
-                    decryptedPasswordDatabase =
-                            new PasswordDatabase(databaseFileToDecrypt, passwordCopy);
+                    switch (mode) {
+                        case PASSWORDLESS: {
+                            // YubiKey only — unwrap DB key from yk_wrapped_key blob
+                            if (yubiKeyResponse == null || yubiKeyResponse.length == 0) {
+                                return ERROR_INVALID_PASSWORD; // shouldn't happen, UI prevents it
+                            }
+                            byte[] ykBlob = YubiKeyManager.loadYkWrappedKey(databaseFileToDecrypt);
+                            if (ykBlob == null) {
+                                return ERROR_GENERIC_ERROR;
+                            }
+                            byte[] dbKey = YubiKeyManager.unwrapDbKeyWithYubiKey(ykBlob, yubiKeyResponse);
+                            if (dbKey == null) {
+                                return ERROR_INVALID_PASSWORD;
+                            }
+                            effectivePassword = YubiKeyManager.dbKeyToPassword(dbKey);
+                            Arrays.fill(dbKey, (byte) 0);
+                            break;
+                        }
 
-                    // Mark that we've processed the password
-                    passwordProcessed = true;
-                } finally {
-                    // Clean up the password copy securely
-                    if (passwordCopy != null) {
-                        Arrays.fill(passwordCopy, '\0');
+                        case PASSWORD_OR_YUBIKEY: {
+                            if (yubiKeyResponse != null && yubiKeyResponse.length > 0) {
+                                // Path A: YubiKey tap — unwrap DB key
+                                byte[] ykBlob = YubiKeyManager.loadYkWrappedKey(databaseFileToDecrypt);
+                                if (ykBlob != null) {
+                                    byte[] dbKey = YubiKeyManager.unwrapDbKeyWithYubiKey(ykBlob, yubiKeyResponse);
+                                    if (dbKey != null) {
+                                        effectivePassword = YubiKeyManager.dbKeyToPassword(dbKey);
+                                        Arrays.fill(dbKey, (byte) 0);
+                                        break;
+                                    }
+                                }
+                            }
+                            // Path B: Password only — unwrap DB key
+                            if (password != null && password.length > 0) {
+                                byte[] pwBlob = YubiKeyManager.loadPwWrappedKey(databaseFileToDecrypt);
+                                if (pwBlob != null) {
+                                    byte[] dbKey = YubiKeyManager.unwrapDbKeyWithPassword(pwBlob, password);
+                                    if (dbKey != null) {
+                                        effectivePassword = YubiKeyManager.dbKeyToPassword(dbKey);
+                                        Arrays.fill(dbKey, (byte) 0);
+                                        break;
+                                    }
+                                }
+                            }
+                            return ERROR_INVALID_PASSWORD;
+                        }
+
+                        case PASSWORD_REQUIRED:
+                        default: {
+                            // Original mode — combine password + YubiKey response
+                            char[] passwordCopy = new char[password.length];
+                            System.arraycopy(password, 0, passwordCopy, 0, password.length);
+
+                            if (yubiKeyResponse != null && yubiKeyResponse.length > 0) {
+                                effectivePassword = YubiKeyManager.combinePasswordWithYubiKeyResponse(
+                                        passwordCopy, yubiKeyResponse);
+                                Arrays.fill(passwordCopy, '\0');
+                            } else {
+                                effectivePassword = passwordCopy;
+                            }
+                            break;
+                        }
                     }
+
+                    // Attempt to decrypt the database
+                    decryptedPasswordDatabase =
+                            new PasswordDatabase(databaseFileToDecrypt, effectivePassword);
+                    passwordProcessed = true;
+
+                } finally {
+                    if (effectivePassword != null) Arrays.fill(effectivePassword, '\0');
+                    if (yubiKeyResponse != null) Arrays.fill(yubiKeyResponse, (byte) 0);
                 }
             } catch (InvalidPasswordException e) {
                 Log.e("EnterMasterPassword", "Invalid password: " + e.getMessage(), e);

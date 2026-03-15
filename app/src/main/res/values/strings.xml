@@ -34,8 +34,8 @@
     <string name="account_already_exists_error">An account with this name already exists</string>
     <string name="account_name_required_error">Account Name is required</string>
     <string name="existing_master_password">Existing master password</string>
-    <string name="change_master_password">Change Master Password</string>
-    <string name="more">More</string>
+    <string name="change_master_password">Password Configuration</string>
+    <string name="more">Settings</string>
     <string name="password_too_short">Master password must be at least %1$d characters long</string>
     <string name="new_passwords_dont_match">New passwords don\'t match</string>
     <string name="new_password">New Password</string>
@@ -161,8 +161,8 @@
     <string name="incorrect_password">Incorrect password</string>
 
     <!-- Downloads Backup/Restore Strings -->
-    <string name="backup_to_downloads">Backup to Downloads</string>
-    <string name="restore_from_downloads">Restore from Downloads</string>
+    <string name="backup_to_downloads">Backup Database</string>
+    <string name="restore_from_downloads">Restore Database</string>
     <string name="backup_downloads_complete">Database backed up to Downloads folder</string>
     <string name="backup_downloads_failed">Failed to backup database to Downloads folder</string>
     <string name="backup_downloads_exists">A backup already exists in the Downloads folder.\nDo you want to overwrite?</string>
@@ -176,4 +176,54 @@
     <string name="export_csv_success">Database exported to: %s</string>
     <string name="export_csv_failed">Failed to export database to CSV file</string>
     <string name="export_and_password_changed">Master password changed and database exported to: %s</string>
+
+    <!-- YubiKey 2FA Strings -->
+    <string name="yubikey_2fa_section_title">YubiKey 2FA (NFC / USB)</string>
+    <string name="yubikey_enrolled">YubiKey enrolled ✓</string>
+    <string name="yubikey_not_enrolled">No YubiKey enrolled</string>
+    <string name="yubikey_enable_2fa">Enable YubiKey 2FA</string>
+    <string name="yubikey_enroll_button">Enroll YubiKey</string>
+    <string name="yubikey_remove_button">Remove YubiKey</string>
+    <string name="yubikey_change_mode_button">Change Unlock Mode</string>
+    <string name="yubikey_tap_to_change_mode">Tap or plug in your YubiKey to confirm mode change…</string>
+    <string name="yubikey_mode_change_failed">Mode change failed: %s</string>
+    <string name="yubikey_tap_to_enroll">Tap or plug in your YubiKey now to enroll…</string>
+    <string name="yubikey_tap_to_unlock">🔑 Enter password, then tap or plug in YubiKey</string>
+    <string name="yubikey_tap_to_unlock_passwordless">🔑 Tap or plug in your YubiKey to unlock</string>
+    <string name="yubikey_tap_to_unlock_optional">🔑 Enter password OR tap/plug in YubiKey</string>
+    <string name="yubikey_tap_now">Tap or plug in your YubiKey now…</string>
+    <string name="yubikey_description">Adds a second factor using your YubiKey via NFC tap or USB plug-in. You will need your YubiKey each time you unlock the database. Requires a YubiKey 5 NFC/USB-C or compatible.</string>
+    <string name="yubikey_mode_password_required">🔒 Password + YubiKey (both required)</string>
+    <string name="yubikey_mode_passwordless">🔑 YubiKey only (no password needed)</string>
+    <string name="yubikey_mode_optional">🔓 Password OR YubiKey (either works)</string>
+    <string name="yubikey_enter_password_or_tap">Enter your password or tap your YubiKey to unlock</string>
+    <string name="yubikey_enrollment_success">YubiKey enrolled successfully! Database re-encrypted with 2FA.</string>
+    <string name="yubikey_enrollment_failed">YubiKey enrollment failed: %s</string>
+    <string name="yubikey_removed_success">YubiKey removed. Database re-encrypted with password only.</string>
+    <string name="yubikey_communication_error">Failed to communicate with YubiKey: %s</string>
+    <string name="yubikey_nfc_not_available">NFC is not available on this device</string>
+    <string name="yubikey_nfc_disabled">NFC is disabled. Please enable NFC in system settings.</string>
+    <string name="yubikey_no_transport">Neither NFC nor USB host mode is available on this device</string>
+    <string name="yubikey_usb_detected">🔌 YubiKey detected via USB</string>
+    <string name="yubikey_plug_in_or_enable_nfc">Plug in your YubiKey via USB, or enable NFC and tap</string>
+    <string name="yubikey_wrong_key">This is not the enrolled YubiKey. Please use the correct key.</string>
+    <string name="yubikey_nfc_required_warning">⚠ Requires NFC or USB connection. If you lose your YubiKey, use your recovery code to regain access. Leave settings after enrolled to complete.</string>
+    <string name="yubikey_verifying">Verifying YubiKey…</string>
+    <string name="yubikey_verified">YubiKey verified ✓</string>
+    <string name="yubikey_enrolling">Enrolling YubiKey…</string>
+    <string name="yubikey_password_first">Please enter your password first</string>
+    <string name="yubikey_require_tap">YubiKey 2FA is enabled — tap your YubiKey after entering password</string>
+
+    <!-- YubiKey Recovery Strings -->
+    <string name="yubikey_recovery_title">⚠ Recovery Code — WRITE THIS DOWN</string>
+    <string name="yubikey_recovery_message">Your YubiKey is now enrolled. If you ever lose your YubiKey, you will need this recovery code plus your master password to unlock your database.\n\nRecovery code:\n\n%s\n\nWrite this down and store it in a safe place. This code will NOT be shown again.</string>
+    <string name="yubikey_recovery_saved">I\'ve saved my recovery code</string>
+    <string name="yubikey_lost_key_link">Lost your YubiKey? Tap here to recover</string>
+    <string name="yubikey_lost_key_title">Recover Without YubiKey</string>
+    <string name="yubikey_lost_key_message">Enter your recovery code below. This will unlock your database and remove the YubiKey requirement.\n\nYou will need both your master password (entered above) and your recovery code.</string>
+    <string name="yubikey_recover_button">Recover</string>
+    <string name="yubikey_recovery_code_hint">Recovery code (e.g. A1B2-C3D4-…)</string>
+    <string name="yubikey_recovery_code_required">Please enter the recovery code</string>
+    <string name="yubikey_recovery_success">Recovery successful! YubiKey removed. Database now uses password only.</string>
+    <string name="yubikey_recovery_failed">Recovery failed: %s</string>
 </resources>

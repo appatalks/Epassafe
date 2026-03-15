@@ -26,3 +26,4 @@
 
 # Keep debug intact
 -renamesourcefileattribute SourceFile
+

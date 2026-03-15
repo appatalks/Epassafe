@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Yubico vendor ID: 0x1050 (4176) -->
+    <usb-device vendor-id="4176" />
+</resources>
+
