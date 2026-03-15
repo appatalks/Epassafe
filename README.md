@@ -10,9 +10,6 @@ Epassafe, a Password Manager of the most basic usage, that of encrypting your pa
 
 Download from the [Google Play Store](https://play.google.com/store/apps/details?id=com.epassafe.upm&pcampaignid=web_share)
 
-> [!IMPORTANT]
-> Backup and Restore $PATH is through `../Android/data/com.epassafe.upm/files/database/`. If this is the initial installation on the device, restore a blank database to automatically create the directory and permissions, then restore the backup as "`upm.db`".
-
 <details>
 
 <summary>Changelog</summary>
