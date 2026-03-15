@@ -176,4 +176,29 @@
     <string name="export_csv_success">Database exported to: %s</string>
     <string name="export_csv_failed">Failed to export database to CSV file</string>
     <string name="export_and_password_changed">Master password changed and database exported to: %s</string>
+
+    <!-- YubiKey 2FA Strings -->
+    <string name="yubikey_2fa_section_title">YubiKey 2FA (NFC)</string>
+    <string name="yubikey_enrolled">YubiKey enrolled ✓</string>
+    <string name="yubikey_not_enrolled">No YubiKey enrolled</string>
+    <string name="yubikey_enable_2fa">Enable YubiKey 2FA</string>
+    <string name="yubikey_enroll_button">Enroll YubiKey</string>
+    <string name="yubikey_remove_button">Remove YubiKey</string>
+    <string name="yubikey_tap_to_enroll">Tap your YubiKey now to enroll…</string>
+    <string name="yubikey_tap_to_unlock">🔑 Enter password, then tap YubiKey</string>
+    <string name="yubikey_tap_now">Tap your YubiKey now…</string>
+    <string name="yubikey_description">Adds a second factor using your YubiKey\'s NFC. You will need to tap your YubiKey each time you unlock the database. Requires a YubiKey 5 NFC or compatible.</string>
+    <string name="yubikey_enrollment_success">YubiKey enrolled successfully! Database re-encrypted with 2FA.</string>
+    <string name="yubikey_enrollment_failed">YubiKey enrollment failed: %s</string>
+    <string name="yubikey_removed_success">YubiKey removed. Database re-encrypted with password only.</string>
+    <string name="yubikey_communication_error">Failed to communicate with YubiKey: %s</string>
+    <string name="yubikey_nfc_not_available">NFC is not available on this device</string>
+    <string name="yubikey_nfc_disabled">NFC is disabled. Please enable NFC in system settings.</string>
+    <string name="yubikey_wrong_key">This is not the enrolled YubiKey. Please use the correct key.</string>
+    <string name="yubikey_nfc_required_warning">⚠ NFC must be enabled. If you lose your YubiKey, you will NOT be able to unlock your database. Keep a backup YubiKey with the same OATH secret.</string>
+    <string name="yubikey_verifying">Verifying YubiKey…</string>
+    <string name="yubikey_verified">YubiKey verified ✓</string>
+    <string name="yubikey_enrolling">Enrolling YubiKey…</string>
+    <string name="yubikey_password_first">Please enter your password first</string>
+    <string name="yubikey_require_tap">YubiKey 2FA is enabled — tap your YubiKey after entering password</string>
 </resources>

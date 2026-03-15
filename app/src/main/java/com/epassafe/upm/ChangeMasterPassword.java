@@ -19,13 +19,19 @@ import java.io.File;
 import java.io.IOException;
 import java.security.GeneralSecurityException;
 import java.text.SimpleDateFormat;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.Locale;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.PendingIntent;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
+import android.nfc.NfcAdapter;
+import android.nfc.Tag;
+import android.nfc.tech.IsoDep;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
@@ -36,11 +42,13 @@ import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.epassafe.upm.crypto.DatabaseExporter;
 import com.epassafe.upm.crypto.InvalidPasswordException;
+import com.epassafe.upm.crypto.YubiKeyManager;
 import com.epassafe.upm.database.PasswordDatabase;
 import com.epassafe.upm.database.ProblemReadingDatabaseFile;
 
@@ -53,6 +61,17 @@ public class ChangeMasterPassword extends Activity {
     private CheckBox useChaCha20Checkbox;
     private CheckBox exportCsvCheckbox;
     private LinearLayout encryptionOptionsLayout;
+
+    // YubiKey enrollment
+    private CheckBox yubiKeyEnableCheckbox;
+    private Button yubiKeyEnrollButton;
+    private TextView yubiKeyEnrollmentStatus;
+    private TextView yubiKeyNfcPrompt;
+    private ProgressBar yubiKeyEnrollProgress;
+    private NfcAdapter nfcAdapter;
+    private boolean waitingForYubiKeyEnroll = false;
+    private boolean waitingForYubiKeyRemove = false;
+    private boolean yubiKeyCurrentlyEnrolled = false;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -161,6 +180,347 @@ public class ChangeMasterPassword extends Activity {
                 }
             }
         });
+
+        // YubiKey enrollment setup
+        yubiKeyEnableCheckbox = findViewById(R.id.yubikey_enable_checkbox);
+        yubiKeyEnrollButton = findViewById(R.id.yubikey_enroll_button);
+        yubiKeyEnrollmentStatus = findViewById(R.id.yubikey_enrollment_status);
+        yubiKeyNfcPrompt = findViewById(R.id.yubikey_nfc_prompt);
+        yubiKeyEnrollProgress = findViewById(R.id.yubikey_enroll_progress);
+
+        nfcAdapter = NfcAdapter.getDefaultAdapter(this);
+
+        if (db != null) {
+            File dbFile = db.getDatabaseFile();
+            yubiKeyCurrentlyEnrolled = YubiKeyManager.isEnrolled(dbFile);
+
+            if (yubiKeyCurrentlyEnrolled) {
+                yubiKeyEnrollmentStatus.setText(R.string.yubikey_enrolled);
+                yubiKeyEnableCheckbox.setChecked(true);
+                yubiKeyEnrollButton.setVisibility(View.VISIBLE);
+                yubiKeyEnrollButton.setText(R.string.yubikey_remove_button);
+            } else {
+                yubiKeyEnrollmentStatus.setText(R.string.yubikey_not_enrolled);
+                yubiKeyEnableCheckbox.setChecked(false);
+            }
+
+            yubiKeyEnableCheckbox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                @Override
+                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                    if (isChecked && !yubiKeyCurrentlyEnrolled) {
+                        // Show enroll button
+                        yubiKeyEnrollButton.setVisibility(View.VISIBLE);
+                        yubiKeyEnrollButton.setText(R.string.yubikey_enroll_button);
+                    } else if (!isChecked && yubiKeyCurrentlyEnrolled) {
+                        // Show remove button
+                        yubiKeyEnrollButton.setVisibility(View.VISIBLE);
+                        yubiKeyEnrollButton.setText(R.string.yubikey_remove_button);
+                    } else {
+                        yubiKeyEnrollButton.setVisibility(View.GONE);
+                        yubiKeyNfcPrompt.setVisibility(View.GONE);
+                    }
+                }
+            });
+
+            yubiKeyEnrollButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    // Verify password is entered
+                    if (existingPasswordEditText.getText().toString().isEmpty()) {
+                        UIUtilities.showToast(ChangeMasterPassword.this, R.string.invalid_password, false);
+                        existingPasswordEditText.requestFocus();
+                        return;
+                    }
+
+                    // Check NFC availability
+                    if (nfcAdapter == null) {
+                        UIUtilities.showToast(ChangeMasterPassword.this, R.string.yubikey_nfc_not_available, false);
+                        return;
+                    }
+                    if (!nfcAdapter.isEnabled()) {
+                        UIUtilities.showToast(ChangeMasterPassword.this, R.string.yubikey_nfc_disabled, false);
+                        return;
+                    }
+
+                    if (yubiKeyCurrentlyEnrolled && !yubiKeyEnableCheckbox.isChecked()) {
+                        // Removing YubiKey — need to tap to verify it's the right key
+                        waitingForYubiKeyRemove = true;
+                        waitingForYubiKeyEnroll = false;
+                    } else {
+                        // Enrolling new YubiKey
+                        waitingForYubiKeyEnroll = true;
+                        waitingForYubiKeyRemove = false;
+                    }
+
+                    yubiKeyNfcPrompt.setVisibility(View.VISIBLE);
+                    yubiKeyNfcPrompt.setText(waitingForYubiKeyEnroll
+                            ? R.string.yubikey_tap_to_enroll
+                            : R.string.yubikey_tap_now);
+                }
+            });
+        }
+
+        // Disable YubiKey section if NFC not available
+        if (nfcAdapter == null) {
+            yubiKeyEnableCheckbox.setEnabled(false);
+            yubiKeyEnrollmentStatus.setText(R.string.yubikey_nfc_not_available);
+        }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (nfcAdapter != null && nfcAdapter.isEnabled()) {
+            PendingIntent pendingIntent = PendingIntent.getActivity(
+                    this, 0,
+                    new Intent(this, getClass()).addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP),
+                    PendingIntent.FLAG_MUTABLE);
+            nfcAdapter.enableForegroundDispatch(this, pendingIntent, null, null);
+        }
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        if (nfcAdapter != null) {
+            nfcAdapter.disableForegroundDispatch(this);
+        }
+    }
+
+    @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+        if (intent == null) return;
+
+        String action = intent.getAction();
+        if (!NfcAdapter.ACTION_TAG_DISCOVERED.equals(action)
+                && !NfcAdapter.ACTION_TECH_DISCOVERED.equals(action)
+                && !NfcAdapter.ACTION_NDEF_DISCOVERED.equals(action)) {
+            return;
+        }
+
+        if (!waitingForYubiKeyEnroll && !waitingForYubiKeyRemove) {
+            return; // Not waiting for a tap
+        }
+
+        Tag tag = intent.getParcelableExtra(NfcAdapter.EXTRA_TAG, Tag.class);
+        if (tag == null) return;
+
+        yubiKeyEnrollProgress.setVisibility(View.VISIBLE);
+        yubiKeyNfcPrompt.setText(R.string.yubikey_enrolling);
+
+        if (waitingForYubiKeyEnroll) {
+            new EnrollYubiKeyTask(tag).execute();
+        } else if (waitingForYubiKeyRemove) {
+            new RemoveYubiKeyTask(tag).execute();
+        }
+    }
+
+    /**
+     * Async task to enroll a YubiKey: provisions the OATH credential,
+     * computes expected response, saves sidecar file, and re-encrypts DB.
+     */
+    private class EnrollYubiKeyTask extends AsyncTask<Void, Void, Boolean> {
+        private final Tag tag;
+        private final String existingPasswordStr;
+        private String errorMessage;
+
+        EnrollYubiKeyTask(Tag tag) {
+            this.tag = tag;
+            // Capture UI value on the main thread
+            this.existingPasswordStr = existingPasswordEditText.getText().toString();
+        }
+
+        @Override
+        protected Boolean doInBackground(Void... params) {
+            try {
+                PasswordDatabase database = ((UPMApplication) getApplication()).getPasswordDatabase();
+                char[] existingPassword = existingPasswordStr.toCharArray();
+                File dbFile = database.getDatabaseFile();
+
+                // Verify existing password first
+                new PasswordDatabase(dbFile, existingPassword.clone());
+
+                // Connect to YubiKey via NFC
+                IsoDep isoDep = IsoDep.get(tag);
+                if (isoDep == null) {
+                    errorMessage = "Not a compatible NFC device";
+                    return false;
+                }
+
+                isoDep.connect();
+                isoDep.setTimeout(30000);
+
+                try {
+                    // Generate a random challenge
+                    byte[] challenge = YubiKeyManager.generateChallenge();
+                    int slot = YubiKeyManager.DEFAULT_SLOT;
+
+                    // Send challenge to YubiKey, get HMAC-SHA1 response
+                    byte[] response;
+                    try {
+                        response = YubiKeyManager.performChallengeResponse(isoDep, slot, challenge);
+                    } catch (YubiKeyManager.YubiKeyException e) {
+                        // If slot 2 fails, try slot 1
+                        if (slot == 2) {
+                            Log.w("ChangeMasterPassword", "Slot 2 failed, trying slot 1", e);
+                            slot = 1;
+                            // Need to reconnect after failed APDU
+                            isoDep.close();
+                            isoDep.connect();
+                            response = YubiKeyManager.performChallengeResponse(isoDep, slot, challenge);
+                        } else {
+                            throw e;
+                        }
+                    }
+
+                    // Combine password + YubiKey response for new encryption key
+                    char[] combinedPassword = YubiKeyManager.combinePasswordWithYubiKeyResponse(
+                            existingPassword, response);
+
+                    // Re-encrypt database with the combined key
+                    database.changePassword(combinedPassword);
+                    database.save();
+
+                    // Save enrollment sidecar file
+                    YubiKeyManager.saveEnrollment(dbFile, slot, challenge, response);
+
+                    // Clean up
+                    Arrays.fill(combinedPassword, '\0');
+                    Arrays.fill(existingPassword, '\0');
+
+                    return true;
+                } finally {
+                    isoDep.close();
+                }
+            } catch (InvalidPasswordException e) {
+                errorMessage = "Incorrect existing password";
+                return false;
+            } catch (YubiKeyManager.YubiKeyException e) {
+                Log.e("ChangeMasterPassword", "YubiKey enrollment error", e);
+                errorMessage = e.getMessage();
+                return false;
+            } catch (Exception e) {
+                Log.e("ChangeMasterPassword", "YubiKey enrollment error", e);
+                errorMessage = e.getMessage();
+                return false;
+            }
+        }
+
+        @Override
+        protected void onPostExecute(Boolean success) {
+            yubiKeyEnrollProgress.setVisibility(View.GONE);
+            waitingForYubiKeyEnroll = false;
+
+            if (success) {
+                yubiKeyCurrentlyEnrolled = true;
+                yubiKeyEnrollmentStatus.setText(R.string.yubikey_enrolled);
+                yubiKeyNfcPrompt.setVisibility(View.GONE);
+                yubiKeyEnrollButton.setText(R.string.yubikey_remove_button);
+                UIUtilities.showToast(ChangeMasterPassword.this,
+                        R.string.yubikey_enrollment_success, true);
+            } else {
+                yubiKeyNfcPrompt.setText(R.string.yubikey_tap_to_enroll);
+                String msg = String.format(getString(R.string.yubikey_enrollment_failed),
+                        errorMessage != null ? errorMessage : "Unknown error");
+                UIUtilities.showToast(ChangeMasterPassword.this, msg, true);
+            }
+        }
+    }
+
+    /**
+     * Async task to remove YubiKey enrollment: re-encrypts DB with password-only,
+     * then deletes the sidecar file.
+     */
+    private class RemoveYubiKeyTask extends AsyncTask<Void, Void, Boolean> {
+        private final Tag tag;
+        private final String existingPasswordStr;
+        private String errorMessage;
+
+        RemoveYubiKeyTask(Tag tag) {
+            this.tag = tag;
+            this.existingPasswordStr = existingPasswordEditText.getText().toString();
+        }
+
+        @Override
+        protected Boolean doInBackground(Void... params) {
+            try {
+                PasswordDatabase database = ((UPMApplication) getApplication()).getPasswordDatabase();
+                char[] existingPassword = existingPasswordStr.toCharArray();
+                File dbFile = database.getDatabaseFile();
+
+                // Load challenge for verification
+                byte[] challenge = YubiKeyManager.loadChallenge(dbFile);
+                if (challenge == null) {
+                    errorMessage = "No enrollment found";
+                    return false;
+                }
+
+                int slot = YubiKeyManager.loadSlot(dbFile);
+
+                // Connect to YubiKey to verify it's the enrolled key
+                IsoDep isoDep = IsoDep.get(tag);
+                if (isoDep == null) {
+                    errorMessage = "Not a compatible NFC device";
+                    return false;
+                }
+
+                isoDep.connect();
+                isoDep.setTimeout(30000);
+
+                try {
+                    byte[] response = YubiKeyManager.performChallengeResponse(isoDep, slot, challenge);
+
+                    // Verify this is the correct YubiKey
+                    byte[] expectedResponse = YubiKeyManager.loadExpectedResponse(dbFile);
+                    if (!YubiKeyManager.verifyResponse(response, expectedResponse)) {
+                        errorMessage = "Wrong YubiKey — tap the enrolled key to remove";
+                        return false;
+                    }
+
+                    // Re-encrypt database with password only
+                    database.changePassword(existingPassword.clone());
+                    database.save();
+
+                    // Remove enrollment
+                    YubiKeyManager.removeEnrollment(dbFile);
+
+                    Arrays.fill(existingPassword, '\0');
+                    return true;
+                } finally {
+                    isoDep.close();
+                }
+            } catch (YubiKeyManager.YubiKeyException e) {
+                Log.e("ChangeMasterPassword", "YubiKey removal error", e);
+                errorMessage = e.getMessage();
+                return false;
+            } catch (Exception e) {
+                Log.e("ChangeMasterPassword", "YubiKey removal error", e);
+                errorMessage = e.getMessage();
+                return false;
+            }
+        }
+
+        @Override
+        protected void onPostExecute(Boolean success) {
+            yubiKeyEnrollProgress.setVisibility(View.GONE);
+            waitingForYubiKeyRemove = false;
+
+            if (success) {
+                yubiKeyCurrentlyEnrolled = false;
+                yubiKeyEnrollmentStatus.setText(R.string.yubikey_not_enrolled);
+                yubiKeyEnableCheckbox.setChecked(false);
+                yubiKeyNfcPrompt.setVisibility(View.GONE);
+                yubiKeyEnrollButton.setVisibility(View.GONE);
+                UIUtilities.showToast(ChangeMasterPassword.this,
+                        R.string.yubikey_removed_success, true);
+            } else {
+                yubiKeyNfcPrompt.setText(R.string.yubikey_tap_now);
+                String msg = String.format(getString(R.string.yubikey_communication_error),
+                        errorMessage != null ? errorMessage : "Unknown error");
+                UIUtilities.showToast(ChangeMasterPassword.this, msg, true);
+            }
+        }
     }
 
     private boolean validateInput() {
@@ -214,17 +574,29 @@ public class ChangeMasterPassword extends Activity {
         private String csvFilePath;
         private ProgressDialog progressDialog;
 
+        // UI values captured in onPreExecute
+        private String existingPasswordStr;
+        private String newPassword1Str;
+        private boolean doExportCsv;
+        private boolean doUseModernEncryption;
+        private boolean doUseChaCha20;
+        private boolean doYubiKeyEnabled;
+
         @Override
         protected void onPreExecute() {
-            // Show appropriate message based on whether we're exporting to CSV or changing password
-            if (exportCsvCheckbox.isChecked() &&
-                newPassword1EditText.getText().toString().length() == 0 &&
-                newPassword2EditText.getText().toString().length() == 0) {
-                // Only exporting to CSV
+            // Capture all UI values on the main thread
+            existingPasswordStr = existingPasswordEditText.getText().toString();
+            newPassword1Str = newPassword1EditText.getText().toString();
+            doExportCsv = exportCsvCheckbox.isChecked();
+            doUseModernEncryption = modernEncryptionCheckbox.isChecked();
+            doUseChaCha20 = useChaCha20Checkbox.isChecked();
+            doYubiKeyEnabled = yubiKeyEnableCheckbox.isChecked();
+
+            // Show appropriate message
+            if (doExportCsv && newPassword1Str.isEmpty()) {
                 progressDialog = ProgressDialog.show(ChangeMasterPassword.this, "",
                         getString(R.string.exporting_csv));
             } else {
-                // Changing password (possibly with CSV export)
                 progressDialog = ProgressDialog.show(ChangeMasterPassword.this, "",
                         getString(R.string.changing_master_password));
             }
@@ -235,7 +607,7 @@ public class ChangeMasterPassword extends Activity {
             PasswordDatabase database = ((UPMApplication) getApplication()).getPasswordDatabase();
 
             try {
-                char[] existingPassword = existingPasswordEditText.getText().toString().toCharArray();
+                char[] existingPassword = existingPasswordStr.toCharArray();
                 File dbFile = database.getDatabaseFile();
 
                 // Verify the existing password on background thread
@@ -244,7 +616,7 @@ public class ChangeMasterPassword extends Activity {
                 // If we got here then the password was correct
 
                 // Check if we need to export to CSV
-                if (exportCsvCheckbox.isChecked()) {
+                if (doExportCsv) {
                     // Create a file in the Downloads directory with timestamp
                     SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd_HHmmss", Locale.US);
                     String timestamp = sdf.format(new Date());
@@ -263,31 +635,46 @@ public class ChangeMasterPassword extends Activity {
                     }
 
                     // If we're only doing CSV export (no password change)
-                    String newPassword1 = newPassword1EditText.getText().toString();
-                    if (newPassword1.length() == 0) {
+                    if (newPassword1Str.isEmpty()) {
                         return RESULT_CSV_ONLY;
                     }
                 }
 
                 // If we need to change the password
-                char[] newPassword = newPassword1EditText.getText().toString().toCharArray();
+                char[] newPassword = newPassword1Str.toCharArray();
+
+                // If YubiKey is enrolled, the effective password must be combined
+                // with the YubiKey response. The enrollment sidecar stays the same
+                // (same challenge salt, same YubiKey), but the password portion changes.
+                char[] effectiveNewPassword;
+                if (yubiKeyCurrentlyEnrolled && doYubiKeyEnabled) {
+                    // Need to re-derive with new password + existing YubiKey response
+                    byte[] expectedResponse = YubiKeyManager.loadExpectedResponse(dbFile);
+                    if (expectedResponse != null) {
+                        effectiveNewPassword = YubiKeyManager.combinePasswordWithYubiKeyResponse(newPassword, expectedResponse);
+                    } else {
+                        effectiveNewPassword = newPassword;
+                    }
+                } else {
+                    effectiveNewPassword = newPassword;
+                }
 
                 // Check which encryption type is selected
-                boolean useModernEncryption = modernEncryptionCheckbox.isChecked();
-                boolean useChaCha20 = useChaCha20Checkbox.isChecked();
+                boolean useModernEncryption = doUseModernEncryption;
+                boolean useChaCha20 = doUseChaCha20;
 
                 boolean isCurrentlyModern = database.isUsingModernEncryption();
                 boolean isCurrentlyChaCha = database.getEncryptionAlgorithm().contains("ChaCha20");
 
                 try {
                     // First change the password
-                    database.changePassword(newPassword);
+                    database.changePassword(effectiveNewPassword);
 
                     // Handle encryption changes based on selection
                     if (useModernEncryption) {
                         if (!isCurrentlyModern) {
                             // Upgrade to modern from legacy
-                            database.upgradeToModernEncryption(newPassword, useChaCha20);
+                            database.upgradeToModernEncryption(effectiveNewPassword, useChaCha20);
                             Log.i("ChangeMasterPassword", "Upgraded to modern encryption with " +
                                   (useChaCha20 ? "ChaCha20-Poly1305" : "AES-GCM"));
                         } else if (isCurrentlyChaCha != useChaCha20) {

@@ -32,8 +32,8 @@ android {
         applicationId = "com.epassafe.upm"
         minSdk = 33
         targetSdk = 35
-        versionCode = 41
-        versionName = "4.1"
+        versionCode = 43
+        versionName = "4.3"
     }
 
     buildTypes {
@@ -42,6 +42,12 @@ android {
             shrinkResources = true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
             signingConfig = signingConfigs.release
+
+            // Generate mapping.txt for Play Store deobfuscation
+            // Upload this file alongside the AAB in Play Console
+            ndk {
+                debugSymbolLevel 'FULL'
+            }
         }
     }
     namespace = 'com.epassafe.upm'
@@ -72,5 +78,8 @@ dependencies {
 
     // Add Bouncy Castle for cryptographic operations
     implementation 'org.bouncycastle:bcprov-jdk18on:1.83'
+
+    // YubiKey NFC support — raw APDU challenge-response via IsoDep
+    // No Yubico SDK needed; we talk directly to the YubiKey OTP applet
 
 }
