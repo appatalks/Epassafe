@@ -81,7 +81,7 @@ dependencies {
     implementation 'androidx.window:window:1.5.1'
 
     // Add Bouncy Castle for cryptographic operations
-    implementation 'org.bouncycastle:bcprov-jdk18on:1.83'
+    implementation 'org.bouncycastle:bcprov-jdk18on:1.84'
 
     // YubiKey NFC support — raw APDU challenge-response via IsoDep
     // No Yubico SDK needed; we talk directly to the YubiKey OTP applet
