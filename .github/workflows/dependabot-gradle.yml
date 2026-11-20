@@ -1,6 +1,8 @@
 name: Submit dependency graph
 on:
   push:
+    branches: [main]
+  workflow_dispatch:
 
 permissions:
   contents: write
@@ -9,18 +11,15 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v6
 
-    - name: Cache Gradle dependencies
-      uses: actions/cache@v3
+    - name: Set up Java
+      uses: actions/setup-java@v5
       with:
-        path: ~/.gradle/caches
-        key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
-        restore-keys: |
-          ${{ runner.os }}-gradle-
+        distribution: temurin
+        java-version: '17'
 
-    - name: Setup Gradle
-      uses: gradle/gradle-build-action@v2
-
-    - name: Run a build and generate dependency graph
-      run: ./gradlew dependencies
+    - name: Generate and submit dependency graph
+      uses: gradle/actions/dependency-submission@v6
+      with:
+        cache-provider: basic

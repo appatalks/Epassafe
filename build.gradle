@@ -6,6 +6,11 @@ buildscript {
     }
     dependencies {
         classpath 'com.android.tools.build:gradle:9.5.1'
+        constraints {
+            classpath 'org.bouncycastle:bcprov-jdk18on:1.85'
+            classpath 'org.bouncycastle:bcpkix-jdk18on:1.85'
+            classpath 'org.bouncycastle:bcutil-jdk18on:1.85'
+        }
     }
 }
 
