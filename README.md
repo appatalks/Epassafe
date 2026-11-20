@@ -8,6 +8,8 @@
 
 Epassafe, a Password Manager of the most basic usage, that of encrypting your passwords using modern cryptography and allowing backups to be made to an external device (e.g., sdcard). 
 
+The app requires Android 13 (API level 33) or higher and targets Android 16 (API level 36).
+
 Download from the [Google Play Store](https://play.google.com/store/apps/details?id=com.epassafe.upm&pcampaignid=web_share)
 
 <details>
@@ -17,6 +19,7 @@ Download from the [Google Play Store](https://play.google.com/store/apps/details
 ```markdown
 ***History***
 
+ - **v4.4.1**: Target Android 16 and update dependencies
  - **v4.3**: Backup to Downloads & restore from file picker (no extra permissions), AGP 9.0.1, Gradle 9.1, removed legacy libraries, safety & localization improvements, AAB build support
  - **v4.1**: Android Updates, library updates
  - **v4.0**: Android Updates, double login patch fix
@@ -79,4 +82,3 @@ https://github.com/adrian/upm-android
 
 Copyright (C) 2005-2012 Adrian Smith
 ```
-
